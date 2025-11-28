@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIANNA | Fine Art Photography</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Manrope:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS E CORES --- */
+        :root {
+            --bg-deep: #0a0a0a;       /* Preto Profundo (não absoluto) */
+            --bg-surface: #141414;    /* Cinza muito escuro para cards */
+            --text-primary: #f0f0f0;  /* Branco gelo */
+            --text-muted: #888888;    /* Cinza médio */
+            --accent: #c4a068;        /* Dourado Envelhecido (Luxo discreto) */
+            --font-display: 'Cinzel', serif;
+            --font-body: 'Manrope', sans-serif;
+            --easing: cubic-bezier(0.19, 1, 0.22, 1); /* Curva exponencial suave */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Esconde cursor padrão */ }
+
+        html, body {
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- CURSOR PERSONALIZADO --- */
+        .cursor-dot, .cursor-circle {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--text-primary);
+        }
+        .cursor-circle {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+        }
+        /* Estado Hover do Cursor */
+        body.hovering .cursor-circle {
+            width: 80px; height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: transparent;
+            backdrop-filter: blur(2px);
+        }
+
+        /* --- TIPOGRAFIA --- */
+        h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; }
+        p { font-weight: 200; letter-spacing: 0.5px; line-height: 1.8; color: var(--text-muted); }
+
+        .big-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            line-height: 0.9;
+            letter-spacing: -2px;
+            margin-bottom: 2rem;
+            opacity: 0; /* JS Fade in */
+        }
+
+        /* --- HEADER & NAV --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference; /* Texto inverte cor baseado no fundo */
+        }
+        .logo { font-size: 1.5rem; font-family: var(--font-display); letter-spacing: 3px; }
+        .menu-btn { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            filter: grayscale(100%) contrast(1.2);
+            transition: 2s ease;
+        }
+        .hero:hover .hero-bg { filter: grayscale(0%) contrast(1); opacity: 0.6; }
+        
+        .hero-content { z-index: 2; text-align: center; max-width: 80%; }
+        .hero-subtitle {
+            display: block;
+            margin-top: 1rem;
+            font-size: 1rem;
+            letter-spacing: 6px;
+            color: var(--accent);
+        }
+
+        /* --- SEÇÕES --- */
+        section { padding: 10rem 10%; position: relative; }
+
+        /* --- GRID ARTÍSTICO (ASSIMÉTRICO) --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s var(--easing), filter 0.5s ease;
+            filter: grayscale(100%);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: grayscale(0%);
+        }
+
+        /* Classes para layout assimétrico */
+        .w-large { grid-column: span 8; height: 70vh; }
+        .w-small { grid-column: span 4; height: 50vh; margin-top: 20vh; } /* Deslocamento vertical */
+        .w-medium { grid-column: span 6; height: 60vh; }
+        
+        /* Descrição da foto (sutil) */
+        .img-caption {
+            position: absolute;
+            bottom: 20px; left: 20px;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.5s ease;
+            pointer-events: none;
+        }
+        .gallery-item:hover .img-caption { opacity: 1; transform: translateY(0); }
+
+        /* --- SOBRE (Minimalista) --- */
+        .about-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+        .about-text h2 { font-size: 3rem; margin-bottom: 2rem; }
+        .about-text p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .highlight { color: var(--text-primary); border-bottom: 1px solid var(--accent); }
+
+        /* --- FOOTER --- */
+        .footer-minimal {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .footer-contact h2 { font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-muted); transition: 0.3s; }
+        .footer-contact h2:hover { color: var(--text-primary); }
+        .socials a { color: var(--text-primary); margin-left: 20px; font-size: 1.2rem; text-decoration: none; }
+
+        /* --- MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .big-title { font-size: 3.5rem; }
+            .gallery-grid { display: flex; flex-direction: column; }
+            .w-large, .w-small, .w-medium { width: 100%; height: 50vh; margin-top: 0; }
+            .about-section { grid-template-columns: 1fr; }
+            nav { padding: 1.5rem 5%; }
+            section { padding: 5rem 5%; }
+            .footer-minimal { flex-direction: column; align-items: flex-start; gap: 2rem; }
+            .cursor-dot, .cursor-circle { display: none; } /* Remove cursor custom no mobile */
+            * { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <nav>
+        <div class="logo">VIANNA.</div>
+        <div class="menu-btn hover-trigger">Menu</div>
+    </nav>
+
+    <header class="hero">
+        <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop" class="hero-bg parallax-img" alt="Fine Art Texture">
+        <div class="hero-content">
+            <h1 class="big-title text-reveal">Silêncio<br>& Sombra</h1>
+            <span class="hero-subtitle text-reveal">FOTOGRAFIA FINE ART</span>
+        </div>
+    </header>
+
+    <section id="philosophy" class="about-section">
+        <div class="about-text">
+            <h2 class="text-reveal">A Estética do<br>Invisível</h2>
+            <p class="text-reveal">Não fotografo apenas o que vejo, mas como sinto. Em um mundo saturado de ruído, meu trabalho é uma busca pelo <span class="highlight">silêncio</span>.</p>
+            <p class="text-reveal">Utilizo sombras profundas e luzes raras para esculpir emoções. Cada imagem é um convite à contemplação.</p>
+        </div>
+        <div class="about-image">
+             <img src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?q=80&w=2058&auto=format&fit=crop" style="width: 100%; filter: grayscale(100%); opacity: 0.8;" class="parallax-img">
+        </div>
+    </section>
+
+    <section id="work">
+        <div style="margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <h2 style="font-size: 1.5rem; letter-spacing: 2px; color: var(--accent);">Portfólio Selecionado</h2>
+            <p style="font-size: 0.9rem;">2021 — 2024</p>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item w-large hover-trigger">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop" class="parallax-img" alt="Portrait">
+                <div class="img-caption">Alma Nua, 2023</div>
+            </div>
+
+            <div class="gallery-item w-small hover-trigger">
+                <img src="https://images.unsplash.com/photo-1505151225809-3636e1471854?q=80&w=1924&auto=format&fit=crop" class="parallax-img" alt="Texture">
+                <div class="img-caption">Texturas Urbanas</div>
+            </div>
+
+            <div class="gallery-item w-medium hover-trigger" style="margin-left: auto;">
+                <img src="https://images.unsplash.com/photo-1595152772835-219674b2a8a6?q=80&w=2080&auto=format&fit=crop" class="parallax-img" alt="BW">
+                <div class="img-caption">O Último Suspiro</div>
+            </div>
+
+            <div class="gallery-item w-large hover-trigger" style="grid-column: span 12; height: 80vh;">
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop" class="parallax-img" alt="Landscape">
+                <div class="img-caption">Vastidão</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-minimal">
+        <div class="footer-contact">
+            <p style="color: var(--accent); margin-bottom: 1rem;">Deseja criar algo único?</p>
+            <a href="mailto:contato@vianna.com" class="hover-trigger" style="text-decoration: none;">
+                <h2>contato@vianna.art</h2>
+            </a>
+            <p style="font-size: 0.8rem; margin-top: 2rem; opacity: 0.5;">© 2024 Vianna Photography.</p>
+        </div>
+        <div class="socials">
+            <a href="#" class="hover-trigger">Instagram</a>
+            <a href="#" class="hover-trigger">Behance</a>
+            <a href="#" class="hover-trigger">Pinterest</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- 1. Lógica do Cursor Personalizado ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorCircle = document.querySelector('.cursor-circle');
+        const hoverTriggers = document.querySelectorAll('.hover-trigger, a, button');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot segue instantaneamente
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Círculo segue com leve delay (efeito magnético)
+            cursorCircle.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Efeito ao passar o mouse em links/imagens
+        hoverTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            trigger.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- 2. Animação de Texto (Reveal) ---
+        gsap.utils.toArray('.text-reveal').forEach(text => {
+            gsap.fromTo(text, 
+                { y: 50, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: text,
+                        start: "top 85%"
+                    }
+                }
+            );
+        });
+
+        // --- 3. Parallax das Imagens ---
+        // As imagens se movem ligeiramente mais rápido que o scroll
+        gsap.utils.toArray('.parallax-img').forEach(img => {
+            gsap.to(img, {
+                yPercent: 20,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: img.parentElement, // Gatilho é o container da imagem
+                    start: "top bottom", // Começa quando o topo do container entra na tela
+                    end: "bottom top", // Termina quando o fundo sai
+                    scrub: true
+                }
+            });
+        });
+
+        // --- 4. Fade inicial da página ---
+        gsap.from("body", { opacity: 0, duration: 1.5, ease: "power2.inOut" });
+
+    </script>
+</body>
+</html>
