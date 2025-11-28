@@ -17,5 +17,3 @@ Este projeto consiste em uma **landing page** desenvolvida para apresentar os se
 - **CSS3**: Estilização da página e responsividade.
 - **JavaScript**: Funcionalidades interativas, como sliders ou efeitos visuais.
 - **Font Awesome** (ou similar): Ícones para melhorar a usabilidade.
-
-## Como Rodar o Projeto
