@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnaFotos | Fine Art Photography</title>
+    <title>AnaFotos | Fotografias</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,35 +42,36 @@
 
         /* Efeito de Ruído (Film Grain) */
         .noise-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9000;
-            opacity: 0.05;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9000; opacity: 0.05;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        /* --- 2. CURSOR PERSONALIZADO --- */
+        /* --- 2. CURSOR PERSONALIZADO (ATUALIZADO) --- */
         .cursor-dot {
             width: 6px; height: 6px;
             background: var(--text-primary);
             position: fixed; top: 0; left: 0;
-            border-radius: 50%; z-index: 10000;
+            border-radius: 50%; 
+            z-index: 20000; /* Z-index altíssimo para aparecer sobre o Lightbox */
             pointer-events: none;
             transform: translate(-50%, -50%);
+            mix-blend-mode: difference; /* Garante visibilidade em fundos claros */
         }
         .cursor-circle {
             width: 40px; height: 40px;
             border: 1px solid rgba(255,255,255,0.3);
             position: fixed; top: 0; left: 0;
-            border-radius: 50%; z-index: 10000;
+            border-radius: 50%; 
+            z-index: 20000; /* Z-index altíssimo */
             pointer-events: none;
             transform: translate(-50%, -50%);
             transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+            mix-blend-mode: difference;
         }
         body.hovering .cursor-circle {
             width: 60px; height: 60px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.3);
             border-color: transparent;
             backdrop-filter: blur(2px);
         }
@@ -84,13 +85,10 @@
             flex-direction: column;
         }
         .loader-text {
-            font-family: var(--font-display);
-            font-size: 2rem; letter-spacing: 5px;
-            overflow: hidden;
+            font-family: var(--font-display); font-size: 2rem; letter-spacing: 5px; overflow: hidden;
         }
         .loader-bar {
-            width: 0%; height: 2px; background: var(--accent);
-            margin-top: 20px; transition: width 0.5s ease;
+            width: 0%; height: 2px; background: var(--accent); margin-top: 20px; transition: width 0.5s ease;
         }
 
         /* --- 4. TYPOGRAPHY --- */
@@ -99,11 +97,10 @@
         
         .big-title {
             font-size: clamp(3.5rem, 9vw, 9rem);
-            line-height: 0.85; letter-spacing: -2px;
-            margin-bottom: 2rem;
+            line-height: 0.85; letter-spacing: -2px; margin-bottom: 2rem;
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
-        .char { display: inline-block; transform: translateY(100%); opacity: 0; } /* Para animação */
+        .char { display: inline-block; transform: translateY(100%); opacity: 0; }
 
         /* --- 5. HEADER & MENU --- */
         nav {
@@ -138,7 +135,7 @@
             position: relative; overflow: hidden;
         }
         .hero-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 120%; /* Extra height for parallax */
+            position: absolute; top: 0; left: 0; width: 100%; height: 120%;
             object-fit: cover; opacity: 0.5;
             filter: grayscale(100%) contrast(1.1);
             transition: filter 1s ease;
@@ -164,7 +161,6 @@
         }
         .gallery-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
         
-        /* Layout Assimétrico */
         .w-large { grid-column: span 8; aspect-ratio: 16/10; }
         .w-small { grid-column: span 4; aspect-ratio: 4/5; margin-top: 30%; }
         .w-tall { grid-column: span 5; aspect-ratio: 3/4; }
@@ -181,7 +177,7 @@
         /* --- 8. LIGHTBOX --- */
         .lightbox {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 11000;
+            background: rgba(0,0,0,0.95); z-index: 11000; /* Z-index menor que o cursor (20000) */
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
             backdrop-filter: blur(10px);
@@ -196,6 +192,7 @@
         .lightbox-close {
             position: absolute; top: 30px; right: 40px;
             color: #fff; font-size: 2rem; cursor: none;
+            padding: 20px; /* Área de clique maior */
         }
 
         /* --- 9. FOOTER --- */
@@ -206,6 +203,21 @@
         .footer-cta h2 { font-size: 3rem; margin-bottom: 1rem; color: #555; transition: 0.3s; }
         .footer-cta h2:hover { color: #fff; }
 
+        .social-link {
+            font-size: 1.1rem; 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            margin-left: 2rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .social-link:hover { color: var(--accent); }
+        .social-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 1px;
+            background: var(--accent); transition: width 0.3s ease;
+        }
+        .social-link:hover::after { width: 100%; }
+
         /* --- RESPONSIVO --- */
         @media (max-width: 768px) {
             .big-title { font-size: 14vw; }
@@ -213,9 +225,9 @@
             section { padding: 4rem 5%; }
             .gallery-grid { display: block; }
             .gallery-item { width: 100%; margin-bottom: 2rem; aspect-ratio: auto; height: 60vh; margin-top: 0 !important; }
-            .about-section { grid-template-columns: 1fr; }
             .cursor-dot, .cursor-circle { display: none; }
             * { cursor: auto; }
+            .lightbox-close { top: 20px; right: 20px; }
         }
     </style>
 </head>
@@ -236,9 +248,9 @@
     </div>
 
     <div class="menu-overlay">
-        <div class="close-menu hover-trigger">FECHAR</div>
+        <div class="close-menu hover-trigger" onclick="toggleMenu()">FECHAR</div>
         <a href="#home" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Início</span></a>
-        <a href="#philosophy" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Filosofia</span></a>
+        <a href="#about" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Sobre Mim</span></a>
         <a href="#work" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Trabalhos</span></a>
         <a href="#contact" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Contato</span></a>
     </div>
@@ -254,14 +266,14 @@
             <header class="hero" id="home">
                 <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop" class="hero-bg" data-speed="0.5" alt="Background">
                 <div class="hero-content">
-                    <h1 class="big-title split-text">Essência &<br>Eternidade</h1>
-                    <span class="hero-subtitle" style="letter-spacing: 6px; color: var(--accent);">FINE ART PHOTOGRAPHY</span>
+                    <h1 class="big-title split-text">Essência &<br>Qualidade</h1>
+                    <span class="hero-subtitle" style="letter-spacing: 6px; color: var(--accent);">FOTOGRAFIA</span>
                 </div>
             </header>
 
-            <section id="philosophy" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+            <section id="about" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
                 <div>
-                    <h2 class="split-text" style="font-size: 3rem; margin-bottom: 2rem;">A Arte do Silêncio</h2>
+                    <h2 class="split-text" style="font-size: 3rem; margin-bottom: 2rem;">Sobre Mim</h2>
                     <p class="reveal-text">Minha fotografia busca o que não é dito. O espaço entre um suspiro e outro. Utilizo a luz natural para esculpir formas e revelar a profundidade da alma humana.</p>
                     <br>
                     <p class="reveal-text">Cada clique é uma tentativa de parar o tempo em sua forma mais graciosa.</p>
@@ -281,17 +293,14 @@
                         <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=100&w=2500">
                         <div class="img-caption">Alma Nua, 2023</div>
                     </div>
-
                     <div class="gallery-item w-small hover-trigger" onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1505151225809-3636e1471854?q=80&w=1924&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1505151225809-3636e1471854?q=100&w=2500">
                         <div class="img-caption">Texturas Urbanas</div>
                     </div>
-
                     <div class="gallery-item w-tall hover-trigger" onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1964&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=100&w=2500">
                         <div class="img-caption">Retrato em Sépia</div>
                     </div>
-
                     <div class="gallery-item w-wide hover-trigger" onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1948&auto=format&fit=crop" data-full="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=100&w=2500">
                         <div class="img-caption">Vastidão</div>
@@ -302,13 +311,14 @@
             <footer id="contact" class="footer-cta">
                 <div>
                     <p style="color: var(--accent); margin-bottom: 1rem;">Vamos criar algo atemporal?</p>
-                    <a href="mailto:contato@ana.art" class="hover-trigger" style="text-decoration: none;">
-                        <h2>contato@ana.art</h2>
+                    
+                    <a href="https://wa.me/5562999999999?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia." target="_blank" class="hover-trigger" style="text-decoration: none;">
+                        <h2>Fale no WhatsApp</h2>
                     </a>
                 </div>
-                <div style="display: flex; gap: 2rem; align-items: flex-end;">
-                    <a href="#" class="hover-trigger" style="color: #fff; text-decoration: none;">Instagram</a>
-                    <a href="#" class="hover-trigger" style="color: #fff; text-decoration: none;">Behance</a>
+                <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                    <a href="https://wa.me/5562999999999" target="_blank" class="hover-trigger social-link">WhatsApp</a>
+                    <a href="https://instagram.com/seuusuario" target="_blank" class="hover-trigger social-link">Instagram</a>
                 </div>
             </footer>
 
@@ -334,7 +344,7 @@
                     duration: 1,
                     ease: "power4.inOut"
                 });
-                initAnimations(); // Inicia o resto das animações
+                initAnimations();
             }, 800);
         });
 
@@ -356,7 +366,6 @@
         }
         requestAnimationFrame(raf);
 
-        // Integrar Lenis com ScrollTrigger
         gsap.registerPlugin(ScrollTrigger);
         
         // --- 3. CURSOR MAGNÉTICO E SEGUIDOR ---
@@ -370,13 +379,11 @@
             mouseX = e.clientX;
             mouseY = e.clientY;
             
-            // Dot move instantaneamente
             gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0 });
         });
 
-        // Loop de animação para suavizar o círculo (Linear Interpolation)
         function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.15; // 0.15 é a velocidade do delay
+            cursorX += (mouseX - cursorX) * 0.15;
             cursorY += (mouseY - cursorY) * 0.15;
             
             cursorCircle.style.left = `${cursorX}px`;
@@ -405,18 +412,17 @@
             
             lightboxImg.src = fullSrc;
             lightbox.classList.add('active');
-            lenis.stop(); // Trava o scroll
+            lenis.stop();
         }
 
         document.querySelector('.lightbox-close').addEventListener('click', () => {
             lightbox.classList.remove('active');
-            lenis.start(); // Destrava o scroll
+            lenis.start();
         });
 
         // --- 5. ANIMAÇÕES GSAP ---
         function initAnimations() {
             
-            // Parallax nas Imagens
             document.querySelectorAll('img[data-speed]').forEach(img => {
                 gsap.to(img, {
                     y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
@@ -430,7 +436,6 @@
                 });
             });
 
-            // Efeito Reveal de Texto (Letra por Letra)
             const titles = document.querySelectorAll('.split-text');
             titles.forEach(title => {
                 const split = new SplitType(title, { types: 'chars' });
@@ -448,7 +453,6 @@
                 });
             });
 
-            // Reveal Simples de Parágrafos
             gsap.utils.toArray('.reveal-text').forEach(text => {
                 gsap.from(text, {
                     y: 30, opacity: 0, duration: 1, ease: "power3.out",
@@ -456,7 +460,6 @@
                 });
             });
         }
-
     </script>
 </body>
 </html>
