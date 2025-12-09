@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AnaFotos | Fotografias</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,12 @@
             --easing: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Cursor logic: Default none only on desktop */
+        @media (hover: hover) and (pointer: fine) {
+            * { cursor: none; }
+        }
 
         html.lenis { height: auto; } 
         .lenis.lenis-smooth { scroll-behavior: auto; } 
@@ -40,42 +45,50 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Efeito de Ruído (Film Grain) */
+        /* Efeito de Ruído */
         .noise-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9000; opacity: 0.05;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        /* --- 2. CURSOR PERSONALIZADO (ATUALIZADO) --- */
-        .cursor-dot {
-            width: 6px; height: 6px;
-            background: var(--text-primary);
-            position: fixed; top: 0; left: 0;
-            border-radius: 50%; 
-            z-index: 20000; /* Z-index altíssimo para aparecer sobre o Lightbox */
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference; /* Garante visibilidade em fundos claros */
+        /* --- 2. CURSOR PERSONALIZADO (Só aparece em PC) --- */
+        .cursor-dot, .cursor-circle {
+            display: none; /* Padrão oculto */
         }
-        .cursor-circle {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(255,255,255,0.3);
-            position: fixed; top: 0; left: 0;
-            border-radius: 50%; 
-            z-index: 20000; /* Z-index altíssimo */
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
-            mix-blend-mode: difference;
+        
+        @media (hover: hover) and (pointer: fine) {
+            .cursor-dot {
+                display: block;
+                width: 6px; height: 6px;
+                background: var(--text-primary);
+                position: fixed; top: 0; left: 0;
+                border-radius: 50%; 
+                z-index: 20000;
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                mix-blend-mode: difference;
+            }
+            .cursor-circle {
+                display: block;
+                width: 40px; height: 40px;
+                border: 1px solid rgba(255,255,255,0.3);
+                position: fixed; top: 0; left: 0;
+                border-radius: 50%; 
+                z-index: 20000;
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+                mix-blend-mode: difference;
+            }
+            body.hovering .cursor-circle {
+                width: 60px; height: 60px;
+                background: rgba(255, 255, 255, 0.3);
+                border-color: transparent;
+                backdrop-filter: blur(2px);
+            }
+            body.hovering .cursor-dot { opacity: 0; }
         }
-        body.hovering .cursor-circle {
-            width: 60px; height: 60px;
-            background: rgba(255, 255, 255, 0.3);
-            border-color: transparent;
-            backdrop-filter: blur(2px);
-        }
-        body.hovering .cursor-dot { opacity: 0; }
 
         /* --- 3. PRELOADER --- */
         .preloader {
@@ -86,6 +99,7 @@
         }
         .loader-text {
             font-family: var(--font-display); font-size: 2rem; letter-spacing: 5px; overflow: hidden;
+            text-align: center; padding: 0 1rem;
         }
         .loader-bar {
             width: 0%; height: 2px; background: var(--accent); margin-top: 20px; transition: width 0.5s ease;
@@ -96,8 +110,9 @@
         p { font-weight: 300; letter-spacing: 0.5px; line-height: 1.8; color: var(--text-muted); }
         
         .big-title {
-            font-size: clamp(3.5rem, 9vw, 9rem);
-            line-height: 0.85; letter-spacing: -2px; margin-bottom: 2rem;
+            font-size: clamp(3rem, 10vw, 9rem); /* Clamp para responsividade fluida */
+            line-height: 0.9; 
+            letter-spacing: -2px; margin-bottom: 2rem;
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
         .char { display: inline-block; transform: translateY(100%); opacity: 0; }
@@ -109,8 +124,8 @@
             justify-content: space-between; align-items: center;
             z-index: 1000; mix-blend-mode: difference;
         }
-        .logo { font-size: 1.8rem; letter-spacing: 2px; font-weight: 600; }
-        .menu-trigger { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; }
+        .logo { font-size: 1.5rem; letter-spacing: 2px; font-weight: 600; }
+        .menu-trigger { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; cursor: pointer; }
 
         /* Fullscreen Menu */
         .menu-overlay {
@@ -121,16 +136,19 @@
         }
         .menu-open .menu-overlay { transform: translateY(0); }
         .menu-link {
-            font-family: var(--font-display); font-size: 3rem; color: var(--text-primary);
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); 
+            color: var(--text-primary);
             text-decoration: none; margin: 1rem 0; overflow: hidden; position: relative;
         }
         .menu-link span { display: block; transition: transform 0.4s; }
         .menu-link:hover span { transform: translateY(-10px) skewX(-10deg); color: var(--accent); }
-        .close-menu { position: absolute; top: 2.5rem; right: 4rem; font-size: 1rem; letter-spacing: 3px; }
+        .close-menu { position: absolute; top: 2.5rem; right: 4rem; font-size: 1rem; letter-spacing: 3px; cursor: pointer;}
 
         /* --- 6. HERO --- */
         .hero {
-            height: 100vh; width: 100%; display: flex;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport para mobile */
+            width: 100%; display: flex;
             align-items: center; justify-content: center;
             position: relative; overflow: hidden;
         }
@@ -141,18 +159,26 @@
             transition: filter 1s ease;
         }
         .hero:hover .hero-bg { filter: grayscale(20%); }
-        .hero-content { z-index: 2; text-align: center; mix-blend-mode: difference; }
+        .hero-content { z-index: 2; text-align: center; mix-blend-mode: difference; padding: 0 1rem; }
 
         /* --- 7. SEÇÕES & GRID --- */
         section { padding: 8rem 10%; position: relative; }
         
+        /* Nova classe para substituir estilos inline no About */
+        .about-grid {
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 4rem; 
+            align-items: center;
+        }
+
         .gallery-grid {
             display: grid; grid-template-columns: repeat(12, 1fr);
             gap: 2rem; margin-top: 4rem;
         }
         .gallery-item {
             position: relative; overflow: hidden; margin-bottom: 6rem;
-            transition: transform 0.5s;
+            transition: transform 0.5s; cursor: pointer;
         }
         .gallery-item img {
             width: 100%; height: 100%; object-fit: cover;
@@ -161,6 +187,7 @@
         }
         .gallery-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
         
+        /* Classes de layout desktop */
         .w-large { grid-column: span 8; aspect-ratio: 16/10; }
         .w-small { grid-column: span 4; aspect-ratio: 4/5; margin-top: 30%; }
         .w-tall { grid-column: span 5; aspect-ratio: 3/4; }
@@ -177,7 +204,7 @@
         /* --- 8. LIGHTBOX --- */
         .lightbox {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 11000; /* Z-index menor que o cursor (20000) */
+            background: rgba(0,0,0,0.95); z-index: 11000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
             backdrop-filter: blur(10px);
@@ -191,8 +218,9 @@
         .lightbox.active img { transform: scale(1); }
         .lightbox-close {
             position: absolute; top: 30px; right: 40px;
-            color: #fff; font-size: 2rem; cursor: none;
-            padding: 20px; /* Área de clique maior */
+            color: #fff; font-size: 2rem; cursor: pointer;
+            padding: 20px;
+            z-index: 11001;
         }
 
         /* --- 9. FOOTER --- */
@@ -200,7 +228,7 @@
             border-top: 1px solid #222; padding: 6rem 10%;
             display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3rem;
         }
-        .footer-cta h2 { font-size: 3rem; margin-bottom: 1rem; color: #555; transition: 0.3s; }
+        .footer-cta h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; color: #555; transition: 0.3s; }
         .footer-cta h2:hover { color: #fff; }
 
         .social-link {
@@ -218,16 +246,39 @@
         }
         .social-link:hover::after { width: 100%; }
 
-        /* --- RESPONSIVO --- */
-        @media (max-width: 768px) {
-            .big-title { font-size: 14vw; }
-            nav { padding: 1.5rem 2rem; }
+        /* --- RESPONSIVO (MOBILE) --- */
+        @media (max-width: 900px) {
+            nav { padding: 1.5rem 1.5rem; }
             section { padding: 4rem 5%; }
-            .gallery-grid { display: block; }
-            .gallery-item { width: 100%; margin-bottom: 2rem; aspect-ratio: auto; height: 60vh; margin-top: 0 !important; }
-            .cursor-dot, .cursor-circle { display: none; }
-            * { cursor: auto; }
-            .lightbox-close { top: 20px; right: 20px; }
+            
+            .about-grid {
+                grid-template-columns: 1fr; /* Empilha o texto e a foto */
+                gap: 2rem;
+            }
+            .about-grid img {
+                margin-top: 1rem;
+            }
+
+            .gallery-grid { display: flex; flex-direction: column; gap: 4rem; }
+            .gallery-item { 
+                width: 100%; 
+                margin-bottom: 0; 
+                margin-top: 0 !important; /* Remove margins de desktop */
+                grid-column: auto !important;
+                height: auto;
+            }
+            
+            /* Ajuste de proporção para mobile - menos altura */
+            .w-large, .w-small, .w-tall, .w-wide { aspect-ratio: 4/5; }
+
+            .close-menu { top: 1.5rem; right: 1.5rem; }
+            .lightbox-close { top: 10px; right: 10px; }
+            
+            footer { flex-direction: column; padding: 4rem 5%; }
+            .social-link { margin-left: 0; margin-right: 2rem; }
+            
+            /* Melhor usabilidade no mobile */
+            .img-caption { opacity: 1; transform: translateY(0); bottom: 10px; left: 10px; font-size: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         }
     </style>
 </head>
@@ -256,7 +307,7 @@
     </div>
 
     <nav>
-        <div class="logo hover-trigger">Ana, Fotográfia.</div>
+        <div class="logo hover-trigger">Ana.</div>
         <div class="menu-trigger hover-trigger" onclick="toggleMenu()">Menu</div>
     </nav>
 
@@ -271,17 +322,17 @@
                 </div>
             </header>
 
-            <section id="about" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+            <section id="about" class="about-grid">
                 <div>
-                    <h2 class="split-text" style="font-size: 3rem; margin-bottom: 2rem;">Sobre Mim</h2>
+                    <h2 class="split-text" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 2rem;">Sobre Mim</h2>
                     <p class="reveal-text">Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.
 
 Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p>
                     <br>
-                    <p class="reveal-text">Cada clique é uma mémoria eternizada.</p>
+                    <p class="reveal-text">Cada clique é uma memória eternizada.</p>
                 </div>
                 <div style="position: relative; overflow: hidden;">
-                    <img src="." style="width: 100%; filter: grayscale(100%);" data-speed="0.8">
+                    <img src="assets/IMG_0826.webp" style="width: 100%; filter: grayscale(100%);" data-speed="0.8" alt="Sobre Ana">
                 </div>
             </section>
 
@@ -292,20 +343,23 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
 
                 <div class="gallery-grid">
                     <div class="gallery-item w-large hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/2025-02-04-18-59-55-498.webp">
+                        <img src="assets/2025-02-04-18-59-55-498.webp" data-full="assets/2025-02-04-18-59-55-498.webp" onerror="this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Natureza</div>
                     </div>
+                    
                     <div class="gallery-item w-small hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/2025-08-17-00-59-08-529.webp" data-full="assets/2025-08-17-00-59-08-529.webp">
+                        <img src="assets/2025-08-17-00-59-08-529.webp" data-full="assets/2025-08-17-00-59-08-529.webp" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Aniversário</div>
                     </div>
+                    
                     <div class="gallery-item w-tall hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp">
-                        <div class="img-caption">iluminação</div>
+                        <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp" onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop'">
+                        <div class="img-caption">Iluminação</div>
                     </div>
+                    
                     <div class="gallery-item w-wide hover-trigger" onclick="openLightbox(this)">
-                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp" data-full="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp">
-                        <div class="img-caption">.</div>
+                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true" data-full="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true" onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1500&auto=format&fit=crop'">
+                        <div class="img-caption">Retratos</div>
                     </div>
                 </div>
             </section>
@@ -318,7 +372,7 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
                         <h2>Fale no WhatsApp</h2>
                     </a>
                 </div>
-                <div style="display: flex; gap: 1rem; align-items: flex-end;">
+                <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
                     <a href="https://wa.me/5599981131658" target="_blank" class="hover-trigger social-link">WhatsApp</a>
                     <a href="https://instagram.com/anaefoto" target="_blank" class="hover-trigger social-link">Instagram</a>
                 </div>
@@ -370,35 +424,39 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
 
         gsap.registerPlugin(ScrollTrigger);
         
-        // --- 3. CURSOR MAGNÉTICO E SEGUIDOR ---
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorCircle = document.querySelector('.cursor-circle');
+        // --- 3. CURSOR MAGNÉTICO (Apenas se não for touch) ---
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         
-        let mouseX = 0, mouseY = 0;
-        let cursorX = 0, cursorY = 0;
+        if (!isTouchDevice) {
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorCircle = document.querySelector('.cursor-circle');
+            
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
 
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            
-            gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0 });
-        });
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0 });
+            });
 
-        function animateCursor() {
-            cursorX += (mouseX - cursorX) * 0.15;
-            cursorY += (mouseY - cursorY) * 0.15;
-            
-            cursorCircle.style.left = `${cursorX}px`;
-            cursorCircle.style.top = `${cursorY}px`;
-            
-            requestAnimationFrame(animateCursor);
+            function animateCursor() {
+                cursorX += (mouseX - cursorX) * 0.15;
+                cursorY += (mouseY - cursorY) * 0.15;
+                
+                cursorCircle.style.left = `${cursorX}px`;
+                cursorCircle.style.top = `${cursorY}px`;
+                
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            document.querySelectorAll('.hover-trigger').forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
         }
-        animateCursor();
-
-        document.querySelectorAll('.hover-trigger').forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-        });
 
         // --- 4. FUNÇÕES DE MENU E LIGHTBOX ---
         function toggleMenu() {
@@ -410,7 +468,8 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
 
         function openLightbox(element) {
             const img = element.querySelector('img');
-            const fullSrc = img.getAttribute('data-full');
+            // Tenta pegar o data-full, se não tiver, pega o src normal
+            const fullSrc = img.getAttribute('data-full') || img.src;
             
             lightboxImg.src = fullSrc;
             lightbox.classList.add('active');
@@ -421,22 +480,33 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
             lightbox.classList.remove('active');
             lenis.start();
         });
+        
+        // Fecha lightbox ao clicar fora da imagem
+        lightbox.addEventListener('click', (e) => {
+             if(e.target === lightbox) {
+                 lightbox.classList.remove('active');
+                 lenis.start();
+             }
+        });
 
         // --- 5. ANIMAÇÕES GSAP ---
         function initAnimations() {
             
-            document.querySelectorAll('img[data-speed]').forEach(img => {
-                gsap.to(img, {
-                    y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
-                    ease: "none",
-                    scrollTrigger: {
-                        trigger: img.parentElement,
-                        start: "top bottom",
-                        end: "bottom top",
-                        scrub: 0
-                    }
+            // Parallax (Desativado em mobile para performance e UX)
+            if(window.innerWidth > 768) {
+                document.querySelectorAll('img[data-speed]').forEach(img => {
+                    gsap.to(img, {
+                        y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: img.parentElement,
+                            start: "top bottom",
+                            end: "bottom top",
+                            scrub: 0
+                        }
+                    });
                 });
-            });
+            }
 
             const titles = document.querySelectorAll('.split-text');
             titles.forEach(title => {
@@ -461,6 +531,9 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
                     scrollTrigger: { trigger: text, start: "top 85%" }
                 });
             });
+            
+            // Força o refresh do ScrollTrigger após carregar tudo
+            ScrollTrigger.refresh();
         }
     </script>
 </body>
