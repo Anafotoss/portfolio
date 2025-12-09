@@ -115,6 +115,15 @@
             letter-spacing: -2px; margin-bottom: 2rem;
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
+        /* Correção para o subtítulo centralizado */
+        .hero-subtitle {
+            display: block;
+            letter-spacing: 6px; 
+            color: var(--accent);
+            margin-top: 10px;
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+        }
+
         .char { display: inline-block; transform: translateY(100%); opacity: 0; }
 
         /* --- 5. HEADER & MENU --- */
@@ -157,14 +166,25 @@
             object-fit: cover; opacity: 0.5;
             filter: grayscale(100%) contrast(1.1);
             transition: filter 1s ease;
+            will-change: transform; /* Performance mobile */
         }
         .hero:hover .hero-bg { filter: grayscale(20%); }
-        .hero-content { z-index: 2; text-align: center; mix-blend-mode: difference; padding: 0 1rem; }
+        
+        /* Centralização corrigida com Flexbox */
+        .hero-content { 
+            z-index: 2; 
+            text-align: center; 
+            mix-blend-mode: difference; 
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* --- 7. SEÇÕES & GRID --- */
         section { padding: 8rem 10%; position: relative; }
         
-        /* Nova classe para substituir estilos inline no About */
         .about-grid {
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -184,6 +204,7 @@
             width: 100%; height: 100%; object-fit: cover;
             transition: transform 1.2s var(--easing), filter 0.5s;
             filter: grayscale(100%);
+            will-change: transform; /* Performance mobile */
         }
         .gallery-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
         
@@ -318,7 +339,7 @@
                 <img src="assets/IMG_1004.webp" class="hero-bg" data-speed="0.5" alt="Background">
                 <div class="hero-content">
                     <h1 class="big-title split-text">Essência &<br>Qualidade</h1>
-                    <span class="hero-subtitle" style="letter-spacing: 6px; color: var(--accent);">FOTOGRAFIA</span>
+                    <span class="hero-subtitle">FOTOGRAFIA</span>
                 </div>
             </header>
 
@@ -368,7 +389,7 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
                 <div>
                     <p style="color: var(--accent); margin-bottom: 1rem;">Vamos criar algo atemporal?</p>
                     
-                    <a href="https://wa.me/5562999999999?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia." target="_blank" class="hover-trigger" style="text-decoration: none;">
+                    <a href="https://wa.me/5599981131658?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia." target="_blank" class="hover-trigger" style="text-decoration: none;">
                         <h2>Fale no WhatsApp</h2>
                     </a>
                 </div>
@@ -468,7 +489,6 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
 
         function openLightbox(element) {
             const img = element.querySelector('img');
-            // Tenta pegar o data-full, se não tiver, pega o src normal
             const fullSrc = img.getAttribute('data-full') || img.src;
             
             lightboxImg.src = fullSrc;
@@ -481,7 +501,6 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
             lenis.start();
         });
         
-        // Fecha lightbox ao clicar fora da imagem
         lightbox.addEventListener('click', (e) => {
              if(e.target === lightbox) {
                  lightbox.classList.remove('active');
@@ -492,22 +511,21 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
         // --- 5. ANIMAÇÕES GSAP ---
         function initAnimations() {
             
-            // Parallax (Desativado em mobile para performance e UX)
-            if(window.innerWidth > 768) {
-                document.querySelectorAll('img[data-speed]').forEach(img => {
-                    gsap.to(img, {
-                        y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
-                        ease: "none",
-                        scrollTrigger: {
-                            trigger: img.parentElement,
-                            start: "top bottom",
-                            end: "bottom top",
-                            scrub: 0
-                        }
-                    });
+            // Parallax IMAGENS (Ativado também no mobile agora)
+            document.querySelectorAll('img[data-speed]').forEach(img => {
+                gsap.to(img, {
+                    y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: img.parentElement,
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 0
+                    }
                 });
-            }
+            });
 
+            // Animação de Título (Split Text)
             const titles = document.querySelectorAll('.split-text');
             titles.forEach(title => {
                 const split = new SplitType(title, { types: 'chars' });
@@ -520,15 +538,19 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
                     ease: "back.out(1.7)",
                     scrollTrigger: {
                         trigger: title,
-                        start: "top 80%"
+                        start: "top 90%" // Ajustado para disparar mais fácil no mobile
                     }
                 });
             });
 
+            // Animação de Texto (Parágrafos)
             gsap.utils.toArray('.reveal-text').forEach(text => {
                 gsap.from(text, {
                     y: 30, opacity: 0, duration: 1, ease: "power3.out",
-                    scrollTrigger: { trigger: text, start: "top 85%" }
+                    scrollTrigger: { 
+                        trigger: text, 
+                        start: "top 90%" // Ajustado para disparar mais fácil no mobile
+                    }
                 });
             });
             
