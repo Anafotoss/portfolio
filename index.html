@@ -8,14 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Manrope:wght@200;300;400;500&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* --- 1. CONFIGURAÇÕES GERAIS --- */
         :root {
             --bg-deep: #080808;
-            --bg-overlay: rgba(10, 10, 10, 0.95);
+            --bg-overlay: rgba(10, 10, 10, 0.98);
             --text-primary: #e0e0e0;
             --text-muted: #888;
             --accent: #c4a068;
@@ -26,10 +25,8 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Cursor logic: Default none only on desktop */
-        @media (hover: hover) and (pointer: fine) {
-            * { cursor: none; }
-        }
+        /* Reset de botão para usabilidade */
+        button { background: none; border: none; font: inherit; color: inherit; cursor: pointer; padding: 0; }
 
         html.lenis { height: auto; } 
         .lenis.lenis-smooth { scroll-behavior: auto; } 
@@ -45,98 +42,63 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Efeito de Ruído */
         .noise-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9000; opacity: 0.05;
             background: url('https://grainy-gradients.vercel.app/noise.svg');
         }
 
-        /* --- 2. CURSOR PERSONALIZADO (Só aparece em PC) --- */
-        .cursor-dot, .cursor-circle {
-            display: none; /* Padrão oculto */
-        }
-        
+        /* --- 2. CURSOR --- */
         @media (hover: hover) and (pointer: fine) {
+            * { cursor: none; }
             .cursor-dot {
-                display: block;
-                width: 6px; height: 6px;
-                background: var(--text-primary);
-                position: fixed; top: 0; left: 0;
-                border-radius: 50%; 
-                z-index: 20000;
-                pointer-events: none;
-                transform: translate(-50%, -50%);
-                mix-blend-mode: difference;
+                display: block; width: 6px; height: 6px; background: var(--text-primary);
+                position: fixed; top: 0; left: 0; border-radius: 50%; z-index: 20000;
+                pointer-events: none; transform: translate(-50%, -50%); mix-blend-mode: difference;
             }
             .cursor-circle {
-                display: block;
-                width: 40px; height: 40px;
-                border: 1px solid rgba(255,255,255,0.3);
-                position: fixed; top: 0; left: 0;
-                border-radius: 50%; 
-                z-index: 20000;
-                pointer-events: none;
-                transform: translate(-50%, -50%);
-                transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
-                mix-blend-mode: difference;
+                display: block; width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
+                position: fixed; top: 0; left: 0; border-radius: 50%; z-index: 20000;
+                pointer-events: none; transform: translate(-50%, -50%);
+                transition: width 0.3s, height 0.3s, background 0.3s; mix-blend-mode: difference;
             }
             body.hovering .cursor-circle {
-                width: 60px; height: 60px;
-                background: rgba(255, 255, 255, 0.3);
-                border-color: transparent;
-                backdrop-filter: blur(2px);
+                width: 60px; height: 60px; background: rgba(255, 255, 255, 0.3); border-color: transparent; backdrop-filter: blur(2px);
             }
             body.hovering .cursor-dot { opacity: 0; }
         }
+        /* Oculta cursor customizado em touch */
+        @media (hover: none) { .cursor-dot, .cursor-circle { display: none; } }
 
         /* --- 3. PRELOADER --- */
         .preloader {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-deep); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            flex-direction: column;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
         }
-        .loader-text {
-            font-family: var(--font-display); font-size: 2rem; letter-spacing: 5px; overflow: hidden;
-            text-align: center; padding: 0 1rem;
-        }
-        .loader-bar {
-            width: 0%; height: 2px; background: var(--accent); margin-top: 20px; transition: width 0.5s ease;
-        }
+        .loader-text { font-family: var(--font-display); font-size: 2rem; letter-spacing: 5px; text-align: center; }
+        .loader-bar { width: 0%; height: 2px; background: var(--accent); margin-top: 20px; transition: width 0.5s ease; }
 
         /* --- 4. TYPOGRAPHY --- */
         h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; }
         p { font-weight: 300; letter-spacing: 0.5px; line-height: 1.8; color: var(--text-muted); }
         
         .big-title {
-            font-size: clamp(3rem, 10vw, 9rem); /* Clamp para responsividade fluida */
-            line-height: 0.9; 
-            letter-spacing: -2px; margin-bottom: 2rem;
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+            font-size: clamp(3rem, 10vw, 9rem); line-height: 0.9; letter-spacing: -2px; margin-bottom: 2rem;
+            clip-path: polygon(0 0, 100% 0, 100% 120%, 0% 120%);
         }
-        /* Correção para o subtítulo centralizado */
-        .hero-subtitle {
-            display: block;
-            letter-spacing: 6px; 
-            color: var(--accent);
-            margin-top: 10px;
-            font-size: clamp(0.8rem, 2vw, 1.2rem);
-        }
-
-        .char { display: inline-block; transform: translateY(100%); opacity: 0; }
+        .hero-subtitle { display: block; letter-spacing: 6px; color: var(--accent); margin-top: 10px; font-size: clamp(0.8rem, 2vw, 1.2rem); }
+        .char { display: inline-block; }
 
         /* --- 5. HEADER & MENU --- */
         nav {
-            position: fixed; top: 0; width: 100%;
-            padding: 2.5rem 4rem; display: flex;
-            justify-content: space-between; align-items: center;
-            z-index: 1000; mix-blend-mode: difference;
+            position: fixed; top: 0; width: 100%; padding: 2.5rem 4rem;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; mix-blend-mode: difference; color: #fff;
         }
         .logo { font-size: 1.5rem; letter-spacing: 2px; font-weight: 600; }
-        .menu-trigger { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; cursor: pointer; }
+        .menu-trigger { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 500; }
 
-        /* Fullscreen Menu */
         .menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: var(--bg-deep); z-index: 999;
@@ -145,74 +107,55 @@
         }
         .menu-open .menu-overlay { transform: translateY(0); }
         .menu-link {
-            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); 
-            color: var(--text-primary);
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); color: var(--text-primary);
             text-decoration: none; margin: 1rem 0; overflow: hidden; position: relative;
         }
         .menu-link span { display: block; transition: transform 0.4s; }
         .menu-link:hover span { transform: translateY(-10px) skewX(-10deg); color: var(--accent); }
-        .close-menu { position: absolute; top: 2.5rem; right: 4rem; font-size: 1rem; letter-spacing: 3px; cursor: pointer;}
+        .close-menu { position: absolute; top: 2.5rem; right: 4rem; font-size: 1rem; letter-spacing: 3px; }
 
         /* --- 6. HERO --- */
         .hero {
-            height: 100vh; /* Fallback */
-            height: 100dvh; /* Dynamic viewport para mobile */
-            width: 100%; display: flex;
-            align-items: center; justify-content: center;
+            height: 100svh; width: 100%; display: flex; align-items: center; justify-content: center;
             position: relative; overflow: hidden;
         }
         .hero-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 120%;
-            object-fit: cover; opacity: 0.5;
-            filter: grayscale(100%) contrast(1.1);
-            transition: filter 1s ease;
-            will-change: transform; /* Performance mobile */
+            object-fit: cover; opacity: 0.5; filter: grayscale(100%) contrast(1.1); will-change: transform;
         }
         .hero:hover .hero-bg { filter: grayscale(20%); }
-        
-        /* Centralização corrigida com Flexbox */
-        .hero-content { 
-            z-index: 2; 
-            text-align: center; 
-            mix-blend-mode: difference; 
-            padding: 0 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+        .hero-content { z-index: 2; text-align: center; padding: 0 1rem; }
 
-        /* --- 7. SEÇÕES & GRID --- */
+        /* --- 7. SEÇÕES --- */
         section { padding: 8rem 10%; position: relative; }
         
-        .about-grid {
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 4rem; 
-            align-items: center;
-        }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
 
+        /* --- 8. GALERIA (CORREÇÃO DE CORTE) --- */
         .gallery-grid {
             display: grid; grid-template-columns: repeat(12, 1fr);
-            gap: 2rem; margin-top: 4rem;
+            gap: 2rem; margin-top: 4rem; align-items: start;
         }
         .gallery-item {
-            position: relative; overflow: hidden; margin-bottom: 6rem;
-            transition: transform 0.5s; cursor: pointer;
+            position: relative; overflow: hidden; margin-bottom: 4rem; /* Margem vertical para respiro */
+            cursor: pointer; width: 100%;
         }
+        
+        /* AQUI ESTÁ A CORREÇÃO PRINCIPAL: REMOVIDO ASPECT-RATIO FIXO */
         .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover;
+            width: 100%; 
+            height: auto; /* Altura natural */
+            display: block; 
             transition: transform 1.2s var(--easing), filter 0.5s;
             filter: grayscale(100%);
-            will-change: transform; /* Performance mobile */
         }
-        .gallery-item:hover img { transform: scale(1.1); filter: grayscale(0%); }
+        .gallery-item:hover img { transform: scale(1.05); filter: grayscale(0%); }
         
-        /* Classes de layout desktop */
-        .w-large { grid-column: span 8; aspect-ratio: 16/10; }
-        .w-small { grid-column: span 4; aspect-ratio: 4/5; margin-top: 30%; }
-        .w-tall { grid-column: span 5; aspect-ratio: 3/4; }
-        .w-wide { grid-column: span 7; aspect-ratio: 16/9; margin-top: 10%; }
+        /* Layout Grid Desktop (Mantido a lógica de colunas, mas sem forçar altura) */
+        .w-large { grid-column: span 8; }
+        .w-small { grid-column: span 4; margin-top: 20%; }
+        .w-tall { grid-column: span 5; }
+        .w-wide { grid-column: span 7; margin-top: 10%; }
 
         .img-caption {
             position: absolute; bottom: 15px; left: 15px;
@@ -222,13 +165,13 @@
         }
         .gallery-item:hover .img-caption { opacity: 1; transform: translateY(0); }
 
-        /* --- 8. LIGHTBOX --- */
+        /* --- 9. LIGHTBOX --- */
         .lightbox {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 11000;
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
         .lightbox.active { opacity: 1; pointer-events: all; }
         .lightbox img {
@@ -239,26 +182,19 @@
         .lightbox.active img { transform: scale(1); }
         .lightbox-close {
             position: absolute; top: 30px; right: 40px;
-            color: #fff; font-size: 2rem; cursor: pointer;
-            padding: 20px;
-            z-index: 11001;
+            color: #fff; font-size: 2rem; cursor: pointer; padding: 20px; z-index: 11001;
         }
 
-        /* --- 9. FOOTER --- */
+        /* --- 10. FOOTER --- */
         footer {
             border-top: 1px solid #222; padding: 6rem 10%;
             display: flex; justify-content: space-between; flex-wrap: wrap; gap: 3rem;
         }
         .footer-cta h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; color: #555; transition: 0.3s; }
         .footer-cta h2:hover { color: #fff; }
-
         .social-link {
-            font-size: 1.1rem; 
-            color: var(--text-muted); 
-            text-decoration: none; 
-            margin-left: 2rem;
-            position: relative;
-            transition: color 0.3s;
+            font-size: 1.1rem; color: var(--text-muted); text-decoration: none; margin-left: 2rem;
+            position: relative; transition: color 0.3s;
         }
         .social-link:hover { color: var(--accent); }
         .social-link::after {
@@ -272,34 +208,24 @@
             nav { padding: 1.5rem 1.5rem; }
             section { padding: 4rem 5%; }
             
-            .about-grid {
-                grid-template-columns: 1fr; /* Empilha o texto e a foto */
-                gap: 2rem;
-            }
-            .about-grid img {
-                margin-top: 1rem;
-            }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .about-grid img { margin-top: 1rem; }
 
-            .gallery-grid { display: flex; flex-direction: column; gap: 4rem; }
+            .gallery-grid { display: flex; flex-direction: column; gap: 3rem; }
             .gallery-item { 
-                width: 100%; 
-                margin-bottom: 0; 
-                margin-top: 0 !important; /* Remove margins de desktop */
-                grid-column: auto !important;
-                height: auto;
+                width: 100%; margin: 0 !important; grid-column: auto !important; height: auto;
             }
             
-            /* Ajuste de proporção para mobile - menos altura */
-            .w-large, .w-small, .w-tall, .w-wide { aspect-ratio: 4/5; }
-
             .close-menu { top: 1.5rem; right: 1.5rem; }
             .lightbox-close { top: 10px; right: 10px; }
             
             footer { flex-direction: column; padding: 4rem 5%; }
             .social-link { margin-left: 0; margin-right: 2rem; }
             
-            /* Melhor usabilidade no mobile */
-            .img-caption { opacity: 1; transform: translateY(0); bottom: 10px; left: 10px; font-size: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+            .img-caption { 
+                opacity: 1; transform: translateY(0); bottom: 10px; left: 10px; font-size: 1rem; 
+                text-shadow: 0 2px 4px rgba(0,0,0,0.8); 
+            }
         }
     </style>
 </head>
@@ -315,12 +241,12 @@
     </div>
 
     <div class="lightbox" id="lightbox">
-        <div class="lightbox-close hover-trigger">&times;</div>
+        <button class="lightbox-close hover-trigger">&times;</button>
         <img src="" alt="Zoom" id="lightbox-img">
     </div>
 
     <div class="menu-overlay">
-        <div class="close-menu hover-trigger" onclick="toggleMenu()">FECHAR</div>
+        <button class="close-menu hover-trigger" onclick="toggleMenu()">FECHAR</button>
         <a href="#home" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Início</span></a>
         <a href="#about" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Sobre Mim</span></a>
         <a href="#work" class="menu-link hover-trigger" onclick="toggleMenu()"><span>Trabalhos</span></a>
@@ -329,7 +255,7 @@
 
     <nav>
         <div class="logo hover-trigger">Ana.</div>
-        <div class="menu-trigger hover-trigger" onclick="toggleMenu()">Menu</div>
+        <button class="menu-trigger hover-trigger" onclick="toggleMenu()">Menu</button>
     </nav>
 
     <div id="smooth-wrapper">
@@ -346,14 +272,17 @@
             <section id="about" class="about-grid">
                 <div>
                     <h2 class="split-text" style="font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 2rem;">Sobre Mim</h2>
-                    <p class="reveal-text">Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.
-
-Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p>
-                    <br>
-                    <p class="reveal-text">Cada clique é uma memória eternizada.</p>
+                    <div class="reveal-text">
+                        <p>Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.</p>
+                        <br>
+                        <p>Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p>
+                        <br>
+                        <p>Cada clique é uma memória eternizada.</p>
+                    </div>
                 </div>
                 <div style="position: relative; overflow: hidden;">
-                    <img src="assets/IMG_0826.webp" style="width: 100%; filter: grayscale(100%);" data-speed="0.8" alt="Sobre Ana">
+                    <img src="assets/IMG_0826.webp" style="width: 100%; filter: grayscale(100%);" data-speed="0.8" alt="Sobre Ana"
+                         onerror="this.src='https://images.unsplash.com/photo-1554048612-387768052bf7?q=80&w=1000&auto=format&fit=crop'">
                 </div>
             </section>
 
@@ -364,27 +293,32 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
 
                 <div class="gallery-grid">
                     <div class="gallery-item w-large hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/2025-02-04-18-59-55-498.webp" data-full="assets/2025-02-04-18-59-55-498.webp" onerror="this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1500&auto=format&fit=crop'">
+                        <img src="assets/2025-02-04-18-59-55-498.webp" data-full="assets/2025-02-04-18-59-55-498.webp" 
+                             onerror="this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Natureza</div>
                     </div>
                     
                     <div class="gallery-item w-small hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/2025-08-17-00-59-08-529.webp" data-full="assets/2025-08-17-00-59-08-529.webp" onerror="this.src='https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=1500&auto=format&fit=crop'">
+                        <img src="assets/2025-08-17-00-59-08-529.webp" data-full="assets/2025-08-17-00-59-08-529.webp" 
+                             onerror="this.src='https://images.unsplash.com/photo-1530103862676-de3c9a59af38?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Infantil</div>
                     </div>
                     
                     <div class="gallery-item w-tall hover-trigger" onclick="openLightbox(this)">
-                        <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp" onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop'">
+                        <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp" 
+                             onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop'">
                         <div class="img-caption">Retrato pessoal</div>
                     </div>
                     
                     <div class="gallery-item w-wide hover-trigger" onclick="openLightbox(this)">
-                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true" data-full="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true" onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1500&auto=format&fit=crop'">
+                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true" 
+                             onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Aniversários</div>
                     </div>
                     
                     <div class="gallery-item w-wide hover-trigger" onclick="openLightbox(this)">
-                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/Hellen_01.webp?raw=true" data-full="https://github.com/Anafotoss/portfolio/blob/main/assets/Hellen_01.webp?raw=true" onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1500&auto=format&fit=crop'">
+                        <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/Hellen_01.webp?raw=true" 
+                             onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1500&auto=format&fit=crop'">
                         <div class="img-caption">Gestantes</div>
                     </div>
                 </div>
@@ -393,7 +327,6 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
             <footer id="contact" class="footer-cta">
                 <div>
                     <p style="color: var(--accent); margin-bottom: 1rem;">Vamos criar algo atemporal?</p>
-                    
                     <a href="https://wa.me/5599981131658?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia." target="_blank" class="hover-trigger" style="text-decoration: none;">
                         <h2>Fale no WhatsApp</h2>
                     </a>
@@ -418,15 +351,13 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
             const loaderBar = document.querySelector('.loader-bar');
             const preloader = document.querySelector('.preloader');
             
-            loaderBar.style.width = '100%';
+            if(loaderBar) loaderBar.style.width = '100%';
             
             setTimeout(() => {
                 gsap.to(preloader, {
-                    yPercent: -100,
-                    duration: 1,
-                    ease: "power4.inOut"
+                    yPercent: -100, duration: 1, ease: "power4.inOut",
+                    onComplete: initAnimations
                 });
-                initAnimations();
             }, 800);
         });
 
@@ -449,31 +380,64 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
         requestAnimationFrame(raf);
 
         gsap.registerPlugin(ScrollTrigger);
+
+        // --- 3. LOGICA MENU & SCROLL LOCK ---
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            document.body.classList.toggle('menu-open');
+            
+            // Trava o scroll quando menu abre
+            if(isMenuOpen) lenis.stop();
+            else lenis.start();
+        }
+
+        // --- 4. LIGHTBOX (ZOOM) & SCROLL LOCK ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const fullSrc = img.getAttribute('data-full') || img.src;
+            
+            lightboxImg.src = fullSrc;
+            lightbox.classList.add('active');
+            lenis.stop(); // Trava scroll
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            if(!isMenuOpen) lenis.start(); // Destrava scroll se menu não estiver aberto
+        }
+
+        document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
         
-        // --- 3. CURSOR MAGNÉTICO (Apenas se não for touch) ---
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        lightbox.addEventListener('click', (e) => {
+             if(e.target === lightbox) closeLightbox();
+        });
+
+        // --- 5. CURSOR ---
+        // Verifica se é dispositivo touch para não exibir cursor customizado
+        const isTouch = window.matchMedia("(pointer: coarse)").matches;
         
-        if (!isTouchDevice) {
+        if (!isTouch) {
             const cursorDot = document.querySelector('.cursor-dot');
             const cursorCircle = document.querySelector('.cursor-circle');
-            
             let mouseX = 0, mouseY = 0;
             let cursorX = 0, cursorY = 0;
 
             window.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-                
                 gsap.to(cursorDot, { x: mouseX, y: mouseY, duration: 0 });
             });
 
             function animateCursor() {
                 cursorX += (mouseX - cursorX) * 0.15;
                 cursorY += (mouseY - cursorY) * 0.15;
-                
                 cursorCircle.style.left = `${cursorX}px`;
                 cursorCircle.style.top = `${cursorY}px`;
-                
                 requestAnimationFrame(animateCursor);
             }
             animateCursor();
@@ -484,39 +448,9 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
             });
         }
 
-        // --- 4. FUNÇÕES DE MENU E LIGHTBOX ---
-        function toggleMenu() {
-            document.body.classList.toggle('menu-open');
-        }
-
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-
-        function openLightbox(element) {
-            const img = element.querySelector('img');
-            const fullSrc = img.getAttribute('data-full') || img.src;
-            
-            lightboxImg.src = fullSrc;
-            lightbox.classList.add('active');
-            lenis.stop();
-        }
-
-        document.querySelector('.lightbox-close').addEventListener('click', () => {
-            lightbox.classList.remove('active');
-            lenis.start();
-        });
-        
-        lightbox.addEventListener('click', (e) => {
-             if(e.target === lightbox) {
-                 lightbox.classList.remove('active');
-                 lenis.start();
-             }
-        });
-
-        // --- 5. ANIMAÇÕES GSAP ---
+        // --- 6. ANIMAÇÕES GSAP ---
         function initAnimations() {
-            
-            // Parallax IMAGENS (Ativado também no mobile agora)
+            // Parallax
             document.querySelectorAll('img[data-speed]').forEach(img => {
                 gsap.to(img, {
                     y: (i, target) => -ScrollTrigger.maxScroll(window) * target.dataset.speed * 0.1,
@@ -530,36 +464,24 @@ Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenti
                 });
             });
 
-            // Animação de Título (Split Text)
+            // Títulos Split
             const titles = document.querySelectorAll('.split-text');
             titles.forEach(title => {
                 const split = new SplitType(title, { types: 'chars' });
-                
                 gsap.from(split.chars, {
-                    y: 100,
-                    opacity: 0,
-                    stagger: 0.05,
-                    duration: 1,
-                    ease: "back.out(1.7)",
-                    scrollTrigger: {
-                        trigger: title,
-                        start: "top 90%" // Ajustado para disparar mais fácil no mobile
-                    }
+                    y: 100, opacity: 0, stagger: 0.05, duration: 1, ease: "back.out(1.7)",
+                    scrollTrigger: { trigger: title, start: "top 90%" }
                 });
             });
 
-            // Animação de Texto (Parágrafos)
+            // Texto Reveal
             gsap.utils.toArray('.reveal-text').forEach(text => {
                 gsap.from(text, {
                     y: 30, opacity: 0, duration: 1, ease: "power3.out",
-                    scrollTrigger: { 
-                        trigger: text, 
-                        start: "top 90%" // Ajustado para disparar mais fácil no mobile
-                    }
+                    scrollTrigger: { trigger: text, start: "top 90%" }
                 });
             });
             
-            // Força o refresh do ScrollTrigger após carregar tudo
             ScrollTrigger.refresh();
         }
     </script>
