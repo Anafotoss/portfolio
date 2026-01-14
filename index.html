@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="theme-color" content="#0a0a0a">
-    <meta name="description" content="AnaFotos - Portfólio de Fotografia">
-    <title>AnaFotos | Fotografias</title>
+    <meta name="theme-color" content="#050505">
+    <title>AnaFotos | Art Portfolio</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- 1. VARIÁVEIS E RESET --- */
+        /* --- 1. CONFIGURAÇÕES VISUAIS --- */
         :root {
             --bg-color: #050505;
-            --text-color: #e0e0e0;
-            --accent-color: #d4af37; /* Ouro Nobre */
-            --transition-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+            --text-color: #e6e6e6;
+            --accent-color: #d4af37;
+            --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1); /* A tal curva suave */
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html.lenis, html.lenis body { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -33,286 +31,268 @@
             color: var(--text-color);
             font-family: 'Manrope', sans-serif;
             overflow-x: hidden;
-            opacity: 1; /* GARANTIA DE VISIBILIDADE */
+            opacity: 1; 
         }
 
-        /* --- 2. EFEITOS VISUAIS --- */
-        .noise-overlay {
-            position: fixed; inset: 0; pointer-events: none; z-index: 9000; opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* --- 3. TIPOGRAFIA FLUIDA --- */
-        h1, h2, h3 { font-family: 'Cinzel', serif; font-weight: 400; text-transform: uppercase; }
-        
-        .big-title {
-            font-size: clamp(3rem, 12vw, 9rem);
-            line-height: 0.9;
-            letter-spacing: -2px;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 4rem);
-            margin-bottom: 2rem;
-            border-left: 1px solid var(--accent-color);
-            padding-left: 20px;
-        }
-
-        p {
-            font-size: clamp(1rem, 1.2vw, 1.1rem);
-            line-height: 1.8;
-            color: #999;
-            margin-bottom: 1.5rem;
-        }
-
-        /* --- 4. PRELOADER (CSS FAILSAFE) --- */
+        /* --- 2. PRELOADER CINEMATOGRÁFICO --- */
         #preloader {
             position: fixed; inset: 0; background: #000; z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
-        .loader-content { text-align: center; }
-        .loader-text { font-family: 'Cinzel'; font-size: 1.5rem; letter-spacing: 5px; color: var(--accent-color); margin-bottom: 10px; }
-        .loader-line { width: 0%; height: 2px; background: white; margin: 0 auto; animation: loadLine 2s ease-in-out forwards; }
+        .loader-wrap { overflow: hidden; position: relative; }
+        .loader-text { 
+            font-family: 'Cinzel'; font-size: 2rem; letter-spacing: 0.5em; 
+            color: var(--accent-color); transform: translateY(100%); 
+        }
+        /* Máscara para transição de saída */
+        .page-mask {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050505; z-index: 99998; pointer-events: none;
+            transform-origin: top;
+        }
+
+        /* --- 3. TYPOGRAPHY & MASKS --- */
+        /* Classes para o efeito de "Texto Nascendo" */
+        .reveal-wrap { overflow: hidden; display: block; position: relative; }
+        .reveal-text { display: block; transform: translateY(120%); will-change: transform; }
+
+        h1.hero-title {
+            font-family: 'Cinzel', serif; font-size: clamp(3.5rem, 13vw, 10rem);
+            line-height: 0.85; text-transform: uppercase; font-weight: 400;
+            color: #fff; mix-blend-mode: exclusion;
+        }
         
-        @keyframes loadLine { to { width: 100%; } }
-        
-        /* Se o JS falhar, isso garante que o site apareça em 3s */
-        @keyframes safeFadeOut { 90% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; pointer-events: none; } }
-        .failsafe-active #preloader { animation: safeFadeOut 3.5s forwards; }
-
-        /* --- 5. HEADER & NAV --- */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 5%;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; mix-blend-mode: difference;
+        .hero-subtitle {
+            font-size: clamp(0.8rem, 2vw, 1rem); letter-spacing: 0.5em; text-transform: uppercase;
+            color: var(--accent-color); margin-top: 2rem; display: inline-block;
         }
-        .logo { font-family: 'Cinzel'; font-size: 1.5rem; font-weight: 600; color: white; }
-        .menu-btn { cursor: pointer; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: white; }
 
-        .menu-overlay {
-            position: fixed; inset: 0; background: #0f0f0f; z-index: 999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transform: translateY(-100%); transition: transform 0.8s var(--transition-smooth);
-        }
-        .menu-open .menu-overlay { transform: translateY(0); }
-        .menu-link {
-            font-family: 'Cinzel'; font-size: 3rem; color: #555; text-decoration: none; margin: 10px 0;
-            transition: color 0.3s, transform 0.3s;
-        }
-        .menu-link:hover { color: white; transform: skewX(-10deg); }
+        h2 { font-family: 'Cinzel'; font-size: clamp(2rem, 5vw, 4rem); font-weight: 400; margin-bottom: 2rem; }
+        p { font-size: clamp(1rem, 1.2vw, 1.15rem); line-height: 1.8; color: #999; margin-bottom: 1.5rem; max-width: 600px; }
 
-        /* --- 6. HERO SECTION --- */
+        /* --- 4. HERO SECTION --- */
         .hero {
             height: 100svh; width: 100%; position: relative; overflow: hidden;
             display: flex; align-items: center; justify-content: center; text-align: center;
         }
-        .hero-bg-wrapper { position: absolute; inset: 0; z-index: -1; }
-        .hero-bg {
-            width: 100%; height: 120%; object-fit: cover; opacity: 0.5;
-            filter: grayscale(100%); transition: scale 10s linear;
+        .hero-bg-wrapper {
+            position: absolute; inset: 0; z-index: -1;
+            clip-path: inset(0 0 0 0); /* Prepara para animação se quiser */
         }
-        .hero:hover .hero-bg { scale: 1.05; }
-        
-        .hero-content { z-index: 2; padding: 0 20px; mix-blend-mode: overlay; opacity: 0; transform: translateY(30px); }
+        .hero-bg {
+            width: 100%; height: 120%; object-fit: cover; opacity: 0.6;
+            filter: grayscale(100%); transform: scale(1.3); /* Começa com zoom */
+        }
+        .hero-content { z-index: 2; padding: 0 5%; }
 
-        /* --- 7. SECTIONS & GRID --- */
-        section { padding: 80px 5%; }
+        /* --- 5. GRID & LAYOUT --- */
+        section { padding: 10vh 5%; position: relative; }
         
-        .about-grid { display: grid; grid-template-columns: 1fr; gap: 40px; align-items: center; }
-        .about-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; filter: grayscale(100%); transition: 0.5s; border-radius: 4px; }
-        .about-img:hover { filter: grayscale(0%); }
+        .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
+        .about-img-wrap { position: relative; overflow: hidden; width: 100%; aspect-ratio: 4/5; }
+        .about-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transform: scale(1.2); transition: filter 0.5s; }
+        .about-img-wrap:hover .about-img { filter: grayscale(0%); }
 
-        /* --- 8. GALERIA OTIMIZADA --- */
         .gallery-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;
-            margin-top: 40px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 4rem;
         }
         .gallery-item { position: relative; cursor: pointer; overflow: hidden; }
         .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover; display: block;
-            transition: transform 1s var(--transition-smooth), filter 0.5s;
-            filter: grayscale(100%); transform: scale(1.1);
+            width: 100%; height: auto; display: block; filter: grayscale(100%);
+            transform: scale(1.1); transition: transform 1.2s var(--ease-luxury), filter 0.5s;
         }
         .gallery-item:hover img { transform: scale(1); filter: grayscale(0%); }
-        
-        .img-caption {
-            position: absolute; bottom: 15px; left: 15px;
-            font-family: 'Cinzel'; color: white; font-size: 1.2rem;
-            opacity: 0; transform: translateY(20px); transition: 0.4s;
+        .caption {
+            position: absolute; bottom: 1rem; left: 1rem; color: #fff; font-family: 'Cinzel';
+            font-size: 1.2rem; opacity: 0; transform: translateY(10px); transition: 0.5s;
             text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
-        .gallery-item:hover .img-caption { opacity: 1; transform: translateY(0); }
+        .gallery-item:hover .caption { opacity: 1; transform: translateY(0); }
 
-        /* --- 9. FOOTER --- */
-        footer { padding: 60px 5%; border-top: 1px solid #222; margin-top: 40px; }
-        .footer-cta { font-size: clamp(2rem, 5vw, 4rem); font-family: 'Cinzel'; color: #333; text-decoration: none; transition: 0.3s; display: block; margin-bottom: 30px;}
-        .footer-cta:hover { color: var(--accent-color); }
-        .socials { display: flex; gap: 20px; }
-        .social-link { color: #888; text-decoration: none; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
+        /* Desktop Grid */
+        @media (min-width: 900px) {
+            .about-grid { grid-template-columns: 1.2fr 0.8fr; gap: 8rem; }
+            .gallery-grid { grid-template-columns: repeat(12, 1fr); gap: 2rem; }
+            .w-large { grid-column: span 8; }
+            .w-small { grid-column: span 4; margin-top: 15vh; }
+            .w-tall { grid-column: span 5; }
+            .w-wide { grid-column: span 7; margin-top: 10vh; }
+        }
 
-        /* --- 10. LIGHTBOX --- */
+        /* --- 6. MENU & NAV --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 2rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; mix-blend-mode: difference; color: #fff;
+        }
+        .logo { font-family: 'Cinzel'; font-weight: 600; font-size: 1.5rem; }
+        .menu-btn { cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; }
+
+        .menu-overlay {
+            position: fixed; inset: 0; background: #0a0a0a; z-index: 999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            clip-path: circle(0% at 100% 0); transition: clip-path 1s var(--ease-luxury);
+        }
+        .menu-open .menu-overlay { clip-path: circle(150% at 100% 0); }
+        .menu-link {
+            font-family: 'Cinzel'; font-size: 8vw; color: #444; text-decoration: none;
+            transition: color 0.3s; line-height: 1.1;
+        }
+        .menu-link:hover { color: #fff; }
+
+        /* --- 7. FOOTER & LIGHTBOX --- */
+        footer { padding: 10vh 5%; border-top: 1px solid #222; margin-top: 5vh; }
         .lightbox {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10000;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10001;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s;
         }
         .lightbox.active { opacity: 1; pointer-events: all; }
-        .lightbox img { max-width: 95%; max-height: 90vh; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .lightbox-close { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; padding: 10px; }
+        .lightbox img { max-width: 90%; max-height: 90vh; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .lightbox-close { position: absolute; top: 2rem; right: 2rem; color: #fff; font-size: 2rem; cursor: pointer; }
 
-        /* --- RESPONSIVIDADE AVANÇADA --- */
-        @media (min-width: 900px) {
-            .about-grid { grid-template-columns: 1fr 1fr; gap: 80px; }
-            .gallery-grid { grid-template-columns: repeat(12, 1fr); gap: 30px; }
-            
-            /* Grid Complexo Desktop */
-            .w-large { grid-column: span 8; aspect-ratio: 16/9; }
-            .w-small { grid-column: span 4; aspect-ratio: 3/4; margin-top: 100px; }
-            .w-tall { grid-column: span 5; aspect-ratio: 3/4; }
-            .w-wide { grid-column: span 7; aspect-ratio: 16/8; margin-top: 50px; }
-        }
-
-        @media (max-width: 899px) {
-            .gallery-item { grid-column: span 2; aspect-ratio: 1/1; } /* Mobile: 1 coluna full width */
-            .about-img { margin-top: 20px; }
-            .hero-content { opacity: 1; transform: translateY(0); } /* Fallback simples mobile */
-        }
     </style>
 </head>
-<body class="failsafe-active">
+<body>
 
     <div id="preloader">
-        <div class="loader-content">
+        <div class="loader-wrap">
             <div class="loader-text">ANAFOTOS</div>
-            <div class="loader-line"></div>
         </div>
     </div>
-
-    <div class="noise-overlay"></div>
+    <div class="page-mask"></div>
 
     <div class="menu-overlay">
-        <div class="menu-btn" onclick="toggleMenu()" style="position: absolute; top: 30px; right: 5%;">FECHAR</div>
+        <div class="menu-btn" onclick="toggleMenu()" style="position: absolute; top: 2rem; right: 5%;">FECHAR</div>
         <a href="#home" class="menu-link" onclick="toggleMenu()">Início</a>
         <a href="#about" class="menu-link" onclick="toggleMenu()">Sobre</a>
-        <a href="#work" class="menu-link" onclick="toggleMenu()">Galeria</a>
+        <a href="#work" class="menu-link" onclick="toggleMenu()">Trabalhos</a>
         <a href="#contact" class="menu-link" onclick="toggleMenu()">Contato</a>
     </div>
 
     <nav>
-        <div class="logo">Ana.</div>
-        <div class="menu-btn" onclick="toggleMenu()">MENU</div>
+        <div class="logo reveal-wrap"><span class="reveal-text">Ana.</span></div>
+        <div class="menu-btn reveal-wrap" onclick="toggleMenu()"><span class="reveal-text">MENU</span></div>
     </nav>
 
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
-        <img src="" id="lightbox-img" alt="Full view">
-    </div>
-
-    <main id="smooth-wrapper">
+    <div id="smooth-wrapper">
         <div id="smooth-content">
 
             <header class="hero" id="home">
                 <div class="hero-bg-wrapper">
-                    <img src="assets/Ana_03.webp" class="hero-bg" alt="Background" data-speed="0.5"
+                    <img src="assets/Ana_03.webp" class="hero-bg" alt="Hero"
                          onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2000&auto=format&fit=crop'">
                 </div>
                 <div class="hero-content">
-                    <h1 class="big-title">Essência &<br>Qualidade</h1>
-                    <p style="letter-spacing: 5px; color: var(--accent-color); text-transform: uppercase; margin-top: 20px;">Fotografia</p>
+                    <div class="reveal-wrap">
+                        <h1 class="hero-title reveal-text">Essência &</h1>
+                    </div>
+                    <div class="reveal-wrap">
+                        <h1 class="hero-title reveal-text">Qualidade</h1>
+                    </div>
+                    <div class="reveal-wrap" style="margin-top: 2rem;">
+                        <span class="hero-subtitle reveal-text">Fotografia Autoral</span>
+                    </div>
                 </div>
             </header>
 
             <section id="about">
                 <div class="about-grid">
                     <div>
-                        <h2 class="section-title">Sobre Mim</h2>
-                        <div class="reveal-text">
-                            <p>Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.</p>
-                            <p>Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p>
-                            <p style="color: var(--text-color);">Cada clique é uma memória eternizada.</p>
+                        <div class="reveal-wrap">
+                            <h2 class="reveal-scroll">Sobre Mim</h2>
+                        </div>
+                        <div class="reveal-wrap">
+                            <p class="reveal-scroll">Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.</p>
+                        </div>
+                        <div class="reveal-wrap">
+                            <p class="reveal-scroll">Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p>
+                        </div>
+                        <div class="reveal-wrap">
+                            <p class="reveal-scroll" style="color: var(--accent-color);">Cada clique é uma memória eternizada.</p>
                         </div>
                     </div>
-                    <div style="position: relative; overflow: hidden;">
-                        <img src="assets/IMG_0826.webp" class="about-img" alt="Ana Portrait"
+                    <div class="about-img-wrap">
+                        <img src="assets/IMG_0826.webp" class="about-img reveal-img" alt="Ana Portrait"
                              onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop'">
                     </div>
                 </div>
             </section>
 
             <section id="work">
-                <h2 class="section-title">Fotos Selecionadas</h2>
+                <div class="reveal-wrap" style="margin-bottom: 3rem; border-bottom: 1px solid #222;">
+                    <h2 class="reveal-scroll">Fotos Selecionadas</h2>
+                </div>
                 
                 <div class="gallery-grid">
                     <div class="gallery-item w-large" onclick="openLightbox(this)">
                         <img src="assets/2025-02-04-18-59-55-498.webp" data-full="assets/2025-02-04-18-59-55-498.webp"
                              onerror="this.src='https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1600&auto=format&fit=crop'">
-                        <div class="img-caption">Natureza</div>
+                        <div class="caption">Natureza</div>
                     </div>
 
                     <div class="gallery-item w-small" onclick="openLightbox(this)">
                         <img src="assets/2025-08-17-00-59-08-529.webp" data-full="assets/2025-08-17-00-59-08-529.webp"
                              onerror="this.src='https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1000&auto=format&fit=crop'">
-                        <div class="img-caption">Infantil</div>
+                        <div class="caption">Infantil</div>
                     </div>
 
                     <div class="gallery-item w-tall" onclick="openLightbox(this)">
                         <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp"
                              onerror="this.src='https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop'">
-                        <div class="img-caption">Retrato</div>
+                        <div class="caption">Retrato</div>
                     </div>
 
                     <div class="gallery-item w-wide" onclick="openLightbox(this)">
                         <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/IMG_0714%20(2).webp?raw=true"
                              onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop'">
-                        <div class="img-caption">Aniversários</div>
+                        <div class="caption">Aniversários</div>
                     </div>
 
-                     <div class="gallery-item w-wide" onclick="openLightbox(this)">
+                    <div class="gallery-item w-wide" onclick="openLightbox(this)">
                         <img src="https://github.com/Anafotoss/portfolio/blob/main/assets/Hellen_01.webp?raw=true"
                              onerror="this.src='https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1600&auto=format&fit=crop'">
-                        <div class="img-caption">Gestantes</div>
+                        <div class="caption">Gestantes</div>
                     </div>
                 </div>
             </section>
 
             <footer id="contact">
-                <p style="text-transform: uppercase; letter-spacing: 2px;">Vamos criar algo atemporal?</p>
-                <a href="https://wa.me/5599981131658" class="footer-cta">Fale no WhatsApp</a>
-                
-                <div class="socials">
-                    <a href="https://wa.me/5599981131658" class="social-link">WhatsApp</a>
-                    <a href="https://instagram.com/anaefoto" class="social-link">Instagram</a>
+                <div class="reveal-wrap">
+                    <p class="reveal-scroll" style="letter-spacing: 2px; text-transform: uppercase;">Vamos criar algo atemporal?</p>
                 </div>
-                <p style="margin-top: 40px; font-size: 0.8rem;">&copy; 2025 AnaFotos.</p>
+                <div class="reveal-wrap">
+                    <a href="https://wa.me/5599981131658" style="text-decoration: none;">
+                        <h2 class="reveal-scroll" style="font-size: clamp(2rem, 5vw, 4rem); cursor: pointer; color: #fff;">Fale no WhatsApp</h2>
+                    </a>
+                </div>
+                <div style="display: flex; gap: 2rem; margin-top: 3rem;">
+                    <a href="https://wa.me/5599981131658" style="color: #666; text-decoration: none;">WhatsApp</a>
+                    <a href="https://instagram.com/anaefoto" style="color: #666; text-decoration: none;">Instagram</a>
+                </div>
             </footer>
 
         </div>
-    </main>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+        <img src="" id="lightbox-img" alt="Zoom">
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.29/dist/lenis.min.js"></script>
 
     <script>
-        // --- 1. SETUP DE SEGURANÇA ---
-        // Assim que a página carrega, removemos o preloader
-        window.onload = function() {
-            const preloader = document.getElementById('preloader');
-            preloader.style.opacity = '0';
-            setTimeout(() => {
-                preloader.style.visibility = 'hidden';
-                initAnimations(); // Só inicia animações pesadas depois de carregar
-            }, 800);
-        };
+        gsap.registerPlugin(ScrollTrigger);
 
-        // --- 2. SMOOTH SCROLL (LENIS) ---
+        // 1. Configurar Lenis (Scroll Suave)
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             direction: 'vertical',
-            smooth: true,
-            touchMultiplier: 2
+            smooth: true
         });
 
         function raf(time) {
@@ -321,20 +301,58 @@
         }
         requestAnimationFrame(raf);
 
-        // --- 3. ANIMAÇÕES GSAP ---
-        gsap.registerPlugin(ScrollTrigger);
+        // 2. TIMELINE MESTRE (Aqui está o segredo da sincronização)
+        window.addEventListener("load", () => {
+            
+            const masterTl = gsap.timeline();
 
-        function initAnimations() {
-            // Animação de Entrada do Hero
-            gsap.to('.hero-content', {
-                opacity: 1,
+            // Passo A: Animar texto do preloader
+            masterTl.to(".loader-text", {
                 y: 0,
+                duration: 1,
+                ease: "power4.out"
+            })
+            // Passo B: Tirar o texto do preloader
+            .to(".loader-text", {
+                y: "-100%",
+                duration: 0.8,
+                ease: "power4.in",
+                delay: 0.2
+            })
+            // Passo C: Remover o Preloader (Tela Preta)
+            .to("#preloader", {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => document.getElementById("preloader").style.display = "none"
+            })
+            // Passo D: Levantar a "Cortina" (Máscara secundária para suavidade)
+            .to(".page-mask", {
+                height: "0%",
                 duration: 1.5,
-                ease: "power3.out"
-            });
+                ease: "power4.inOut"
+            }, "-=0.3") // Começa um pouco antes do preloader terminar totalmente
+            
+            // Passo E: INICIAR ANIMAÇÕES DO HERO (Só agora elas começam!)
+            .to(".hero-bg", {
+                scale: 1, // Zoom out da imagem de fundo
+                duration: 2.5,
+                ease: "power2.out"
+            }, "-=1.2")
+            .to(".hero-title.reveal-text, .hero-subtitle.reveal-text, nav .reveal-text", {
+                y: 0, // Texto sobe
+                duration: 1.8,
+                stagger: 0.15, // Um por um
+                ease: "power4.out"
+            }, "-=2"); // Sincronizado com a imagem
 
-            // Parallax do Background Hero
-            gsap.to('.hero-bg', {
+            initScrollAnimations();
+        });
+
+        // 3. Animações de Scroll (Só rodam quando você desce a tela)
+        function initScrollAnimations() {
+            
+            // Parallax Hero
+            gsap.to(".hero-bg", {
                 yPercent: 30,
                 ease: "none",
                 scrollTrigger: {
@@ -345,39 +363,46 @@
                 }
             });
 
-            // Reveal dos textos das seções
-            const reveals = document.querySelectorAll('.reveal-text p, .section-title, .about-img');
-            reveals.forEach(el => {
-                gsap.from(el, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power3.out",
+            // Reveal Textos Gerais (Sections)
+            document.querySelectorAll(".reveal-scroll").forEach(text => {
+                // Cria wrapper se não existir (segurança)
+                if(!text.parentElement.classList.contains('reveal-wrap')) {
+                    const wrap = document.createElement('div');
+                    wrap.classList.add('reveal-wrap');
+                    text.parentNode.insertBefore(wrap, text);
+                    wrap.appendChild(text);
+                }
+                
+                // Configura estado inicial
+                gsap.set(text, { y: "120%" });
+
+                gsap.to(text, {
+                    y: 0,
+                    duration: 1.5,
+                    ease: "power4.out",
                     scrollTrigger: {
-                        trigger: el,
+                        trigger: text,
                         start: "top 85%"
                     }
                 });
             });
 
-            // Efeito suave nas imagens da galeria
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach((item, i) => {
-                gsap.from(item, {
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.8,
-                    delay: i * 0.05, // efeito cascata sutil
-                    ease: "power3.out",
+            // Reveal Imagens (About)
+            gsap.utils.toArray('.reveal-img').forEach(img => {
+                gsap.to(img, {
+                    scale: 1,
+                    filter: "grayscale(0%)",
+                    duration: 1.5,
+                    ease: "power2.out",
                     scrollTrigger: {
-                        trigger: item,
-                        start: "top 90%"
+                        trigger: img,
+                        start: "top 80%"
                     }
                 });
             });
         }
 
-        // --- 4. FUNÇÕES DE INTERFACE ---
+        // Funções UI
         function toggleMenu() {
             document.body.classList.toggle('menu-open');
         }
@@ -387,21 +412,20 @@
 
         function openLightbox(el) {
             const img = el.querySelector('img');
-            // Pega a imagem full ou usa a source atual se não tiver data-full
             lightboxImg.src = img.getAttribute('data-full') || img.src;
             lightbox.classList.add('active');
-            lenis.stop(); // Trava o scroll
+            lenis.stop();
         }
 
         function closeLightbox() {
             lightbox.classList.remove('active');
-            lenis.start(); // Destrava o scroll
+            lenis.start();
         }
-
-        // Fecha lightbox ao clicar fora da imagem
+        
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) closeLightbox();
+            if(e.target === lightbox) closeLightbox();
         });
+
     </script>
 </body>
 </html>
