@@ -26,89 +26,94 @@
             color: var(--text-color);
             font-family: 'Manrope', sans-serif;
             overflow-x: hidden;
-            opacity: 1; 
         }
 
-        /* --- 2. PRELOADER --- */
+        /* --- 2. PRELOADER BLINDADO (CSS PURO) --- */
+        /* Esta animação garante que o preloader suma SOZINHO, sem depender de scripts */
+        @keyframes forceExit {
+            0% { opacity: 1; visibility: visible; }
+            70% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+
         #preloader {
             position: fixed; inset: 0; background: #000; z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
+            /* O CSS remove o preloader em 3.5s obrigatoriamente */
+            animation: forceExit 3.5s forwards; 
+            pointer-events: none; /* Garante que não bloqueie cliques se bugar visualmente */
         }
+        
         .loader-text {
             font-family: 'Cinzel'; font-size: 2rem; letter-spacing: 5px; color: var(--accent-color);
-            animation: pulse 1.5s infinite alternate;
+            animation: pulse 1s infinite alternate;
         }
-        @keyframes pulse { from { opacity: 0.3; } to { opacity: 1; } }
+        @keyframes pulse { from { opacity: 0.4; } to { opacity: 1; } }
 
-        /* --- 3. HERO (IMAGEM NÃO CORTADA) --- */
+        /* --- 3. HERO (IMAGEM AJUSTADA) --- */
         .hero-section {
             width: 100%;
+            /* Altura dinâmica para evitar cortes ruins */
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
-            /* Padding cria a borda que você pediu */
-            padding: 120px 5vw 5vw 5vw; 
+            padding: 120px 5vw 5vw 5vw; /* Borda ao redor */
         }
 
         .hero-container {
             position: relative;
             width: 100%;
-            max-width: 1600px; /* Limita largura em telas gigantes */
+            max-width: 1600px;
             
-            /* A MÁGICA DO NÃO-CORTE: 
-               Define uma proporção fixa (Paisagem Cinemática) para PC 
-               e altura auto para a imagem se ajustar melhor */
+            /* Proporção Cinematográfica (não corta cabeças no Desktop) */
             aspect-ratio: 16/9; 
-            max-height: 85vh;
+            max-height: 85vh; /* Limite de altura */
             
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            background: #111; /* Cor de fundo enquanto carrega a img */
         }
 
         .hero-img {
             width: 100%; height: 100%;
             object-fit: cover; 
-            /* Foca no TOPO e CENTRO da imagem (Evita cortar cabeças) */
+            /* FOCA NO TOPO: Garante que cabeças apareçam */
             object-position: top center; 
-            opacity: 0.8;
-            transform: scale(1.1); /* Zoom inicial para animar */
+            opacity: 0; /* Começa invisível para animar */
+            transform: scale(1.1);
         }
 
         .hero-content {
             position: absolute; inset: 0;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 2; text-align: center;
-            background: rgba(0,0,0,0.2); /* Leve escurecimento para leitura */
+            background: rgba(0,0,0,0.2); 
         }
 
-        /* Mobile Hero Ajuste */
         @media (max-width: 768px) {
             .hero-section { padding: 100px 15px 15px 15px; min-height: auto; }
             .hero-container { aspect-ratio: 3/4; max-height: 80vh; } /* Retrato no celular */
+            h1.hero-title { font-size: 3.5rem !important; }
         }
 
-        /* --- 4. TEXTOS E ANIMAÇÕES (CSS FIRST) --- */
-        /* O estado inicial é definido no CSS para garantir que não apareça antes da hora */
+        /* --- 4. TEXTOS (CSS STATE) --- */
         .anim-text-wrap { overflow: hidden; display: block; }
         
         .anim-text {
             display: block;
             opacity: 0;
-            transform: translateY(100%); /* Começa descido */
-            will-change: transform, opacity;
+            transform: translateY(100%);
         }
 
-        /* Títulos */
         h1.hero-title {
             font-family: 'Cinzel', serif; 
-            font-size: clamp(2.5rem, 8vw, 6rem); 
+            font-size: clamp(2.5rem, 6vw, 6rem); 
             line-height: 1; text-transform: uppercase; font-weight: 400;
             color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         .hero-subtitle {
-            font-size: clamp(0.7rem, 1.5vw, 0.9rem); letter-spacing: 0.4em; text-transform: uppercase;
+            font-size: 0.8rem; letter-spacing: 0.4em; text-transform: uppercase;
             color: #fff; margin-top: 1.5rem; display: inline-block;
             background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 50px;
             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
@@ -117,11 +122,10 @@
         h2 { font-family: 'Cinzel'; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; }
         p { font-size: 1.1rem; line-height: 1.7; color: #aaa; margin-bottom: 1.5rem; max-width: 600px; }
 
-        /* --- 5. GRID --- */
+        /* --- 5. SEÇÕES & GRID --- */
         section { padding: 8rem 5%; }
         
         .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
-        .about-img-wrap { border-radius: 8px; overflow: hidden; }
         .about-img { width: 100%; display: block; border-radius: 8px; }
 
         .gallery-grid {
@@ -129,18 +133,16 @@
         }
         .gallery-item { position: relative; cursor: pointer; overflow: hidden; border-radius: 4px; }
         .gallery-item img {
-            width: 100%; height: auto; display: block;
-            transition: transform 0.8s ease;
+            width: 100%; height: auto; display: block; transition: transform 0.8s ease;
         }
         .gallery-item:hover img { transform: scale(1.05); }
         
         .caption {
             position: absolute; bottom: 1rem; left: 1rem; color: #fff; 
-            font-family: 'Cinzel'; font-size: 1.2rem; 
-            opacity: 0; transform: translateY(10px); transition: 0.3s;
+            font-family: 'Cinzel'; font-size: 1.2rem; opacity: 0; transition: 0.3s;
             text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
-        .gallery-item:hover .caption { opacity: 1; transform: translateY(0); }
+        .gallery-item:hover .caption { opacity: 1; }
 
         @media (min-width: 900px) {
             .about-grid { grid-template-columns: 1fr 1fr; gap: 6rem; }
@@ -306,7 +308,7 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // 1. Scroll Suave
+        // 1. Configurar Lenis (Scroll Suave)
         const lenis = new Lenis({
             duration: 1.2,
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -320,46 +322,38 @@
         }
         requestAnimationFrame(raf);
 
-        // 2. TIMELINE PRINCIPAL (Wait for Load)
-        window.onload = function() {
-            
-            const tl = gsap.timeline();
+        // 2. DISPARAR ANIMAÇÕES APÓS BREVE TIMEOUT
+        // Usamos setTimeout para garantir que rode mesmo se window.onload falhar
+        setTimeout(() => {
+            runAnimations();
+        }, 1000); 
 
-            // Sequência infalível
-            tl.to('#preloader', {
-                opacity: 0,
-                duration: 0.8,
-                delay: 0.2,
-                onComplete: () => { document.getElementById('preloader').style.display = 'none'; }
-            })
-            .to('.hero-img', {
-                scale: 1,
+        function runAnimations() {
+            // A. Remover Preloader (Já feito pelo CSS, mas garantimos aqui tb)
+            const preloader = document.getElementById('preloader');
+            if(preloader) preloader.style.display = 'none';
+
+            // B. Animar Hero
+            const tl = gsap.timeline();
+            
+            tl.to('.hero-img', {
                 opacity: 1,
                 duration: 2,
                 ease: "power2.out"
-            }, "-=0.4")
+            })
             .to('.anim-text', {
                 y: 0,
                 opacity: 1,
                 duration: 1.5,
-                stagger: 0.1,
+                stagger: 0.15,
                 ease: "power3.out"
             }, "-=1.5");
 
+            // C. Configurar Scroll Triggers
             initScrollAnimations();
-        };
-
-        // Fallback de segurança: Se o onload não disparar em 3s, força a abertura
-        setTimeout(() => {
-            if(document.getElementById('preloader').style.display !== 'none') {
-                document.getElementById('preloader').style.opacity = '0';
-                setTimeout(() => document.getElementById('preloader').style.display = 'none', 500);
-                gsap.to('.anim-text', { y: 0, opacity: 1, duration: 1 });
-            }
-        }, 3000);
+        }
 
         function initScrollAnimations() {
-            
             // Textos Scroll
             document.querySelectorAll('.anim-scroll').forEach(el => {
                 gsap.to(el, {
@@ -383,13 +377,12 @@
                     ease: "power2.out",
                     scrollTrigger: {
                         trigger: el,
-                        start: "top 80%",
-                        toggleActions: "play none none reverse"
+                        start: "top 80%"
                     }
                 });
             });
 
-            // Parallax Hero BG (Suave)
+            // Parallax Hero
             gsap.to('.hero-img', {
                 yPercent: 15,
                 ease: "none",
@@ -402,7 +395,7 @@
             });
         }
 
-        // UI Functions
+        // Funções UI
         function toggleMenu() { document.body.classList.toggle('menu-open'); }
         
         const lightbox = document.getElementById('lightbox');
