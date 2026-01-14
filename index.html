@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="theme-color" content="#080808">
-    <title>AnaFotos | Essence & Art</title>
+    <meta name="theme-color" content="#0a0a0a">
+    <title>AnaFotos | Portfólio</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,19 +13,13 @@
     <style>
         /* --- 1. CONFIGURAÇÕES VISUAIS --- */
         :root {
-            --bg-color: #080808;
-            --text-color: #e6e6e6;
+            --bg-color: #0a0a0a;
+            --text-color: #f0f0f0;
             --accent-color: #d4af37;
-            --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
-            --border-radius-lg: 12px;
+            --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html.lenis, html.lenis body { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-        .lenis.lenis-stopped { overflow: hidden; }
 
         body {
             background-color: var(--bg-color);
@@ -35,167 +29,172 @@
             opacity: 1; 
         }
 
-        /* --- 2. PRELOADER (COM TRAVA DE SEGURANÇA CSS) --- */
-        /* Animação que roda sozinha se o JS falhar */
-        @keyframes safetyNet {
-            0% { opacity: 1; visibility: visible; }
-            90% { opacity: 1; visibility: visible; }
-            100% { opacity: 0; visibility: hidden; pointer-events: none; }
-        }
-
+        /* --- 2. PRELOADER --- */
         #preloader {
             position: fixed; inset: 0; background: #000; z-index: 99999;
             display: flex; justify-content: center; align-items: center;
-            /* Se o JS não remover isso em 4.5s, o CSS remove sozinho */
-            animation: safetyNet 4.5s forwards; 
+            transition: opacity 0.5s ease;
         }
-        
-        .loader-text { 
-            font-family: 'Cinzel'; font-size: 2rem; letter-spacing: 0.5em; 
-            color: var(--accent-color); opacity: 0; animation: fadeInOut 2s infinite;
+        .loader-text {
+            font-family: 'Cinzel'; font-size: 2rem; letter-spacing: 5px; color: var(--accent-color);
+            animation: pulse 1.5s infinite alternate;
         }
-        @keyframes fadeInOut { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        @keyframes pulse { from { opacity: 0.3; } to { opacity: 1; } }
 
-        /* --- 3. HERO (FRAME STYLE - CORRIGIDO) --- */
+        /* --- 3. HERO (IMAGEM NÃO CORTADA) --- */
         .hero-section {
-            /* Garante padding em volta da imagem (BORDAS) */
-            padding: 120px 4vw 4vw 4vw; 
+            width: 100%;
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
-            position: relative;
+            /* Padding cria a borda que você pediu */
+            padding: 120px 5vw 5vw 5vw; 
         }
 
-        /* O Container da Imagem (A Moldura) */
-        .hero-frame {
+        .hero-container {
             position: relative;
             width: 100%;
-            height: 80vh; /* Altura controlada, não ocupa a tela toda */
-            max-height: 900px;
+            max-width: 1600px; /* Limita largura em telas gigantes */
+            
+            /* A MÁGICA DO NÃO-CORTE: 
+               Define uma proporção fixa (Paisagem Cinemática) para PC 
+               e altura auto para a imagem se ajustar melhor */
+            aspect-ratio: 16/9; 
+            max-height: 85vh;
+            
+            border-radius: 8px;
             overflow: hidden;
-            border-radius: var(--border-radius-lg);
-            /* Sombra suave para destacar do fundo */
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
         }
 
-        .hero-bg {
+        .hero-img {
             width: 100%; height: 100%;
-            object-fit: cover; /* Cobre o container */
-            object-position: center 20%; /* Foca um pouco mais acima do centro (rostos) */
-            opacity: 0.7;
-            transform: scale(1.2); /* Zoom inicial para animação */
+            object-fit: cover; 
+            /* Foca no TOPO e CENTRO da imagem (Evita cortar cabeças) */
+            object-position: top center; 
+            opacity: 0.8;
+            transform: scale(1.1); /* Zoom inicial para animar */
         }
 
         .hero-content {
             position: absolute; inset: 0;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 2; text-align: center;
-            mix-blend-mode: overlay; /* Texto mescla com a imagem elegantemente */
+            background: rgba(0,0,0,0.2); /* Leve escurecimento para leitura */
         }
 
-        /* --- 4. TYPOGRAPHY --- */
-        .reveal-wrap { overflow: hidden; display: block; position: relative; }
-        .reveal-text { display: block; transform: translateY(110%); will-change: transform; }
+        /* Mobile Hero Ajuste */
+        @media (max-width: 768px) {
+            .hero-section { padding: 100px 15px 15px 15px; min-height: auto; }
+            .hero-container { aspect-ratio: 3/4; max-height: 80vh; } /* Retrato no celular */
+        }
 
+        /* --- 4. TEXTOS E ANIMAÇÕES (CSS FIRST) --- */
+        /* O estado inicial é definido no CSS para garantir que não apareça antes da hora */
+        .anim-text-wrap { overflow: hidden; display: block; }
+        
+        .anim-text {
+            display: block;
+            opacity: 0;
+            transform: translateY(100%); /* Começa descido */
+            will-change: transform, opacity;
+        }
+
+        /* Títulos */
         h1.hero-title {
             font-family: 'Cinzel', serif; 
-            font-size: clamp(3rem, 10vw, 8rem); /* Ajustado para caber na moldura */
-            line-height: 0.9; text-transform: uppercase; font-weight: 400;
+            font-size: clamp(2.5rem, 8vw, 6rem); 
+            line-height: 1; text-transform: uppercase; font-weight: 400;
             color: #fff; text-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
         .hero-subtitle {
-            font-size: clamp(0.8rem, 1.5vw, 1rem); letter-spacing: 0.5em; text-transform: uppercase;
+            font-size: clamp(0.7rem, 1.5vw, 0.9rem); letter-spacing: 0.4em; text-transform: uppercase;
             color: #fff; margin-top: 1.5rem; display: inline-block;
-            background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 50px;
-            backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 50px;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
         }
 
-        h2 { font-family: 'Cinzel'; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; margin-bottom: 2rem; }
-        p { font-size: clamp(1rem, 1.1vw, 1.15rem); line-height: 1.8; color: #999; margin-bottom: 1.5rem; max-width: 600px; }
+        h2 { font-family: 'Cinzel'; font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 2rem; }
+        p { font-size: 1.1rem; line-height: 1.7; color: #aaa; margin-bottom: 1.5rem; max-width: 600px; }
 
-        /* --- 5. GRID & LAYOUT --- */
-        section { padding: 8rem 5%; position: relative; }
+        /* --- 5. GRID --- */
+        section { padding: 8rem 5%; }
         
         .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
-        .about-img-wrap { position: relative; overflow: hidden; width: 100%; aspect-ratio: 4/5; border-radius: var(--border-radius-lg); }
-        .about-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transform: scale(1.1); transition: filter 0.5s; }
-        .about-img-wrap:hover .about-img { filter: grayscale(0%); }
+        .about-img-wrap { border-radius: 8px; overflow: hidden; }
+        .about-img { width: 100%; display: block; border-radius: 8px; }
 
         .gallery-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 4rem;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 3rem;
         }
         .gallery-item { position: relative; cursor: pointer; overflow: hidden; border-radius: 4px; }
         .gallery-item img {
-            width: 100%; height: auto; display: block; filter: grayscale(100%) brightness(0.8);
-            transform: scale(1.05); transition: transform 1.2s var(--ease-luxury), filter 0.5s;
+            width: 100%; height: auto; display: block;
+            transition: transform 0.8s ease;
         }
-        .gallery-item:hover img { transform: scale(1); filter: grayscale(0%) brightness(1); }
+        .gallery-item:hover img { transform: scale(1.05); }
         
         .caption {
-            position: absolute; bottom: 1.5rem; left: 1.5rem; color: #fff; font-family: 'Cinzel';
-            font-size: 1.2rem; opacity: 0; transform: translateY(10px); transition: 0.5s;
-            z-index: 2; pointer-events: none;
+            position: absolute; bottom: 1rem; left: 1rem; color: #fff; 
+            font-family: 'Cinzel'; font-size: 1.2rem; 
+            opacity: 0; transform: translateY(10px); transition: 0.3s;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
         .gallery-item:hover .caption { opacity: 1; transform: translateY(0); }
 
-        /* Desktop Grid */
         @media (min-width: 900px) {
-            .about-grid { grid-template-columns: 1.2fr 0.8fr; gap: 8rem; }
-            .gallery-grid { grid-template-columns: repeat(12, 1fr); gap: 2rem; }
+            .about-grid { grid-template-columns: 1fr 1fr; gap: 6rem; }
+            .gallery-grid { grid-template-columns: repeat(12, 1fr); gap: 20px; }
             .w-large { grid-column: span 8; }
-            .w-small { grid-column: span 4; margin-top: 15vh; }
+            .w-small { grid-column: span 4; margin-top: 100px; }
             .w-tall { grid-column: span 5; }
-            .w-wide { grid-column: span 7; margin-top: 10vh; }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-section { padding: 100px 5vw 5vw 5vw; height: auto; min-height: auto; }
-            .hero-frame { height: 60vh; } /* Mobile hero height */
+            .w-wide { grid-column: span 7; margin-top: 50px; }
         }
 
-        /* --- 6. MENU & NAV --- */
+        /* --- 6. MENU & UI --- */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 2rem 5%;
+            position: fixed; top: 0; width: 100%; padding: 30px 5%;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; mix-blend-mode: difference; color: #fff; pointer-events: none;
+            z-index: 1000; mix-blend-mode: difference; color: #fff;
         }
-        nav * { pointer-events: all; } /* Reabilita cliques nos botões */
-        .logo { font-family: 'Cinzel'; font-weight: 600; font-size: 1.5rem; }
-        .menu-btn { cursor: pointer; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; font-weight: 600; }
+        .logo { font-family: 'Cinzel'; font-weight: 600; font-size: 1.5rem; cursor: pointer; }
+        .menu-btn { cursor: pointer; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
 
         .menu-overlay {
-            position: fixed; inset: 0; background: #0f0f0f; z-index: 999;
+            position: fixed; inset: 0; background: #111; z-index: 999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transform: translateY(-100%); transition: transform 0.8s var(--ease-luxury);
+            transform: translateY(-100%); transition: transform 0.6s cubic-bezier(0.7, 0, 0.3, 1);
         }
         .menu-open .menu-overlay { transform: translateY(0); }
         .menu-link {
-            font-family: 'Cinzel'; font-size: 8vw; color: #444; text-decoration: none;
-            transition: color 0.3s; line-height: 1.1;
+            font-family: 'Cinzel'; font-size: 3rem; color: #666; text-decoration: none; margin: 10px 0;
+            transition: 0.3s;
         }
         .menu-link:hover { color: #fff; }
 
-        /* --- 7. FOOTER & LIGHTBOX --- */
-        footer { padding: 10vh 5%; border-top: 1px solid #222; margin-top: 5vh; }
+        /* Lightbox */
         .lightbox {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 10001;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10001;
             display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.5s;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
         }
         .lightbox.active { opacity: 1; pointer-events: all; }
-        .lightbox img { max-width: 90%; max-height: 85vh; border-radius: 4px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        .lightbox-close { position: absolute; top: 2rem; right: 2rem; color: #fff; font-size: 2rem; cursor: pointer; }
+        .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 4px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .lightbox-close { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; }
+
+        /* Footer */
+        footer { padding: 80px 5%; border-top: 1px solid #222; margin-top: 50px; }
 
     </style>
 </head>
 <body>
 
     <div id="preloader">
-        <div class="loader-text">ANA.</div>
+        <div class="loader-text">ANAFOTOS</div>
     </div>
 
     <div class="menu-overlay">
-        <div class="menu-btn" onclick="toggleMenu()" style="position: absolute; top: 2rem; right: 5%; color: white;">FECHAR</div>
+        <div class="menu-btn" onclick="toggleMenu()" style="position: absolute; top: 30px; right: 5%; color: white;">FECHAR</div>
         <a href="#home" class="menu-link" onclick="toggleMenu()">Início</a>
         <a href="#about" class="menu-link" onclick="toggleMenu()">Sobre</a>
         <a href="#work" class="menu-link" onclick="toggleMenu()">Trabalhos</a>
@@ -203,28 +202,22 @@
     </div>
 
     <nav>
-        <div class="logo reveal-wrap"><span class="reveal-text">Ana.</span></div>
-        <div class="menu-btn reveal-wrap" onclick="toggleMenu()"><span class="reveal-text">MENU</span></div>
+        <div class="logo">Ana.</div>
+        <div class="menu-btn" onclick="toggleMenu()">MENU</div>
     </nav>
 
     <div id="smooth-wrapper">
         <div id="smooth-content">
 
             <header class="hero-section" id="home">
-                <div class="hero-frame">
-                    <img src="assets/Ana_03.webp" class="hero-bg" alt="Hero"
+                <div class="hero-container">
+                    <img src="assets/Ana_03.webp" class="hero-img" alt="Hero"
                          onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2000&auto=format&fit=crop'">
                     
                     <div class="hero-content">
-                        <div class="reveal-wrap">
-                            <h1 class="hero-title reveal-text">Essência &</h1>
-                        </div>
-                        <div class="reveal-wrap">
-                            <h1 class="hero-title reveal-text">Qualidade</h1>
-                        </div>
-                        <div class="reveal-wrap">
-                            <span class="hero-subtitle reveal-text">Fotografia Autoral</span>
-                        </div>
+                        <div class="anim-text-wrap"><h1 class="hero-title anim-text">Essência &</h1></div>
+                        <div class="anim-text-wrap"><h1 class="hero-title anim-text">Qualidade</h1></div>
+                        <div class="anim-text-wrap"><span class="hero-subtitle anim-text">Fotografia Autoral</span></div>
                     </div>
                 </div>
             </header>
@@ -232,27 +225,27 @@
             <section id="about">
                 <div class="about-grid">
                     <div>
-                        <div class="reveal-wrap"><h2 class="reveal-scroll">Sobre Mim</h2></div>
-                        <div class="reveal-wrap"><p class="reveal-scroll">Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.</p></div>
-                        <div class="reveal-wrap"><p class="reveal-scroll">Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p></div>
-                        <div class="reveal-wrap"><p class="reveal-scroll" style="color: var(--accent-color);">Cada clique é uma memória eternizada.</p></div>
+                        <div class="anim-text-wrap"><h2 class="anim-scroll">Sobre Mim</h2></div>
+                        <div class="anim-text-wrap"><p class="anim-scroll">Me chamo Ana e a fotografia começou como um hobby que rapidamente se transformou em paixão e propósito. Sempre fui encantada por registrar momentos e contar histórias através das imagens.</p></div>
+                        <div class="anim-text-wrap"><p class="anim-scroll">Hoje, sigo me profissionalizando e criando memórias com sensibilidade e autenticidade. Acredito que a fotografia é mais que um registro: é uma arte que conecta pessoas, emoções e histórias.</p></div>
+                        <div class="anim-text-wrap"><p class="anim-scroll" style="color: var(--accent-color);">Cada clique é uma memória eternizada.</p></div>
                     </div>
                     <div class="about-img-wrap">
-                        <img src="assets/IMG_0826.webp" class="about-img reveal-img" alt="Ana Portrait"
+                        <img src="assets/IMG_0826.webp" class="about-img anim-img" alt="Sobre Ana"
                              onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop'">
                     </div>
                 </div>
             </section>
 
             <section id="work">
-                <div class="reveal-wrap" style="margin-bottom: 3rem; border-bottom: 1px solid #222;">
-                    <h2 class="reveal-scroll">Fotos Selecionadas</h2>
+                <div class="anim-text-wrap" style="margin-bottom: 3rem; border-bottom: 1px solid #222; padding-bottom: 1rem;">
+                    <h2 class="anim-scroll">Fotos Selecionadas</h2>
                 </div>
                 
                 <div class="gallery-grid">
                     <div class="gallery-item w-large" onclick="openLightbox(this)">
                         <img src="assets/2025-02-04-18-59-55-498.webp" data-full="assets/2025-02-04-18-59-55-498.webp"
-                             onerror="this.src='https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1600&auto=format&fit=crop'">
+                             onerror="this.src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1600&auto=format&fit=crop'">
                         <div class="caption">Natureza</div>
                     </div>
 
@@ -264,7 +257,7 @@
 
                     <div class="gallery-item w-tall" onclick="openLightbox(this)">
                         <img src="assets/IMG_0374 (3).webp" data-full="assets/IMG_0374 (3).webp"
-                             onerror="this.src='https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1000&auto=format&fit=crop'">
+                             onerror="this.src='https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop'">
                         <div class="caption">Retrato</div>
                     </div>
 
@@ -283,17 +276,17 @@
             </section>
 
             <footer id="contact">
-                <div class="reveal-wrap">
-                    <p class="reveal-scroll" style="letter-spacing: 2px; text-transform: uppercase;">Vamos criar algo atemporal?</p>
+                <div class="anim-text-wrap">
+                    <p class="anim-scroll" style="text-transform: uppercase; letter-spacing: 2px;">Vamos criar algo atemporal?</p>
                 </div>
-                <div class="reveal-wrap">
+                <div class="anim-text-wrap">
                     <a href="https://wa.me/5599981131658" style="text-decoration: none;">
-                        <h2 class="reveal-scroll" style="font-size: clamp(2rem, 5vw, 4rem); cursor: pointer; color: #fff;">Fale no WhatsApp</h2>
+                        <h2 class="anim-scroll" style="font-size: clamp(2rem, 5vw, 4rem); cursor: pointer; color: #fff;">Fale no WhatsApp</h2>
                     </a>
                 </div>
-                <div style="display: flex; gap: 2rem; margin-top: 3rem;">
-                    <a href="https://wa.me/5599981131658" style="color: #666; text-decoration: none;">WhatsApp</a>
-                    <a href="https://instagram.com/anaefoto" style="color: #666; text-decoration: none;">Instagram</a>
+                <div style="display: flex; gap: 2rem; margin-top: 3rem; color: #666;">
+                    <a href="https://wa.me/5599981131658" style="color: inherit; text-decoration: none;">WhatsApp</a>
+                    <a href="https://instagram.com/anaefoto" style="color: inherit; text-decoration: none;">Instagram</a>
                 </div>
                 <p style="margin-top: 2rem; color: #444; font-size: 0.8rem;">&copy; 2025 AnaFotos.</p>
             </footer>
@@ -327,104 +320,91 @@
         }
         requestAnimationFrame(raf);
 
-        // 2. LÓGICA DE INICIALIZAÇÃO ROBUSTA
-        // Usamos DOMContentLoaded para ser mais rápido (não espera todas as imagens carregarem para liberar o JS)
-        document.addEventListener("DOMContentLoaded", () => {
+        // 2. TIMELINE PRINCIPAL (Wait for Load)
+        window.onload = function() {
             
-            const masterTl = gsap.timeline({
-                // Se der erro, garante que o site aparece
-                onComplete: () => { document.getElementById("preloader").style.display = "none"; }
-            });
+            const tl = gsap.timeline();
 
-            // Sequência de Abertura (Timeline)
-            masterTl
-                .to("#preloader", {
-                    opacity: 0,
-                    duration: 0.8,
-                    delay: 0.5, // Pequena pausa
-                    ease: "power2.inOut",
-                    onComplete: () => document.getElementById("preloader").style.visibility = "hidden"
-                })
-                .from(".hero-frame", {
-                    y: 100,
-                    opacity: 0,
-                    duration: 1.5,
-                    ease: "power3.out"
-                }, "-=0.2")
-                .to(".hero-bg", {
-                    scale: 1, // Zoom out
-                    opacity: 0.8,
-                    duration: 2,
-                    ease: "power2.out"
-                }, "-=1.5")
-                .to(".hero-title.reveal-text, .hero-subtitle.reveal-text, nav .reveal-text", {
-                    y: 0,
-                    duration: 1.5,
-                    stagger: 0.1,
-                    ease: "power4.out"
-                }, "-=1.5");
-            
+            // Sequência infalível
+            tl.to('#preloader', {
+                opacity: 0,
+                duration: 0.8,
+                delay: 0.2,
+                onComplete: () => { document.getElementById('preloader').style.display = 'none'; }
+            })
+            .to('.hero-img', {
+                scale: 1,
+                opacity: 1,
+                duration: 2,
+                ease: "power2.out"
+            }, "-=0.4")
+            .to('.anim-text', {
+                y: 0,
+                opacity: 1,
+                duration: 1.5,
+                stagger: 0.1,
+                ease: "power3.out"
+            }, "-=1.5");
+
             initScrollAnimations();
-        });
+        };
 
-        // 3. Animações durante o Scroll
+        // Fallback de segurança: Se o onload não disparar em 3s, força a abertura
+        setTimeout(() => {
+            if(document.getElementById('preloader').style.display !== 'none') {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => document.getElementById('preloader').style.display = 'none', 500);
+                gsap.to('.anim-text', { y: 0, opacity: 1, duration: 1 });
+            }
+        }, 3000);
+
         function initScrollAnimations() {
             
-            // Parallax na moldura
-            gsap.to(".hero-bg", {
-                yPercent: 20,
+            // Textos Scroll
+            document.querySelectorAll('.anim-scroll').forEach(el => {
+                gsap.to(el, {
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%"
+                    }
+                });
+            });
+
+            // Imagens Scroll
+            document.querySelectorAll('.anim-img').forEach(el => {
+                gsap.from(el, {
+                    scale: 1.1,
+                    filter: "grayscale(100%)",
+                    duration: 1.5,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+
+            // Parallax Hero BG (Suave)
+            gsap.to('.hero-img', {
+                yPercent: 15,
                 ease: "none",
                 scrollTrigger: {
-                    trigger: ".hero-section",
+                    trigger: '.hero-section',
                     start: "top top",
                     end: "bottom top",
                     scrub: true
                 }
             });
-
-            // Reveal Textos
-            document.querySelectorAll(".reveal-scroll").forEach(text => {
-                // Wrapper automático se necessário
-                if(!text.parentElement.classList.contains('reveal-wrap')) {
-                    const wrap = document.createElement('div');
-                    wrap.classList.add('reveal-wrap');
-                    text.parentNode.insertBefore(wrap, text);
-                    wrap.appendChild(text);
-                }
-                
-                gsap.set(text, { y: "110%" }); // Garante posição inicial
-
-                gsap.to(text, {
-                    y: 0,
-                    duration: 1.2,
-                    ease: "power4.out",
-                    scrollTrigger: {
-                        trigger: text,
-                        start: "top 85%" // Começa quando o topo do elemento chega em 85% da tela
-                    }
-                });
-            });
-
-            // Reveal Imagens
-            gsap.utils.toArray('.reveal-img').forEach(img => {
-                gsap.to(img, {
-                    scale: 1,
-                    filter: "grayscale(0%)",
-                    duration: 1.5,
-                    ease: "power2.out",
-                    scrollTrigger: {
-                        trigger: img,
-                        start: "top 80%"
-                    }
-                });
-            });
         }
 
-        // Funções UI
-        function toggleMenu() {
-            document.body.classList.toggle('menu-open');
-        }
-
+        // UI Functions
+        function toggleMenu() { document.body.classList.toggle('menu-open'); }
+        
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
 
@@ -440,9 +420,8 @@
             lenis.start();
         }
         
-        lightbox.addEventListener('click', (e) => {
-            if(e.target === lightbox) closeLightbox();
-        });
+        lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+
     </script>
 </body>
 </html>
