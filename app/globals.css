@@ -266,6 +266,21 @@ body::after {
 
 /* ===== EXAGGERATED CINEMA SHINE/SHIMMER TEXT OVERLAY ===== */
 .retro-title-shine {
+  position: relative;
+  color: transparent; /* Invisible bounding box */
+  z-index: 2;
+}
+
+/* Gradient Text (Front) */
+.retro-title-shine::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2; /* Front */
+  
   /* Vintage warm gradient with bright projector center */
   background: linear-gradient(
     -45deg,
@@ -280,12 +295,9 @@ body::after {
   -webkit-background-clip: text;
   background-clip: text;
   animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
-  
-  /* Removed drop-shadow to fix iOS bug. Using pseudo-element instead. */
-  position: relative;
-  z-index: 2;
 }
 
+/* Shadow Text (Back) */
 .retro-title-shine::after {
   content: attr(data-text);
   position: absolute;
@@ -293,16 +305,17 @@ body::after {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: 1; /* Back */
+  
   /* Solid retro 3D color */
-  color: #50321e; /* rgba(80, 50, 30, 0.9) approx */
+  color: #50321e;
   -webkit-text-fill-color: #50321e;
   background: none;
   -webkit-background-clip: border-box;
   animation: none;
   
   /* The 3D offset and glow */
-  transform: translateY(6px);
+  transform: translateY(8px);
   text-shadow: 
     0px 15px 10px rgba(0,0,0,0.8),
     0 0 40px rgba(194, 168, 140, 0.4);
