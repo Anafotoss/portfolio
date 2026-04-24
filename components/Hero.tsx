@@ -111,7 +111,7 @@ export default function Hero() {
       >
         {/* Apple Glass Label Pill */}
         <motion.div
-          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white/40 shadow-lg backdrop-blur-2xl bg-white/20"
+          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white/40 shadow-lg bg-white/20"
           initial={{ opacity: 0, y: 30, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 1.2, duration: 0.9, ease: smoothEase }}
@@ -167,7 +167,7 @@ export default function Hero() {
             href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia."
             target="_blank"
             rel="noopener noreferrer"
-            className="px-12 py-4 sm:py-5 text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-white/15 active:bg-white/20 transition-all duration-300 text-center rounded-full border border-white/40 backdrop-blur-xl bg-white/10"
+            className="px-12 py-4 sm:py-5 text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-white/15 active:bg-white/20 transition-all duration-300 text-center rounded-full border border-white/40 bg-white/10"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-hover

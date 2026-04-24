@@ -1,58 +1,71 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { photos } from "@/lib/photos";
 
 const preloaderTitle = "Ana Fotos";
+
+// All critical images that must load before showing the site
+const criticalImages = [
+  "/portfolio/photos/Ana_03.webp",        // Hero background
+  "/portfolio/photos/aboutme.jpeg",        // About section
+  ...photos.map((p) => p.src),             // Portfolio cards
+];
+
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve(); // Don't block on errors
+    img.src = src;
+  });
+}
 
 export default function Preloader() {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const loaded = useRef(0);
 
   useEffect(() => {
-    // Block scrolling
+    // Block scrolling & Lenis
     document.body.style.overflow = "hidden";
     document.body.style.touchAction = "none";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const lenis = (window as any).__lenis;
     if (lenis) lenis.stop();
 
-    let isPageLoaded = document.readyState === "complete";
-    const handleLoad = () => {
-      isPageLoaded = true;
-    };
+    const total = criticalImages.length;
 
-    if (!isPageLoaded) {
-      window.addEventListener("load", handleLoad);
-    }
+    // Load all images in parallel, updating progress as each completes
+    const promises = criticalImages.map((src) =>
+      preloadImage(src).then(() => {
+        loaded.current += 1;
+        setProgress(Math.round((loaded.current / total) * 100));
+      })
+    );
 
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        // If page is loaded, we can go to 100%
-        if (isPageLoaded && prev >= 90) {
-          clearInterval(interval);
-          setTimeout(() => setIsLoading(false), 400);
-          return 100;
-        }
-        
-        // If not loaded, stall at 90%
-        if (!isPageLoaded && prev >= 90) {
-          return 90;
-        }
-        
-        return prev + Math.random() * 15 + 5;
-      });
-    }, 100);
+    // Also wait for the window load event (fonts, scripts, etc.)
+    const windowLoadPromise = new Promise<void>((resolve) => {
+      if (document.readyState === "complete") {
+        resolve();
+      } else {
+        window.addEventListener("load", () => resolve(), { once: true });
+      }
+    });
 
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("load", handleLoad);
-    };
+    Promise.all([...promises, windowLoadPromise]).then(() => {
+      setProgress(100);
+      // Small delay so the 100% state is visible before exit animation
+      setTimeout(() => setIsLoading(false), 500);
+    });
   }, []);
 
   useEffect(() => {
     if (!isLoading) {
       document.body.style.overflow = "";
       document.body.style.touchAction = "";
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const lenis = (window as any).__lenis;
       if (lenis) lenis.start();
     }
@@ -70,19 +83,13 @@ export default function Preloader() {
           }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* Warm ambient orb — soft sunlight wash */}
-          <motion.div
-            className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-full"
+          {/* Warm ambient orb — simple CSS gradient, no animated blur */}
+          <div
+            className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full opacity-60"
             style={{
               background:
-                "radial-gradient(circle, rgba(232,221,211,0.5) 0%, rgba(249,246,240,0.3) 40%, transparent 60%)",
-              filter: "blur(80px)",
+                "radial-gradient(circle, rgba(232,221,211,0.6) 0%, rgba(249,246,240,0.2) 50%, transparent 70%)",
             }}
-            animate={{ 
-              scale: [1, 1.15, 1],
-              rotate: [0, 3, 0],
-            }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
 
           {/* Logo with letter-by-letter reveal */}
@@ -114,14 +121,14 @@ export default function Preloader() {
 
           <motion.p
             className="text-retro-warm/60 text-[10px] sm:text-xs tracking-[0.25em] uppercase font-medium"
-            initial={{ opacity: 0, filter: "blur(6px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 0.7, duration: 0.8 }}
           >
             Essência & Qualidade
           </motion.p>
 
-          {/* Elegant thin progress bar */}
+          {/* Real progress bar tied to actual image loading */}
           <div className="absolute bottom-16 sm:bottom-20 w-44 sm:w-56">
             <div className="h-[1px] bg-foreground/10 rounded-full overflow-hidden">
               <motion.div
@@ -129,7 +136,7 @@ export default function Preloader() {
                 style={{ background: "linear-gradient(90deg, rgba(194,168,140,0.4), rgba(194,168,140,0.9), rgba(194,168,140,0.4))" }}
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(progress, 100)}%` }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               />
             </div>
             <motion.p
