@@ -68,7 +68,7 @@ export default function Navbar() {
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-6 lg:mt-8 pointer-events-none px-4">
         <motion.nav
           className={`pointer-events-auto transition-all duration-700 ease-out flex items-center justify-between
-            ${isScrolled ? "glass-pill py-3 px-6 lg:px-8 shadow-[0_8px_40px_rgba(0,0,0,0.5)]" : "bg-transparent py-3 px-4 lg:px-6"}
+            ${isScrolled ? "glass-pill py-3 px-6 lg:px-8 shadow-sm" : "bg-transparent py-3 px-4 lg:px-6"}
           `}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1, width: isScrolled ? "auto" : "100%", maxWidth: "1200px" }}
@@ -76,12 +76,12 @@ export default function Navbar() {
         >
           <button onClick={() => handleNavClick("#hero")} className="group flex items-center pr-8 lg:pr-16" data-hover>
             <motion.span
-              className="font-display font-medium text-xl sm:text-2xl tracking-wide text-white"
+              className="font-display font-medium text-xl sm:text-2xl tracking-wide text-foreground"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              Ana<span className="text-[#C2A88C] mx-0.5">.</span>
+              Ana<span className="text-retro-warm mx-0.5">.</span>
             </motion.span>
           </button>
 
@@ -91,14 +91,14 @@ export default function Navbar() {
                 key={link.name}
                 onClick={() => handleNavClick(link.href)}
                 className={`relative text-xs lg:text-sm tracking-widest uppercase transition-colors duration-300 group ${
-                  activeSection === link.href.slice(1) ? "text-white" : "text-white/50 hover:text-white"
+                  activeSection === link.href.slice(1) ? "text-foreground" : "text-foreground/40 hover:text-foreground"
                 }`}
                 data-hover
               >
                 {link.name}
                 {activeSection === link.href.slice(1) && (
                   <motion.div
-                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#C2A88C] shadow-[0_0_6px_rgba(194,168,140,0.5)]"
+                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-retro-warm shadow-[0_0_6px_rgba(194,168,140,0.5)]"
                     layoutId="navbar-indicator"
                     transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
                   />
@@ -112,9 +112,9 @@ export default function Navbar() {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menu"
           >
-            <motion.span className="w-5 h-[1.5px] bg-white block origin-center" animate={isMobileMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
-            <motion.span className="w-4 h-[1.5px] bg-white block ml-auto" animate={isMobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }} transition={{ duration: 0.2 }} />
-            <motion.span className="w-5 h-[1.5px] bg-white block origin-center" animate={isMobileMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
+            <motion.span className="w-5 h-[1.5px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
+            <motion.span className="w-4 h-[1.5px] bg-foreground block ml-auto" animate={isMobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }} transition={{ duration: 0.2 }} />
+            <motion.span className="w-5 h-[1.5px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
           </button>
         </motion.nav>
       </div>
@@ -122,7 +122,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-black/90 backdrop-blur-3xl flex flex-col items-center justify-center"
+            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl flex flex-col items-center justify-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -134,7 +134,7 @@ export default function Navbar() {
                   <motion.button
                     onClick={() => handleNavClick(link.href)}
                     className={`font-display text-4xl sm:text-5xl font-light tracking-wide py-2 transition-colors duration-300 ${
-                      activeSection === link.href.slice(1) ? "text-white" : "text-white/40 active:text-white"
+                      activeSection === link.href.slice(1) ? "text-foreground" : "text-foreground/30 active:text-foreground"
                     }`}
                     initial={{ y: 80, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -153,8 +153,8 @@ export default function Navbar() {
               exit={{ opacity: 0 }}
               transition={{ delay: 0.3, duration: 0.4 }}
             >
-              <a href="https://wa.me/5562994101578" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#C2A88C] text-xs tracking-widest uppercase transition-colors">WhatsApp</a>
-              <a href="https://instagram.com/anaefoto" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-[#C2A88C] text-xs tracking-widest uppercase transition-colors">Instagram</a>
+              <a href="https://wa.me/5562994101578" target="_blank" rel="noopener noreferrer" className="text-foreground/30 hover:text-retro-warm text-xs tracking-widest uppercase transition-colors">WhatsApp</a>
+              <a href="https://instagram.com/anaefoto" target="_blank" rel="noopener noreferrer" className="text-foreground/30 hover:text-retro-warm text-xs tracking-widest uppercase transition-colors">Instagram</a>
             </motion.div>
           </motion.div>
         )}

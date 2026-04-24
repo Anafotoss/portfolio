@@ -24,7 +24,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="relative py-10 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20 border-t border-white/10 bg-black">
+    <footer className="relative py-10 sm:py-16 px-4 sm:px-6 md:px-12 lg:px-20 border-t border-foreground/8 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col items-center gap-8 sm:gap-10 md:flex-row md:justify-between">
           <motion.div
@@ -34,10 +34,10 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <span className="font-display font-medium text-2xl sm:text-3xl tracking-wider text-white">
+            <span className="font-display font-medium text-2xl sm:text-3xl tracking-wider text-foreground">
               Ana Fotos
             </span>
-            <p className="text-[#C2A88C]/50 text-[10px] sm:text-xs tracking-widest uppercase mt-2 font-medium">
+            <p className="text-retro-warm/60 text-[10px] sm:text-xs tracking-widest uppercase mt-2 font-medium">
               Essência & Qualidade
             </p>
           </motion.div>
@@ -58,7 +58,7 @@ export default function Footer() {
               <button
                 key={link.label}
                 onClick={() => lenisScrollTo(link.href)}
-                className="text-xs sm:text-sm text-white/50 hover:text-[#C2A88C] transition-colors duration-300 font-light"
+                className="text-xs sm:text-sm text-foreground/40 hover:text-retro-warm transition-colors duration-300 font-light"
                 data-hover
               >
                 {link.label}
@@ -77,17 +77,17 @@ export default function Footer() {
               href="https://wa.me/5562994101578"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-white/40 hover:text-[#C2A88C] transition-colors tracking-wider uppercase"
+              className="text-xs text-foreground/35 hover:text-retro-warm transition-colors tracking-wider uppercase"
               data-hover
             >
               WhatsApp
             </a>
-            <span className="w-[1px] h-3 bg-white/15" />
+            <span className="w-[1px] h-3 bg-foreground/15" />
             <a
               href="https://instagram.com/anaefoto"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-white/40 hover:text-[#C2A88C] transition-colors tracking-wider uppercase"
+              className="text-xs text-foreground/35 hover:text-retro-warm transition-colors tracking-wider uppercase"
               data-hover
             >
               Instagram
@@ -96,7 +96,7 @@ export default function Footer() {
 
           <motion.button
             onClick={scrollToTop}
-            className="w-12 h-12 rounded-full glass border border-white/10 flex items-center justify-center group bg-white/5 hover:bg-white/10 transition-colors duration-300"
+            className="w-12 h-12 rounded-full glass border border-foreground/8 flex items-center justify-center group hover:bg-foreground/5 transition-colors duration-300"
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -106,7 +106,7 @@ export default function Footer() {
             data-hover
             aria-label="Voltar ao topo"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-white/50 group-hover:text-white transition-colors duration-300">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-foreground/40 group-hover:text-foreground transition-colors duration-300">
               <path d="M8 13V3M3 7l5-5 5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.button>
@@ -119,7 +119,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <p className="text-white/30 text-[10px] sm:text-xs tracking-wider font-light">
+          <p className="text-foreground/25 text-[10px] sm:text-xs tracking-wider font-light">
             © {new Date().getFullYear()} Ana Fotos — Todos os direitos reservados
           </p>
         </motion.div>

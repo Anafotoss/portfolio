@@ -76,9 +76,9 @@ export default function Lightbox({ photo, onClose, onNavigate }: LightboxProps) 
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
     >
-      {/* Backdrop */}
+      {/* Backdrop — frosted light */}
       <motion.div
-        className="absolute inset-0 bg-black/95 backdrop-blur-3xl"
+        className="absolute inset-0 bg-background/90 backdrop-blur-3xl"
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -87,14 +87,14 @@ export default function Lightbox({ photo, onClose, onNavigate }: LightboxProps) 
       {/* Close button */}
       <motion.button
         onClick={onClose}
-        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full glass hover:bg-white/10 active:bg-white/20 transition-colors"
+        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20 w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-full glass hover:bg-foreground/5 active:bg-foreground/10 transition-colors"
         whileHover={{ scale: 1.1, rotate: 90 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         data-hover
         aria-label="Fechar"
       >
-        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" className="text-white">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" className="text-foreground">
           <path d="M1 1L17 17M17 1L1 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       </motion.button>
@@ -102,7 +102,7 @@ export default function Lightbox({ photo, onClose, onNavigate }: LightboxProps) 
       {/* Navigation arrows — hidden on mobile (swipe instead) */}
       <motion.button
         onClick={() => { setDirection(-1); onNavigate("prev"); }}
-        className="absolute left-2 sm:left-4 md:left-8 z-20 w-11 h-11 sm:w-12 sm:h-12 hidden sm:flex items-center justify-center rounded-full glass hover:border-white/30 transition-all text-white/70 hover:text-white hover:bg-white/10"
+        className="absolute left-2 sm:left-4 md:left-8 z-20 w-11 h-11 sm:w-12 sm:h-12 hidden sm:flex items-center justify-center rounded-full glass hover:border-foreground/20 transition-all text-foreground/50 hover:text-foreground hover:bg-foreground/5"
         whileHover={{ scale: 1.1, x: -3 }}
         whileTap={{ scale: 0.9 }}
         data-hover
@@ -115,7 +115,7 @@ export default function Lightbox({ photo, onClose, onNavigate }: LightboxProps) 
 
       <motion.button
         onClick={() => { setDirection(1); onNavigate("next"); }}
-        className="absolute right-2 sm:right-4 md:right-8 z-20 w-11 h-11 sm:w-12 sm:h-12 hidden sm:flex items-center justify-center rounded-full glass hover:border-white/30 transition-all text-white/70 hover:text-white hover:bg-white/10"
+        className="absolute right-2 sm:right-4 md:right-8 z-20 w-11 h-11 sm:w-12 sm:h-12 hidden sm:flex items-center justify-center rounded-full glass hover:border-foreground/20 transition-all text-foreground/50 hover:text-foreground hover:bg-foreground/5"
         whileHover={{ scale: 1.1, x: 3 }}
         whileTap={{ scale: 0.9 }}
         data-hover
@@ -157,21 +157,21 @@ export default function Lightbox({ photo, onClose, onNavigate }: LightboxProps) 
 
       {/* Info bar — responsive */}
       <motion.div
-        className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:left-auto sm:right-auto z-10 glass border border-white/10 rounded-xl sm:rounded-full px-5 sm:px-8 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 sm:w-auto shadow-2xl bg-black/40"
+        className="absolute bottom-4 sm:bottom-6 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:left-auto sm:right-auto z-10 glass-strong border border-white/60 rounded-xl sm:rounded-full px-5 sm:px-8 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-4 sm:w-auto shadow-lg"
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 30, opacity: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
       >
-        <span className="text-white text-[10px] sm:text-xs tracking-widest uppercase font-medium bg-white/10 px-2 py-0.5 rounded">
+        <span className="text-foreground text-[10px] sm:text-xs tracking-widest uppercase font-medium bg-foreground/8 px-2 py-0.5 rounded">
           {photo.category}
         </span>
-        <span className="w-[1px] h-4 bg-white/20 hidden sm:block" />
-        <span className="text-white/80 font-light text-xs sm:text-sm tracking-wide line-clamp-1">
+        <span className="w-[1px] h-4 bg-foreground/15 hidden sm:block" />
+        <span className="text-foreground/70 font-light text-xs sm:text-sm tracking-wide line-clamp-1">
           {photo.description}
         </span>
         {/* Swipe hint on mobile */}
-        <span className="text-white/40 text-[10px] tracking-wider sm:hidden mt-1 font-light">
+        <span className="text-foreground/30 text-[10px] tracking-wider sm:hidden mt-1 font-light">
           ← Deslize para navegar →
         </span>
       </motion.div>

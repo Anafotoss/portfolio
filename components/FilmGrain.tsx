@@ -53,7 +53,7 @@ export default function FilmGrain() {
       // Only draw occasionally for realistic film wear
       if (Math.random() > 0.6) {
         const numScratches = Math.floor(Math.random() * 3);
-        ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+        ctx.fillStyle = "rgba(180, 160, 140, 0.12)";
         for (let i = 0; i < numScratches; i++) {
           const x = Math.random() * w;
           const scratchWidth = Math.random() * 1.5 + 0.5;
@@ -63,7 +63,7 @@ export default function FilmGrain() {
       
       // Light leaks / bright scratches
       if (Math.random() > 0.85) {
-        ctx.fillStyle = "rgba(255, 230, 200, 0.08)";
+        ctx.fillStyle = "rgba(255, 245, 230, 0.06)";
         const x = Math.random() * w;
         ctx.fillRect(x, 0, Math.random() * 2 + 1, h);
       }
@@ -82,8 +82,8 @@ export default function FilmGrain() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none z-[9995] mix-blend-overlay"
-      style={{ opacity: 0.3, imageRendering: "pixelated" }}
+      className="fixed inset-0 w-full h-full pointer-events-none z-[9995] mix-blend-multiply"
+      style={{ opacity: 0.15, imageRendering: "pixelated" }}
       aria-hidden="true"
     />
   );

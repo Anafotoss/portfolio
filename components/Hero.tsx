@@ -36,14 +36,14 @@ export default function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-[100svh] flex items-center justify-center overflow-hidden bg-[#0a0806]"
+      className="relative h-[100svh] flex items-center justify-center overflow-hidden bg-background"
     >
       {/* 
         Cinemascope / Letterboxing 
-        Black bars at top and bottom to create a dramatic anamorphic film look 
+        White bars at top and bottom to create a dramatic anamorphic film look on light theme
       */}
-      <div className="absolute top-0 left-0 right-0 h-[10svh] bg-black z-30 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-[10svh] bg-black z-30 pointer-events-none flex items-center justify-between px-3 sm:px-8">
+      <div className="absolute top-0 left-0 right-0 h-[10svh] bg-background z-30 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-[10svh] bg-background z-30 pointer-events-none flex items-center justify-between px-3 sm:px-8">
         {/* Retro Film Timecodes integrated inside letterbox */}
         <motion.div 
           className="glass px-2.5 sm:px-4 py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2"
@@ -52,7 +52,7 @@ export default function Hero() {
           transition={{ delay: 2, duration: 1 }}
         >
           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[7px] sm:text-[9px] text-white/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">REC / 35MM</span>
+          <span className="text-[7px] sm:text-[9px] text-foreground/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">REC / 35MM</span>
         </motion.div>
         
         <motion.div 
@@ -61,7 +61,7 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[7px] sm:text-[9px] text-white/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">SCN 01 — TAKE 1</span>
+          <span className="text-[7px] sm:text-[9px] text-foreground/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">SCN 01 — TAKE 1</span>
         </motion.div>
       </div>
 
@@ -72,15 +72,15 @@ export default function Hero() {
       {/* 
         Background Setup: Fixed the image visibility.
         Removed harsh gradients, using mix-blend-luminosity and sepia overlays 
-        to blend the image perfectly with the dark warm background.
+        to blend the image perfectly with the light warm background.
       */}
       <motion.div className="absolute inset-0 z-0" style={{ y: imageY, scale: imageScale }}>
-        <div className="absolute inset-0 bg-[#120e0a]" /> {/* Warm dark base */}
+        <div className="absolute inset-0 bg-background" /> {/* Warm light base */}
         
         <motion.div
-          className="relative w-full h-full mix-blend-luminosity opacity-80"
+          className="relative w-full h-full mix-blend-luminosity opacity-40"
           initial={{ scale: 1.2, opacity: 0, filter: "blur(20px)" }}
-          animate={{ scale: 1, opacity: 0.8, filter: "blur(0px)" }}
+          animate={{ scale: 1, opacity: 0.4, filter: "blur(0px)" }}
           transition={{ duration: 2.5, ease: smoothEase }}
         >
           <Image
@@ -88,7 +88,7 @@ export default function Hero() {
             alt="Fotografia por Ana Fotos — Essência & Qualidade"
             fill
             className="object-cover will-change-transform"
-            style={{ filter: "sepia(0.3) contrast(1.2) brightness(0.9)" }}
+            style={{ filter: "sepia(0.2) contrast(1.1) brightness(1.2)" }}
             priority
             quality={100}
             sizes="100vw"
@@ -96,7 +96,7 @@ export default function Hero() {
         </motion.div>
         
         {/* Subtle radial vignette directly on the image layer */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(0,0,0,0.85)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#F9F6F0_100%)]" />
       </motion.div>
 
       {/* Content */}
@@ -106,13 +106,13 @@ export default function Hero() {
       >
         {/* Apple Glass Label Pill */}
         <motion.div
-          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white/20 shadow-[0_15px_40px_rgba(0,0,0,0.8)]"
+          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white shadow-sm"
           initial={{ opacity: 0, y: 30, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 1.2, duration: 0.9, ease: smoothEase }}
         >
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full shadow-[0_0_12px_rgba(194,168,140,0.8)] animate-pulse" style={{ background: "#E8DDD3" }} />
-          <p className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.25em] uppercase text-white font-semibold">
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full shadow-[0_0_10px_rgba(42,36,32,0.4)] animate-pulse bg-foreground" />
+          <p className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.25em] uppercase text-foreground font-semibold">
             Essência & Qualidade
           </p>
         </motion.div>
@@ -133,12 +133,12 @@ export default function Hero() {
 
         {/* Dramatic Subtitle */}
         <motion.p
-          className="mt-4 sm:mt-8 text-[#E8DDD3]/70 font-light text-lg sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed tracking-wide text-shadow-sm"
+          className="mt-4 sm:mt-8 text-foreground/70 font-light text-lg sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed tracking-wide"
           initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ delay: 2.2, duration: 1, ease: smoothEase }}
         >
-          Cada clique é uma <span className="italic text-white">memória eternizada.</span>
+          Cada clique é uma <span className="italic text-foreground">memória eternizada.</span>
         </motion.p>
 
         {/* CTA Buttons in strong glass */}
@@ -150,8 +150,8 @@ export default function Hero() {
         >
           <motion.button
             onClick={() => lenisScrollTo("#portfolio")}
-            className="relative px-12 py-4 sm:py-5 overflow-hidden rounded-full bg-gradient-to-b from-[#FFF] to-[#E8DDD3] text-black font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto active:scale-95 transition-all shadow-[0_0_50px_rgba(194,168,140,0.3)]"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 80px rgba(194,168,140,0.5)" }}
+            className="relative px-12 py-4 sm:py-5 overflow-hidden rounded-full bg-foreground text-background font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto active:scale-95 transition-all shadow-lg"
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(42,36,32,0.2)" }}
             whileTap={{ scale: 0.95 }}
             data-hover
           >
@@ -162,7 +162,7 @@ export default function Hero() {
             href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia."
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-strong px-12 py-4 sm:py-5 text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-white/20 active:bg-white/10 transition-all duration-300 text-center rounded-full border border-white/30"
+            className="glass-strong px-12 py-4 sm:py-5 text-foreground font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-black/5 active:bg-black/10 transition-all duration-300 text-center rounded-full border border-black/10"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-hover

@@ -20,7 +20,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#000000",
+  themeColor: "#F9F6F0",
 };
 
 export const metadata: Metadata = {
@@ -47,7 +47,7 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${playfair.variable} ${inter.variable} antialiased`}
     >
-      <body className="min-h-screen md:cursor-none bg-black text-white retro-vignette">{children}</body>
+      <body className="min-h-screen md:cursor-none bg-background text-foreground retro-vignette">{children}</body>
     </html>
   );
 }

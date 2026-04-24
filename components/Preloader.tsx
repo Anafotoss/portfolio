@@ -62,7 +62,7 @@ export default function Preloader() {
     <AnimatePresence mode="wait">
       {isLoading && (
         <motion.div
-          className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-black"
+          className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-background"
           exit={{ 
             opacity: 0,
             scale: 1.05,
@@ -70,12 +70,12 @@ export default function Preloader() {
           }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* Warm ambient orb */}
+          {/* Warm ambient orb — soft sunlight wash */}
           <motion.div
             className="absolute w-[300px] h-[300px] md:w-[600px] md:h-[600px] rounded-full"
             style={{
               background:
-                "radial-gradient(circle, rgba(194,168,140,0.08) 0%, rgba(212,165,116,0.04) 40%, transparent 60%)",
+                "radial-gradient(circle, rgba(232,221,211,0.5) 0%, rgba(249,246,240,0.3) 40%, transparent 60%)",
               filter: "blur(80px)",
             }}
             animate={{ 
@@ -113,7 +113,7 @@ export default function Preloader() {
           </div>
 
           <motion.p
-            className="text-[#C2A88C]/50 text-[10px] sm:text-xs tracking-[0.25em] uppercase font-medium"
+            className="text-retro-warm/60 text-[10px] sm:text-xs tracking-[0.25em] uppercase font-medium"
             initial={{ opacity: 0, filter: "blur(6px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ delay: 0.7, duration: 0.8 }}
@@ -123,17 +123,17 @@ export default function Preloader() {
 
           {/* Elegant thin progress bar */}
           <div className="absolute bottom-16 sm:bottom-20 w-44 sm:w-56">
-            <div className="h-[1px] bg-white/10 rounded-full overflow-hidden">
+            <div className="h-[1px] bg-foreground/10 rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
-                style={{ background: "linear-gradient(90deg, rgba(194,168,140,0.4), rgba(194,168,140,0.8), rgba(194,168,140,0.4))" }}
+                style={{ background: "linear-gradient(90deg, rgba(194,168,140,0.4), rgba(194,168,140,0.9), rgba(194,168,140,0.4))" }}
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(progress, 100)}%` }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </div>
             <motion.p
-              className="text-white/20 text-[10px] tracking-widest mt-3 text-center tabular-nums"
+              className="text-foreground/25 text-[10px] tracking-widest mt-3 text-center tabular-nums"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}

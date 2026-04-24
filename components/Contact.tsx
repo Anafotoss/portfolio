@@ -99,7 +99,7 @@ function ContactMonolith({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative flex flex-col items-center justify-center w-full sm:w-[400px] h-[300px] sm:h-[450px] glass-strong rounded-[2rem] border border-white/10 group overflow-hidden transition-transform duration-500 ease-out"
+      className="relative flex flex-col items-center justify-center w-full sm:w-[400px] h-[300px] sm:h-[450px] glass-strong rounded-[2rem] border border-white/60 group overflow-hidden transition-transform duration-500 ease-out"
       initial={{ opacity: 0, y: 50, rotateX: 20 }}
       whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -109,7 +109,7 @@ function ContactMonolith({
       <div 
         className="glass-glare absolute w-[200%] h-[200%] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-0 transition-opacity duration-300 z-10"
         style={{
-          background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(194,168,140,0.05) 30%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(232,221,211,0.3) 30%, transparent 60%)",
           filter: "blur(20px)",
           top: "50%",
           left: "50%"
@@ -117,20 +117,20 @@ function ContactMonolith({
       />
       
       {/* Retro Viewfinder Framing Decoration */}
-      <div className="absolute inset-4 sm:inset-6 border-[0.5px] border-white/10 opacity-50 pointer-events-none flex items-center justify-center">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 border-t border-l border-white/30" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 border-b border-r border-white/30" />
+      <div className="absolute inset-4 sm:inset-6 border-[0.5px] border-foreground/8 opacity-50 pointer-events-none flex items-center justify-center">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 border-t border-l border-foreground/20" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 border-b border-r border-foreground/20" />
       </div>
 
       <div className="relative z-20 flex flex-col items-center group-hover:-translate-y-4 transition-transform duration-500">
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-[#E8DDD3] to-[#C2A88C] shadow-[0_0_40px_rgba(194,168,140,0.3)] mb-6 sm:mb-8 group-hover:scale-110 group-hover:shadow-[0_0_60px_rgba(194,168,140,0.6)] transition-all duration-500">
-          <Icon className="w-10 h-10 sm:w-12 sm:h-12 text-black" strokeWidth={1.5} />
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center bg-gradient-to-br from-foreground to-foreground/80 shadow-lg mb-6 sm:mb-8 group-hover:scale-110 group-hover:shadow-xl transition-all duration-500">
+          <Icon className="w-10 h-10 sm:w-12 sm:h-12 text-background" strokeWidth={1.5} />
         </div>
         
-        <h3 className="font-display text-3xl sm:text-4xl text-white font-medium tracking-tight mb-2 rgb-split-hover">
+        <h3 className="font-display text-3xl sm:text-4xl text-foreground font-medium tracking-tight mb-2 rgb-split-hover">
           {title}
         </h3>
-        <p className="text-[#C2A88C] text-[10px] sm:text-xs tracking-[0.3em] font-mono uppercase">
+        <p className="text-retro-warm text-[10px] sm:text-xs tracking-[0.3em] font-mono uppercase">
           {subtitle}
         </p>
       </div>
@@ -152,11 +152,11 @@ export default function Contact() {
     <section 
       id="contact" 
       ref={sectionRef} 
-      className="relative min-h-[100svh] flex flex-col items-center justify-center py-20 px-4 sm:px-6 overflow-hidden bg-black"
+      className="relative min-h-[100svh] flex flex-col items-center justify-center py-20 px-4 sm:px-6 overflow-hidden bg-background"
     >
       {/* Cinematic Background Light */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full bg-gradient-to-b from-[rgba(194,168,140,0.08)] to-transparent blur-[150px] mix-blend-screen opacity-70" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] rounded-full bg-gradient-to-b from-[rgba(232,221,211,0.5)] to-transparent blur-[150px] opacity-70" />
       </div>
 
       <motion.div 
@@ -171,7 +171,7 @@ export default function Contact() {
           viewport={{ once: true }}
         >
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_red]" />
-          <span className="text-[9px] text-white/70 tracking-[0.3em] font-mono">READY TO SHOOT</span>
+          <span className="text-[9px] text-foreground/60 tracking-[0.3em] font-mono">READY TO SHOOT</span>
         </motion.div>
 
         {/* Dramatic Typography with Chromatic Aberration */}
@@ -179,16 +179,16 @@ export default function Contact() {
           className="text-center mb-16 sm:mb-24"
           style={{ y: titleY }}
         >
-          <h2 className="font-display font-bold text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] tracking-tighter text-white mb-6">
+          <h2 className="font-display font-bold text-[clamp(3.5rem,10vw,8rem)] leading-[0.85] tracking-tighter text-foreground mb-6">
             Vamos Criar Algo <br/>
             <span 
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#E8DDD3] via-[#C2A88C] to-[#E8DDD3] chromatic-text rgb-split-hover" 
+              className="text-transparent bg-clip-text bg-gradient-to-r from-retro-warm-dark via-retro-warm to-retro-warm-dark chromatic-text rgb-split-hover" 
               data-text="Atemporal?"
             >
               Atemporal?
             </span>
           </h2>
-          <p className="text-white/50 text-sm sm:text-base md:text-xl font-light tracking-wide max-w-2xl mx-auto">
+          <p className="text-foreground/45 text-sm sm:text-base md:text-xl font-light tracking-wide max-w-2xl mx-auto">
             Sua essência capturada através de uma lente que entende e valoriza a sua verdadeira arte.
           </p>
         </motion.div>
