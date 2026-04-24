@@ -120,11 +120,12 @@ export default function Hero() {
         {/* Exaggerated Cinematic Title */}
         <div className="overflow-visible pb-10 pt-4 sm:pb-12 sm:pt-6 w-full max-w-[100vw] px-2 flex justify-center">
           <motion.h1
-            className="font-display font-bold text-[clamp(3.5rem,13vw,5.5rem)] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] tracking-tighter leading-[0.8] retro-title-shine relative whitespace-nowrap"
+            className="font-display font-semibold text-[clamp(3.5rem,13vw,5.5rem)] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] tracking-tighter leading-[0.8] retro-title-shine relative whitespace-nowrap"
             initial={{ y: "80%", opacity: 0, rotateX: 45, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
             transition={{ delay: 1.4, duration: 1.4, ease: smoothEase }}
             style={{ perspective: "1000px" }}
+            data-text={heroTitle}
           >
             {heroTitle}
           </motion.h1>

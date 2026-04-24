@@ -281,7 +281,31 @@ body::after {
   background-clip: text;
   animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
   
-  /* Removed shadow completely as iOS Safari has rendering bugs with shadow on background-clip text */
+  /* Removed drop-shadow to fix iOS bug. Using pseudo-element instead. */
+  position: relative;
+  z-index: 2;
+}
+
+.retro-title-shine::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /* Solid retro 3D color */
+  color: #50321e; /* rgba(80, 50, 30, 0.9) approx */
+  -webkit-text-fill-color: #50321e;
+  background: none;
+  -webkit-background-clip: border-box;
+  animation: none;
+  
+  /* The 3D offset and glow */
+  transform: translateY(6px);
+  text-shadow: 
+    0px 15px 10px rgba(0,0,0,0.8),
+    0 0 40px rgba(194, 168, 140, 0.4);
 }
 
 @keyframes shine-sweep-text {
