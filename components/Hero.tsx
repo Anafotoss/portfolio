@@ -125,7 +125,7 @@ export default function Hero() {
             initial={{ y: "80%", opacity: 0, rotateX: 45, scale: 0.9 }}
             animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
             transition={{ delay: 1.4, duration: 1.4, ease: smoothEase }}
-            style={{ perspectiveOrigin: "center", transformStyle: "preserve-3d" }}
+            style={{ perspective: "1000px" }}
           >
             {heroTitle.split("").map((char, i) => (
               <span

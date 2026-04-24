@@ -281,10 +281,7 @@ body::after {
   background-clip: text;
   animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
   
-  /* Exaggerated Retro Cinema 3D Drop Shadow & Light Leak */
-  filter: drop-shadow(0 0 40px rgba(194, 168, 140, 0.4)) 
-          drop-shadow(0px 8px 0px rgba(80, 50, 30, 0.9)) 
-          drop-shadow(0px 15px 10px rgba(0,0,0,0.8));
+  /* Removed shadow completely as iOS Safari has rendering bugs with shadow on background-clip text */
 }
 
 @keyframes shine-sweep-text {
