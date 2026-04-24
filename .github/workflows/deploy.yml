@@ -48,10 +48,15 @@ jobs:
       - name: Build with Next.js
         run: npm run build
         
+      - name: Debug Output Directory
+        run: |
+          ls -la
+          ls -la out || echo "out directory not found"
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: out
 
   deploy:
     environment:
