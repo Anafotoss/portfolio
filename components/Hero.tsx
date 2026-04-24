@@ -15,7 +15,6 @@ function lenisScrollTo(target: string) {
 }
 
 const heroTitle = "Ana Fotos";
-const waveDelays = heroTitle.split("").map((_, i) => i * 0.15); // Faster cascade
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -127,18 +126,7 @@ export default function Hero() {
             transition={{ delay: 1.4, duration: 1.4, ease: smoothEase }}
             style={{ perspective: "1000px" }}
           >
-            {heroTitle.split("").map((char, i) => (
-              <span
-                key={i}
-                className="wave-letter"
-                style={{
-                  animationDelay: `${waveDelays[i]}s`,
-                  ...(char === " " ? { width: "0.2em", display: "inline-block" } : {}),
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </span>
-            ))}
+            {heroTitle}
           </motion.h1>
         </div>
 
