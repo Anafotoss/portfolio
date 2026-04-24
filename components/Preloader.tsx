@@ -10,19 +10,53 @@ export default function Preloader() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Block scrolling
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
+    const lenis = (window as any).__lenis;
+    if (lenis) lenis.stop();
+
+    let isPageLoaded = document.readyState === "complete";
+    const handleLoad = () => {
+      isPageLoaded = true;
+    };
+
+    if (!isPageLoaded) {
+      window.addEventListener("load", handleLoad);
+    }
+
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 100) {
+        // If page is loaded, we can go to 100%
+        if (isPageLoaded && prev >= 90) {
           clearInterval(interval);
           setTimeout(() => setIsLoading(false), 400);
           return 100;
         }
-        return prev + Math.random() * 18 + 6;
+        
+        // If not loaded, stall at 90%
+        if (!isPageLoaded && prev >= 90) {
+          return 90;
+        }
+        
+        return prev + Math.random() * 15 + 5;
       });
-    }, 90);
+    }, 100);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("load", handleLoad);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      const lenis = (window as any).__lenis;
+      if (lenis) lenis.start();
+    }
+  }, [isLoading]);
 
   return (
     <AnimatePresence mode="wait">
