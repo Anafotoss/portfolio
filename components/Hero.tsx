@@ -52,7 +52,7 @@ export default function Hero() {
           transition={{ delay: 2, duration: 1 }}
         >
           <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[7px] sm:text-[9px] text-foreground/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">REC / 35MM</span>
+          <span className="text-[7px] sm:text-[9px] text-white/70 tracking-[0.2em] sm:tracking-[0.3em] font-mono">REC / 35MM</span>
         </motion.div>
         
         <motion.div 
@@ -61,7 +61,7 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 2, duration: 1 }}
         >
-          <span className="text-[7px] sm:text-[9px] text-foreground/50 tracking-[0.2em] sm:tracking-[0.3em] font-mono">SCN 01 — TAKE 1</span>
+          <span className="text-[7px] sm:text-[9px] text-white/70 tracking-[0.2em] sm:tracking-[0.3em] font-mono">SCN 01 — TAKE 1</span>
         </motion.div>
       </div>
 
@@ -70,17 +70,16 @@ export default function Hero() {
       <div className="lens-flare-bottom" />
 
       {/* 
-        Background Setup: Fixed the image visibility.
-        Removed harsh gradients, using mix-blend-luminosity and sepia overlays 
-        to blend the image perfectly with the light warm background.
+        Background Image — Full warm color, no desaturation.
+        The photo is the star of the hero. We let it breathe with
+        natural tones, a gentle sepia warmth, and a smooth gradient
+        fade at the bottom so it melts into the off-white background.
       */}
       <motion.div className="absolute inset-0 z-0" style={{ y: imageY, scale: imageScale }}>
-        <div className="absolute inset-0 bg-background" /> {/* Warm light base */}
-        
         <motion.div
-          className="relative w-full h-full mix-blend-luminosity opacity-40"
-          initial={{ scale: 1.2, opacity: 0, filter: "blur(20px)" }}
-          animate={{ scale: 1, opacity: 0.4, filter: "blur(0px)" }}
+          className="relative w-full h-full"
+          initial={{ scale: 1.15, opacity: 0, filter: "blur(12px)" }}
+          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
           transition={{ duration: 2.5, ease: smoothEase }}
         >
           <Image
@@ -88,15 +87,21 @@ export default function Hero() {
             alt="Fotografia por Ana Fotos — Essência & Qualidade"
             fill
             className="object-cover will-change-transform"
-            style={{ filter: "sepia(0.2) contrast(1.1) brightness(1.2)" }}
+            style={{ filter: "sepia(0.08) contrast(1.05) brightness(0.95) saturate(0.9)" }}
             priority
             quality={100}
             sizes="100vw"
           />
         </motion.div>
         
-        {/* Subtle radial vignette directly on the image layer */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#F9F6F0_100%)]" />
+        {/* Layered gradient fade — bottom melts into background, top stays visible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#F9F6F0] via-[#F9F6F0]/60 via-[30%] to-transparent pointer-events-none" />
+        
+        {/* Soft side fades for elegant framing */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#F9F6F0]/50 via-transparent to-[#F9F6F0]/50 pointer-events-none" />
+        
+        {/* Very subtle dark overlay so text is readable over the photo */}
+        <div className="absolute inset-0 bg-black/15 pointer-events-none" />
       </motion.div>
 
       {/* Content */}
@@ -106,13 +111,13 @@ export default function Hero() {
       >
         {/* Apple Glass Label Pill */}
         <motion.div
-          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white shadow-sm"
+          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white/40 shadow-lg backdrop-blur-2xl bg-white/20"
           initial={{ opacity: 0, y: 30, scale: 0.8 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 1.2, duration: 0.9, ease: smoothEase }}
         >
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full shadow-[0_0_10px_rgba(42,36,32,0.4)] animate-pulse bg-foreground" />
-          <p className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.25em] uppercase text-foreground font-semibold">
+          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.6)] animate-pulse bg-white" />
+          <p className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.25em] uppercase text-white font-semibold">
             Essência & Qualidade
           </p>
         </motion.div>
@@ -133,12 +138,12 @@ export default function Hero() {
 
         {/* Dramatic Subtitle */}
         <motion.p
-          className="mt-4 sm:mt-8 text-foreground/70 font-light text-lg sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed tracking-wide"
+          className="mt-4 sm:mt-8 text-white/80 font-light text-lg sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed tracking-wide drop-shadow-sm"
           initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ delay: 2.2, duration: 1, ease: smoothEase }}
         >
-          Cada clique é uma <span className="italic text-foreground">memória eternizada.</span>
+          Cada clique é uma <span className="italic text-white">memória eternizada.</span>
         </motion.p>
 
         {/* CTA Buttons in strong glass */}
@@ -150,8 +155,8 @@ export default function Hero() {
         >
           <motion.button
             onClick={() => lenisScrollTo("#portfolio")}
-            className="relative px-12 py-4 sm:py-5 overflow-hidden rounded-full bg-foreground text-background font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto active:scale-95 transition-all shadow-lg"
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(42,36,32,0.2)" }}
+            className="relative px-12 py-4 sm:py-5 overflow-hidden rounded-full bg-white text-foreground font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto active:scale-95 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
+            whileHover={{ scale: 1.05, boxShadow: "0 12px 40px rgba(0,0,0,0.2)" }}
             whileTap={{ scale: 0.95 }}
             data-hover
           >
@@ -162,7 +167,7 @@ export default function Hero() {
             href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia."
             target="_blank"
             rel="noopener noreferrer"
-            className="glass-strong px-12 py-4 sm:py-5 text-foreground font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-black/5 active:bg-black/10 transition-all duration-300 text-center rounded-full border border-black/10"
+            className="px-12 py-4 sm:py-5 text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-white/15 active:bg-white/20 transition-all duration-300 text-center rounded-full border border-white/40 backdrop-blur-xl bg-white/10"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             data-hover

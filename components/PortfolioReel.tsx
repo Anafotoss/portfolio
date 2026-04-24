@@ -168,7 +168,7 @@ export default function PortfolioReel() {
               </div>
               <h2 className="font-display font-bold text-[clamp(2.5rem,8vw,6rem)] tracking-tight text-foreground leading-[0.95]">
                 <span className="text-foreground/35 font-light italic">Acervo &</span>{" "}
-                <span className="retro-title-shine" data-text="Especialidades">Especialidades</span>
+                <span className="retro-title-shine-dark" data-text="Especialidades">Especialidades</span>
               </h2>
             </motion.div>
           </div>

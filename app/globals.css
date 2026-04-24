@@ -278,7 +278,67 @@ body::after {
   height: 100%;
   z-index: 2; /* Front */
   
-  /* Vintage dark/warm gradient */
+  /* Warm white-gold shimmer gradient */
+  background: linear-gradient(
+    -45deg,
+    rgba(232, 221, 211, 0.9) 0%,
+    rgba(255, 255, 255, 1) 35%,
+    rgba(232, 221, 211, 0.85) 50%,
+    rgba(255, 255, 255, 1) 65%,
+    rgba(232, 221, 211, 0.9) 100%
+  );
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+/* Shadow Text (Back) - Dark Emboss */
+.retro-title-shine::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1; /* Back */
+  
+  /* Dark shadow color for depth */
+  color: rgba(42, 36, 32, 0.5);
+  -webkit-text-fill-color: rgba(42, 36, 32, 0.5);
+  background: none;
+  -webkit-background-clip: border-box;
+  animation: none;
+  
+  /* The 3D offset and glow */
+  transform: translateY(6px);
+  text-shadow: 
+    0px 8px 20px rgba(0,0,0,0.4),
+    0 0 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes shine-sweep-text {
+  0%   { background-position: 250% center; }
+  100% { background-position: -250% center; }
+}
+
+/* === Dark variant of retro-title-shine for use on LIGHT backgrounds === */
+.retro-title-shine-dark {
+  position: relative;
+  color: transparent;
+  z-index: 2;
+}
+
+.retro-title-shine-dark::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  
   background: linear-gradient(
     -45deg,
     #3b2516 0%,
@@ -294,33 +354,25 @@ body::after {
   animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
 }
 
-/* Shadow Text (Back) - Light Emboss */
-.retro-title-shine::after {
+.retro-title-shine-dark::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 1; /* Back */
+  z-index: 1;
   
-  /* Light retro paper color for embossed look */
   color: #E8DDD3;
   -webkit-text-fill-color: #E8DDD3;
   background: none;
   -webkit-background-clip: border-box;
   animation: none;
   
-  /* The 3D offset and glow */
-  transform: translateY(6px);
+  transform: translateY(5px);
   text-shadow: 
-    0px 10px 15px rgba(0,0,0,0.08),
-    0 0 30px rgba(255, 255, 255, 0.6);
-}
-
-@keyframes shine-sweep-text {
-  0%   { background-position: 250% center; }
-  100% { background-position: -250% center; }
+    0px 8px 15px rgba(0,0,0,0.06),
+    0 0 25px rgba(194, 168, 140, 0.2);
 }
 
 /* ===== LENS FLARE / PROJECTOR LIGHTS ===== */
