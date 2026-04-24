@@ -1,26 +1,427 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  --color-glass: rgba(255, 255, 255, 0.04);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-highlight: rgba(255, 255, 255, 0.15);
+  --color-muted: #888888;
+  --color-accent: #ffffff;
+  --color-accent-glow: rgba(255, 255, 255, 0.2);
+  --color-retro-warm: #C2A88C;
+  --color-retro-warm-light: #E8DDD3;
+  --color-retro-warm-dark: #A68B6B;
+  --color-retro-sepia: #d4a574;
+  --font-display: var(--font-playfair);
+  --font-body: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ===== BASE ===== */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== AMBIENT LIGHT (Vision Pro + Warm Retro atmosphere) ===== */
+body::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 160vw;
+  height: 160vh;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse 60% 50% at 75% 25%, rgba(194, 168, 140, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 20% 75%, rgba(212, 165, 116, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  animation: aurora-drift 20s ease-in-out infinite alternate;
+}
+
+@media (max-width: 768px) {
+  body::after {
+    background: 
+      radial-gradient(circle at 80% 20%, rgba(194, 168, 140, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(212, 165, 116, 0.08) 0%, transparent 60%);
+    animation: aurora-drift 25s ease-in-out infinite alternate;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(194, 168, 140, 0.25);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(194, 168, 140, 0.5);
+}
+
+/* ========================================
+   VISION PRO / APPLE GLASS SYSTEM + RETRO WARMTH
+   ======================================== */
+
+/* --- Standard Glass --- */
+.glass {
+  backdrop-filter: blur(60px) saturate(200%);
+  -webkit-backdrop-filter: blur(60px) saturate(200%);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -0.5px 0 rgba(255, 255, 255, 0.04),
+    0 20px 60px -15px rgba(0, 0, 0, 0.6),
+    0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* --- Strong Glass (floating cards, popups) --- */
+.glass-strong {
+  backdrop-filter: blur(80px) saturate(220%);
+  -webkit-backdrop-filter: blur(80px) saturate(220%);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 30px 80px -20px rgba(0, 0, 0, 0.7),
+    0 0 0 0.5px rgba(255, 255, 255, 0.08);
+}
+
+/* --- Pill Glass (Navbar, CTA buttons) --- */
+.glass-pill {
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  background: rgba(30, 30, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+}
+
+@media (max-width: 768px) {
+  .glass {
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
+  }
+}
+
+/* ===== 3D APPLE GLASS CARDS ===== */
+.apple-glass-card {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  isolation: isolate;
+  transition: box-shadow 0.5s ease, transform 0.4s ease;
+}
+
+/* Border with specular edge highlight */
+.apple-glass-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  z-index: 10;
+  transition: border-color 0.4s ease;
+}
+
+/* Specular top-edge shine (simulates light hitting glass edge) */
+.apple-glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(194,168,140,0.35), transparent);
+  z-index: 11;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.apple-glass-card:hover::before {
+  opacity: 1;
+}
+
+.apple-glass-card:hover::after {
+  border-color: rgba(194, 168, 140, 0.2);
+}
+
+.apple-glass-card:hover {
+  box-shadow: 
+    0 25px 80px -20px rgba(0, 0, 0, 0.6),
+    0 0 0 0.5px rgba(194, 168, 140, 0.15),
+    0 0 40px -10px rgba(194, 168, 140, 0.06);
+}
+
+/* Image styling inside cards */
+.apple-glass-card img {
+  border-radius: 24px;
+}
+
+/* ===== TEXT STYLES ===== */
+
+/* Hero/Section title gradient (warm retro + glass lit) */
+.apple-text {
+  background: linear-gradient(
+    180deg, 
+    #FFFFFF 0%, 
+    rgba(232, 221, 211, 0.85) 50%,
+    rgba(194, 168, 140, 0.6) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Ambient glow text — warm retro glow */
+.ambient-glow-text {
+  text-shadow: 
+    0 0 30px rgba(194, 168, 140, 0.35),
+    0 0 60px rgba(194, 168, 140, 0.12),
+    0 0 120px rgba(212, 165, 116, 0.06);
+}
+
+/* Chromatic Aberration Text (RGB Split) */
+.chromatic-text {
+  position: relative;
+}
+.chromatic-text::before,
+.chromatic-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: -1;
+}
+.chromatic-text::before {
+  color: #ff0055; /* Retro red */
+  transform: translate(-3px, 1px);
+  mix-blend-mode: screen;
+  filter: blur(1px);
+}
+.chromatic-text::after {
+  color: #00ddff; /* Retro cyan */
+  transform: translate(3px, -1px);
+  mix-blend-mode: screen;
+  filter: blur(1px);
+}
+
+.rgb-split-hover {
+  transition: text-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.rgb-split-hover:hover {
+  text-shadow: 
+    -4px 0 0 rgba(255, 0, 85, 0.5),
+    4px 0 0 rgba(0, 221, 255, 0.5);
+}
+
+/* Generic gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, #C2A88C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== EXAGGERATED RETRO CINEMA WAVE TEXT ANIMATION ===== */
+.wave-letter {
+  display: inline-block;
+  animation: cinema-wave 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  transform-origin: bottom center;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes cinema-wave {
+  0%, 100% { transform: translateY(0px) rotateX(0deg) rotateZ(0deg) scale(1); }
+  33%      { transform: translateY(-18px) rotateX(25deg) rotateZ(-3deg) scale(1.08); }
+  66%      { transform: translateY(10px) rotateX(-15deg) rotateZ(2deg) scale(0.96); }
+}
+
+/* ===== EXAGGERATED CINEMA SHINE/SHIMMER TEXT OVERLAY ===== */
+.retro-title-shine {
+  /* Vintage warm gradient with bright projector center */
+  background: linear-gradient(
+    -45deg,
+    rgba(166, 139, 107, 0.8) 0%,
+    rgba(194, 168, 140, 0.9) 35%,
+    #ffffff 50%,
+    rgba(194, 168, 140, 0.9) 65%,
+    rgba(166, 139, 107, 0.8) 100%
+  );
+  background-size: 300% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  
+  /* Exaggerated Retro Cinema 3D Drop Shadow & Light Leak */
+  filter: drop-shadow(0 0 40px rgba(194, 168, 140, 0.4)) 
+          drop-shadow(0px 8px 0px rgba(80, 50, 30, 0.9)) 
+          drop-shadow(0px 15px 10px rgba(0,0,0,0.8));
+}
+
+@keyframes shine-sweep-text {
+  0%   { background-position: 250% center; }
+  100% { background-position: -250% center; }
+}
+
+/* ===== LENS FLARE / PROJECTOR LIGHTS ===== */
+.lens-flare-top {
+  position: absolute;
+  top: -20%;
+  left: 20%;
+  width: 150vw;
+  height: 50vh;
+  background: radial-gradient(ellipse at center, rgba(194, 168, 140, 0.35) 0%, rgba(212, 165, 116, 0.08) 30%, transparent 60%);
+  transform: rotate(-15deg) translateY(-50%) translateX(-20%);
+  transform-origin: center;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: lens-flare-pulse 8s ease-in-out infinite alternate;
+  z-index: 10;
+  filter: blur(60px);
+}
+
+.lens-flare-bottom {
+  position: absolute;
+  bottom: -30%;
+  right: 10%;
+  width: 120vw;
+  height: 60vh;
+  background: radial-gradient(ellipse at center, rgba(194, 168, 140, 0.25) 0%, rgba(212, 165, 116, 0.05) 40%, transparent 70%);
+  transform: rotate(20deg) translateY(30%);
+  mix-blend-mode: color-dodge;
+  pointer-events: none;
+  animation: lens-flare-pulse-alt 11s ease-in-out infinite alternate;
+  z-index: 10;
+  filter: blur(80px);
+}
+
+@keyframes lens-flare-pulse {
+  0% { opacity: 0.3; transform: rotate(-15deg) translateY(-50%) translateX(-20%) scale(1); }
+  100% { opacity: 0.8; transform: rotate(-12deg) translateY(-40%) translateX(-15%) scale(1.1); }
+}
+
+@keyframes lens-flare-pulse-alt {
+  0% { opacity: 0.2; transform: rotate(20deg) translateY(30%) scale(0.9); }
+  100% { opacity: 0.7; transform: rotate(25deg) translateY(20%) scale(1.2); }
+}
+
+/* ===== NOISE TEXTURE OVERLAY (static, canvas handles animated version) ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  mix-blend-mode: overlay;
+}
+
+/* ===== SELECTION ===== */
+::selection {
+  background: rgba(194, 168, 140, 0.3);
+  color: #fff;
+}
+
+/* ===== TOUCH TARGETS ===== */
+@media (max-width: 768px) {
+  button, a, [data-hover] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* ===== SECTION DIVIDER ===== */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(194, 168, 140, 0.12) 20%,
+    rgba(194, 168, 140, 0.2) 50%,
+    rgba(194, 168, 140, 0.12) 80%,
+    transparent 100%
+  );
+}
+
+/* ===== RETRO VIGNETTE (subtle dark edges) ===== */
+.retro-vignette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9989;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes aurora-drift {
+  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 0.7; }
+  50%  { transform: translate(-48%, -52%) rotate(1deg) scale(1.03); opacity: 1; }
+  100% { transform: translate(-52%, -48%) rotate(-1deg) scale(0.97); opacity: 0.8; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes pulse-warm {
+  0%, 100% { opacity: 0.03; }
+  50%      { opacity: 0.07; }
+}
+
+@keyframes gentle-rotate {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== REDUCE MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
