@@ -17,7 +17,7 @@ const blurPlaceholder =
 export const photos: Photo[] = [
   {
     id: 1,
-    src: "/photos/IMG_0374.webp",
+    src: "/portfolio/photos/IMG_0374.webp",
     alt: "Fotografia individual artística",
     category: "Individual",
     description:
@@ -29,7 +29,7 @@ export const photos: Photo[] = [
   },
   {
     id: 2,
-    src: "/photos/IMG_0714.webp",
+    src: "/portfolio/photos/IMG_0714.webp",
     alt: "Fotografia de aniversário e celebração",
     category: "Aniversários",
     description:
@@ -41,7 +41,7 @@ export const photos: Photo[] = [
   },
   {
     id: 3,
-    src: "/photos/infantil_real.webp",
+    src: "/portfolio/photos/infantil_real.webp",
     alt: "Ensaio fotográfico infantil",
     category: "Infantil",
     description:
@@ -53,7 +53,7 @@ export const photos: Photo[] = [
   },
   {
     id: 4,
-    src: "/photos/Hellen_01.webp",
+    src: "/portfolio/photos/Hellen_01.webp",
     alt: "Ensaio fotográfico de gestante",
     category: "Gestantes",
     description:
@@ -65,7 +65,7 @@ export const photos: Photo[] = [
   },
   {
     id: 5,
-    src: "/photos/Sensuais.webp",
+    src: "/portfolio/photos/Sensuais.webp",
     alt: "Ensaio sensual feminino",
     category: "Sensuais",
     description:
@@ -77,7 +77,7 @@ export const photos: Photo[] = [
   },
   {
     id: 6,
-    src: "/photos/natureza_real.webp",
+    src: "/portfolio/photos/natureza_real.webp",
     alt: "Fotografia de natureza com luz natural",
     category: "Natureza",
     description:

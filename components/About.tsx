@@ -41,7 +41,7 @@ export default function About() {
             style={{ y: imageY }}
           >
             <Image
-              src="/photos/aboutme.jpeg"
+              src="/portfolio/photos/aboutme.jpeg"
               alt="Retrato fotográfico de Ana"
               fill
               className="object-cover will-change-transform"

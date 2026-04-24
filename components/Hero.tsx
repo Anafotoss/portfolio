@@ -85,7 +85,7 @@ export default function Hero() {
           transition={{ duration: 2.5, ease: smoothEase }}
         >
           <Image
-            src="/photos/Ana_03.webp"
+            src="/portfolio/photos/Ana_03.webp"
             alt="Fotografia por Ana Fotos — Essência & Qualidade"
             fill
             className="object-cover will-change-transform"
