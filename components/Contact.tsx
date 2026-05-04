@@ -31,7 +31,7 @@ function ContactCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex flex-col items-center justify-center w-full sm:w-[380px] h-[260px] sm:h-[340px] rounded-2xl border border-foreground/5 group overflow-hidden bg-surface/60 hover:border-accent/20 transition-all duration-600 shadow-[0_10px_40px_-15px_rgba(28,25,23,0.06)]"
+      className="relative flex flex-col items-center justify-center w-full h-[220px] sm:w-[380px] sm:h-[340px] rounded-2xl border border-foreground/5 group overflow-hidden bg-surface/60 hover:border-accent/20 transition-all duration-600 shadow-[0_10px_40px_-15px_rgba(28,25,23,0.06)]"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -43,8 +43,8 @@ function ContactCard({
       <div className="absolute inset-0 bg-gradient-to-b from-accent-light via-transparent to-accent-light opacity-0 group-hover:opacity-100 transition-opacity duration-600" />
 
       <div className="relative z-10 flex flex-col items-center group-hover:-translate-y-2 transition-transform duration-500">
-        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center border border-accent/12 mb-6 sm:mb-8 group-hover:border-accent/25 group-hover:scale-105 transition-all duration-500">
-          <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-accent" />
+        <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center border border-accent/12 mb-4 sm:mb-8 group-hover:border-accent/25 group-hover:scale-105 transition-all duration-500">
+          <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-accent" />
         </div>
 
         <h3 className="font-display font-light text-2xl sm:text-3xl text-foreground tracking-tight mb-2">
@@ -103,7 +103,7 @@ export default function Contact() {
 
         {/* Headline */}
         <motion.div className="text-center mb-14 sm:mb-20" style={{ y: titleY }}>
-          <h2 className="font-display font-light text-[clamp(2.8rem,8vw,7rem)] leading-[0.9] tracking-tight text-foreground mb-6">
+          <h2 className="font-display font-light text-[clamp(2.2rem,8vw,7rem)] leading-[0.9] tracking-tight text-foreground mb-4 sm:mb-6">
             Vamos Criar Algo
             <br />
             <span className="italic text-accent">Atemporal?</span>
@@ -114,7 +114,7 @@ export default function Contact() {
         </motion.div>
 
         {/* Contact Cards */}
-        <div className="flex flex-col md:flex-row gap-5 sm:gap-8 items-center justify-center w-full px-4 sm:px-0">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-center justify-center w-full">
           <ContactCard
             href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20seus%20ensaios."
             title="WhatsApp"

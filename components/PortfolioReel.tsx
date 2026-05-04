@@ -9,7 +9,7 @@ import Lightbox from "./Lightbox";
 function GalleryCard({ photo, index, onClick }: { photo: Photo; index: number; onClick: () => void }) {
   return (
     <motion.div
-      className="relative group cursor-pointer editorial-card overflow-hidden"
+      className="relative group cursor-pointer editorial-card overflow-hidden rounded-2xl"
       onClick={onClick}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -18,39 +18,38 @@ function GalleryCard({ photo, index, onClick }: { photo: Photo; index: number; o
       whileTap={{ scale: 0.98 }}
       data-hover
     >
-      <div className={`relative overflow-hidden rounded-2xl ${
-        photo.span === "tall" ? "aspect-[3/4]" :
-        photo.span === "wide" ? "aspect-[4/3]" :
-        "aspect-square"
-      }`}>
+      {/* Image with generous portrait ratio — shows more content */}
+      <div className="relative overflow-hidden rounded-2xl aspect-[3/4]">
         <Image
           src={photo.src}
           alt={photo.alt}
           fill
-          className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04] will-change-transform"
+          className="object-cover object-[center_30%] transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04] will-change-transform"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           placeholder="blur"
           blurDataURL={photo.blurDataURL}
         />
 
-        {/* Hover overlay — warm dark gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/70 via-[#1C1917]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[2]" />
+        {/* Permanent bottom gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/75 via-[#1C1917]/5 via-[40%] to-transparent z-[2] pointer-events-none" />
 
-        {/* Info overlay */}
-        <div className="absolute inset-0 z-[3] flex flex-col justify-end p-5 sm:p-7 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-white/80 text-[10px] tracking-[0.3em] uppercase font-medium">
+        {/* Hover overlay */}
+        <div className="absolute inset-0 bg-[#1C1917]/0 group-hover:bg-[#1C1917]/15 transition-colors duration-500 z-[3]" />
+
+        {/* ALWAYS visible: Category + Description */}
+        <div className="absolute bottom-0 left-0 right-0 z-[4] p-4 sm:p-5">
+          <div className="flex items-end justify-between">
+            <div>
+              <span className="text-white/95 font-display text-lg sm:text-xl font-light tracking-wide block leading-tight">
                 {photo.category}
               </span>
-              <span className="flex-1 h-[1px] bg-white/15" />
-              <span className="text-white/40 text-[10px] tracking-widest font-mono">
-                0{index + 1}
+              <span className="text-white/50 text-[10px] tracking-[0.15em] uppercase mt-1 block line-clamp-1">
+                {photo.description.split(".")[0]}
               </span>
             </div>
-            <p className="text-white/70 font-light text-xs sm:text-sm leading-relaxed line-clamp-2">
-              {photo.description}
-            </p>
+            <span className="text-white/25 text-[10px] tracking-widest font-mono">
+              {String(index + 1).padStart(2, "0")}
+            </span>
           </div>
         </div>
       </div>
@@ -84,7 +83,7 @@ export default function PortfolioReel() {
 
   return (
     <>
-      <section id="portfolio" className="relative py-20 sm:py-28 md:py-36 px-4 sm:px-6 md:px-12 lg:px-20 bg-background">
+      <section id="portfolio" className="relative py-14 sm:py-28 md:py-36 px-3 sm:px-6 md:px-12 lg:px-20 bg-background">
 
         {/* Ambient warm light */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -106,16 +105,16 @@ export default function PortfolioReel() {
                 Portfólio
               </p>
             </div>
-            <h2 className="font-display font-light text-[clamp(2.5rem,7vw,5.5rem)] tracking-tight text-foreground leading-[0.95]">
+            <h2 className="font-display font-light text-[clamp(2rem,7vw,5.5rem)] tracking-tight text-foreground leading-[0.95]">
               Acervo{" "}
               <span className="italic text-accent/60">&</span>{" "}
               <span className="italic">Especialidades</span>
             </h2>
           </motion.div>
 
-          {/* Category filters */}
+          {/* Category filters — horizontal scroll on mobile */}
           <motion.div
-            className="mt-10 sm:mt-14 flex flex-wrap gap-2 sm:gap-3"
+            className="mt-6 sm:mt-14 flex gap-2 sm:gap-3 overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0 sm:flex-wrap scrollbar-none"
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -125,7 +124,7 @@ export default function PortfolioReel() {
               <motion.button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-400 border ${
+                className={`flex-shrink-0 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-400 border whitespace-nowrap ${
                   activeCategory === cat
                     ? "bg-foreground text-background border-foreground"
                     : "bg-transparent text-secondary border-foreground/8 hover:border-accent/30 hover:text-foreground"
@@ -140,11 +139,11 @@ export default function PortfolioReel() {
           </motion.div>
         </div>
 
-        {/* Masonry Grid */}
+        {/* Portfolio Grid */}
         <AnimatePresence mode="popLayout">
           <motion.div
             key={activeCategory}
-            className="relative max-w-7xl mx-auto z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 auto-rows-auto"
+            className="relative max-w-7xl mx-auto z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 md:gap-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

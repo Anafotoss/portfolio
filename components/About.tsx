@@ -53,9 +53,9 @@ export default function About() {
             <div className="absolute inset-0 bg-gradient-to-t from-background/30 to-transparent" />
           </motion.div>
 
-          {/* Floating accent element */}
+          {/* Floating accent element — hidden on small mobile */}
           <motion.div
-            className="absolute -bottom-4 -right-2 sm:-bottom-6 sm:-right-6 glass-elevated rounded-xl p-4 sm:p-5 max-w-[160px] sm:max-w-[190px]"
+            className="hidden sm:block absolute -bottom-6 -right-6 glass-elevated rounded-xl p-4 sm:p-5 max-w-[160px] sm:max-w-[190px]"
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true }}
@@ -85,7 +85,7 @@ export default function About() {
             </p>
           </div>
 
-          <h2 className="font-display font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.05] text-foreground">
+          <h2 className="font-display font-light text-[clamp(2rem,8vw,4.5rem)] sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-foreground">
             <span className="text-secondary">Cada clique é uma</span>
             <br />
             <span className="editorial-text italic">memória eternizada</span>

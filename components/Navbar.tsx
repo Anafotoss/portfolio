@@ -54,15 +54,15 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-5 lg:mt-7 pointer-events-none px-4">
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-3 sm:mt-5 lg:mt-7 pointer-events-none px-3 sm:px-4">
         <motion.nav
-          className={`pointer-events-auto transition-all duration-700 ease-out flex items-center justify-between ${isScrolled ? "glass-pill py-3 px-6 lg:px-8 shadow-sm" : "bg-transparent py-3 px-4 lg:px-6"}`}
+          className={`pointer-events-auto transition-all duration-700 ease-out flex items-center justify-between ${isScrolled ? "glass-pill py-2.5 sm:py-3 px-4 sm:px-6 lg:px-8 shadow-sm" : "bg-transparent py-2.5 sm:py-3 px-3 sm:px-4 lg:px-6"}`}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1, width: isScrolled ? "auto" : "100%", maxWidth: "1200px" }}
           transition={{ delay: 1.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
-          <button onClick={() => handleNavClick("#hero")} className="group flex items-center pr-8 lg:pr-16" data-hover>
-            <motion.span className="font-display font-light text-2xl sm:text-3xl tracking-wide text-foreground" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+          <button onClick={() => handleNavClick("#hero")} className="group flex items-center pr-4 sm:pr-8 lg:pr-16" data-hover>
+            <motion.span className="font-display font-light text-xl sm:text-2xl md:text-3xl tracking-wide text-foreground" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
               ana<span className="text-accent mx-0.5 font-normal">.</span>
             </motion.span>
           </button>

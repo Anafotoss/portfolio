@@ -26,6 +26,7 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 html.lenis, html.lenis body { height: auto; }
@@ -70,6 +71,10 @@ body::after {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 115, 85, 0.35);
 }
+
+/* Hide scrollbar for horizontal scroll elements */
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
 
 /* ========================================
    EDITORIAL GLASS SYSTEM (LIGHT)
@@ -264,6 +269,11 @@ body::before {
   );
 }
 
+@media (max-width: 768px) {
+  .warm-vignette::before { display: none; }
+  body::before { display: none; }
+}
+
 /* ===== SELECTION ===== */
 ::selection {
   background: rgba(139, 115, 85, 0.18);
@@ -272,9 +282,8 @@ body::before {
 
 /* ===== TOUCH TARGETS ===== */
 @media (max-width: 768px) {
-  button, a, [data-hover] {
+  button, a {
     min-height: 44px;
-    min-width: 44px;
   }
 }
 
