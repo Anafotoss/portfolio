@@ -23,42 +23,24 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    // Detect touch device
-    const isTouch =
-      "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
     setIsTouchDevice(isTouch);
     if (isTouch) return;
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.closest("a, button, [data-hover], .hover-trigger") ||
-        target.tagName === "A" ||
-        target.tagName === "BUTTON"
-      ) {
-        setIsHovering(true);
-      }
+      const t = e.target as HTMLElement;
+      if (t.closest("a, button, [data-hover], .hover-trigger") || t.tagName === "A" || t.tagName === "BUTTON") setIsHovering(true);
     };
-
     const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.closest("a, button, [data-hover], .hover-trigger") ||
-        target.tagName === "A" ||
-        target.tagName === "BUTTON"
-      ) {
-        setIsHovering(false);
-      }
+      const t = e.target as HTMLElement;
+      if (t.closest("a, button, [data-hover], .hover-trigger") || t.tagName === "A" || t.tagName === "BUTTON") setIsHovering(false);
     };
-
     const handleMouseLeave = () => setIsVisible(false);
 
     document.addEventListener("mouseover", handleMouseOver);
     document.addEventListener("mouseout", handleMouseOut);
     document.addEventListener("mouseleave", handleMouseLeave);
-
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseover", handleMouseOver);
@@ -72,30 +54,24 @@ export default function CustomCursor() {
 
   return (
     <>
-      {/* Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-white z-[9997] pointer-events-none mix-blend-difference"
-        animate={{
-          x: position.x - 4,
-          y: position.y - 4,
-          opacity: isVisible ? 1 : 0,
-        }}
+        className="fixed top-0 left-0 w-1.5 h-1.5 rounded-full bg-foreground z-[9997] pointer-events-none mix-blend-difference"
+        animate={{ x: position.x - 3, y: position.y - 3, opacity: isVisible ? 1 : 0 }}
         transition={{ type: "tween", duration: 0 }}
       />
-      {/* Ring */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full border z-[9997] pointer-events-none mix-blend-difference"
+        className="fixed top-0 left-0 rounded-full z-[9997] pointer-events-none mix-blend-difference"
         animate={{
-          x: position.x - (isHovering ? 28 : 18),
-          y: position.y - (isHovering ? 28 : 18),
-          width: isHovering ? 56 : 36,
-          height: isHovering ? 56 : 36,
-          opacity: isVisible ? 0.5 : 0,
-          borderColor: isHovering
-            ? "rgba(255,255,255,0.7)"
-            : "rgba(255,255,255,0.3)",
+          x: position.x - (isHovering ? 26 : 16),
+          y: position.y - (isHovering ? 26 : 16),
+          width: isHovering ? 52 : 32,
+          height: isHovering ? 52 : 32,
+          opacity: isVisible ? 0.4 : 0,
+          borderWidth: 1,
+          borderColor: isHovering ? "rgba(139, 115, 85, 0.7)" : "rgba(28, 25, 23, 0.3)",
         }}
-        transition={{ type: "spring", stiffness: 150, damping: 15 }}
+        style={{ borderStyle: "solid" }}
+        transition={{ type: "spring", stiffness: 180, damping: 18 }}
       />
     </>
   );

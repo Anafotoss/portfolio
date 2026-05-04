@@ -1,20 +1,25 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #F9F6F0; /* Warm Off-White / Paper */
-  --color-foreground: #2A2420; /* Dark Espresso */
-  --color-glass: rgba(255, 255, 255, 0.6);
-  --color-glass-border: rgba(255, 255, 255, 0.8);
-  --color-glass-highlight: rgba(255, 255, 255, 1);
-  --color-muted: #666666;
-  --color-accent: #2A2420;
-  --color-accent-glow: rgba(194, 168, 140, 0.4);
-  --color-retro-warm: #C2A88C;
-  --color-retro-warm-light: #E8DDD3;
-  --color-retro-warm-dark: #A68B6B;
-  --color-retro-sepia: #d4a574;
-  --font-display: var(--font-playfair);
-  --font-body: var(--font-inter);
+  /* ==============================================
+     EDITORIAL ATELIER — LIGHT PALETTE
+     Color Theory: Warm neutrals reduce eye strain.
+     Off-white backgrounds avoid blue-light harshness.
+     Low-saturation accents prevent fatigue.
+     Contrast ratio ~7:1 for AAA accessibility.
+     ============================================== */
+  --color-background: #F9F7F3;       /* Warm linen white — easy on eyes */
+  --color-surface: #F1EEE8;          /* Warm cream for cards/surfaces */
+  --color-elevated: #FFFFFF;          /* Pure white for elevated popups */
+  --color-foreground: #1C1917;       /* Deep warm charcoal — not pure black */
+  --color-secondary: #78716C;        /* Stone 500 — warm mid-gray */
+  --color-muted: #A8A29E;            /* Stone 400 — soft warm gray */
+  --color-accent: #8B7355;           /* Refined warm taupe — sophisticated */
+  --color-accent-hover: #6B5A45;     /* Deeper taupe on hover */
+  --color-accent-light: rgba(139, 115, 85, 0.08); /* Subtle accent wash */
+  --color-divider: rgba(139, 115, 85, 0.12);
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-syne);
 }
 
 /* ===== BASE ===== */
@@ -36,7 +41,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== AMBIENT LIGHT (Vision Pro + Warm Retro atmosphere) ===== */
+/* ===== AMBIENT LIGHT — Subtle warm radials for depth ===== */
 body::after {
   content: "";
   position: fixed;
@@ -46,64 +51,63 @@ body::after {
   height: 100%;
   z-index: -1;
   pointer-events: none;
-  background: 
-    radial-gradient(ellipse 60% 50% at 75% 25%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 60% at 20% 75%, rgba(232, 221, 211, 0.35) 0%, transparent 50%);
+  background:
+    radial-gradient(ellipse 60% 50% at 75% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 20% 80%, rgba(241, 238, 232, 0.5) 0%, transparent 50%);
 }
 
 @media (max-width: 768px) {
-  body::after {
-    display: none;
-  }
+  body::after { display: none; }
 }
 
 /* ===== SCROLLBAR ===== */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(194, 168, 140, 0.25);
+  background: rgba(139, 115, 85, 0.18);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(194, 168, 140, 0.5);
+  background: rgba(139, 115, 85, 0.35);
 }
 
 /* ========================================
-   VISION PRO / APPLE GLASS SYSTEM + RETRO WARMTH
+   EDITORIAL GLASS SYSTEM (LIGHT)
+   Frosted glass with warm white tones
    ======================================== */
 
 /* --- Standard Glass --- */
 .glass {
   backdrop-filter: blur(40px) saturate(150%);
   -webkit-backdrop-filter: blur(40px) saturate(150%);
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    0 20px 40px -15px rgba(0, 0, 0, 0.05),
-    0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 40px -15px rgba(28, 25, 23, 0.06),
+    0 0 1px rgba(28, 25, 23, 0.05);
 }
 
-/* --- Strong Glass (floating cards, popups) --- */
-.glass-strong {
-  backdrop-filter: blur(60px) saturate(180%);
-  -webkit-backdrop-filter: blur(60px) saturate(180%);
-  background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(255, 255, 255, 1);
-  box-shadow: 
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    0 30px 60px -20px rgba(0, 0, 0, 0.08),
-    0 0 0 0.5px rgba(0, 0, 0, 0.04);
-}
-
-/* --- Pill Glass (Navbar, CTA buttons) --- */
-.glass-pill {
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  background: rgba(255, 255, 255, 0.7);
+/* --- Elevated Glass (cards, popups) --- */
+.glass-elevated {
+  backdrop-filter: blur(60px) saturate(160%);
+  -webkit-backdrop-filter: blur(60px) saturate(160%);
+  background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.06),
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    0 30px 60px -20px rgba(28, 25, 23, 0.08),
+    0 0 0 0.5px rgba(28, 25, 23, 0.03);
+}
+
+/* --- Pill Glass (Navbar, buttons) --- */
+.glass-pill {
+  backdrop-filter: blur(40px) saturate(170%);
+  -webkit-backdrop-filter: blur(40px) saturate(170%);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow:
+    0 8px 32px rgba(28, 25, 23, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 1);
   border-radius: 100px;
 }
@@ -113,7 +117,7 @@ body::after {
     backdrop-filter: blur(16px) saturate(130%);
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
-  .glass-strong {
+  .glass-elevated {
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
   }
@@ -123,315 +127,147 @@ body::after {
   }
 }
 
-/* ===== 3D APPLE GLASS CARDS ===== */
-.apple-glass-card {
+/* ===== EDITORIAL CARDS ===== */
+.editorial-card {
   position: relative;
-  border-radius: 24px;
+  border-radius: 20px;
   overflow: hidden;
-  transform-style: preserve-3d;
-  isolation: isolate;
-  transition: box-shadow 0.5s ease, transform 0.4s ease;
+  transition: box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Border with specular edge highlight */
-.apple-glass-card::after {
+.editorial-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(28, 25, 23, 0.04);
   pointer-events: none;
   z-index: 10;
-  transition: border-color 0.4s ease;
+  transition: border-color 0.5s ease;
 }
 
-/* Specular top-edge shine (simulates light hitting glass edge) */
-.apple-glass-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,1), transparent);
-  z-index: 11;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+.editorial-card:hover::after {
+  border-color: rgba(139, 115, 85, 0.15);
 }
 
-.apple-glass-card:hover::before {
-  opacity: 1;
-}
-
-.apple-glass-card:hover::after {
-  border-color: rgba(255, 255, 255, 1);
-}
-
-.apple-glass-card:hover {
-  box-shadow: 
-    0 25px 80px -20px rgba(0, 0, 0, 0.15),
-    0 0 0 0.5px rgba(255, 255, 255, 1),
-    0 0 40px -10px rgba(194, 168, 140, 0.15);
-}
-
-/* Image styling inside cards */
-.apple-glass-card img {
-  border-radius: 24px;
+.editorial-card:hover {
+  box-shadow:
+    0 25px 60px -15px rgba(28, 25, 23, 0.12),
+    0 0 0 0.5px rgba(139, 115, 85, 0.1);
 }
 
 /* ===== TEXT STYLES ===== */
 
-/* Hero/Section title gradient (warm retro + glass lit) */
-.apple-text {
+/* Gradient title — editorial warm */
+.editorial-text {
   background: linear-gradient(
-    180deg, 
-    #2A2420 0%, 
-    #50321e 50%,
-    #A68B6B 100%
+    180deg,
+    #1C1917 0%,
+    #8B7355 50%,
+    #A8A29E 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Ambient glow text — warm retro glow */
-.ambient-glow-text {
-  text-shadow: 
-    0 0 30px rgba(255, 255, 255, 0.8),
-    0 0 60px rgba(255, 255, 255, 0.5);
-}
-
-/* Chromatic Aberration Text (RGB Split) */
-.chromatic-text {
-  position: relative;
-}
-.chromatic-text::before,
-.chromatic-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: -1;
-}
-.chromatic-text::before {
-  color: #ff0055; /* Retro red */
-  transform: translate(-2px, 1px);
-  mix-blend-mode: multiply;
-  filter: blur(1px);
-}
-.chromatic-text::after {
-  color: #00ddff; /* Retro cyan */
-  transform: translate(2px, -1px);
-  mix-blend-mode: multiply;
-  filter: blur(1px);
-}
-
-.rgb-split-hover {
-  transition: text-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.rgb-split-hover:hover {
-  text-shadow: 
-    -3px 0 0 rgba(255, 0, 85, 0.3),
-    3px 0 0 rgba(0, 221, 255, 0.3);
-}
-
-/* Generic gradient text */
-.gradient-text {
-  background: linear-gradient(135deg, #2A2420 0%, #A68B6B 100%);
+/* Accent gradient text */
+.accent-text {
+  background: linear-gradient(135deg, #8B7355 0%, #6B5A45 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ===== EXAGGERATED RETRO CINEMA WAVE TEXT ANIMATION ===== */
-.wave-letter {
-  display: inline-block;
-  animation: cinema-wave 4s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  transform-origin: bottom center;
-  position: relative;
-  z-index: 2;
-}
-
-@keyframes cinema-wave {
-  0%, 100% { transform: translateY(0px) rotateX(0deg) rotateZ(0deg) scale(1); }
-  33%      { transform: translateY(-18px) rotateX(25deg) rotateZ(-3deg) scale(1.08); }
-  66%      { transform: translateY(10px) rotateX(-15deg) rotateZ(2deg) scale(0.96); }
-}
-
-/* ===== EXAGGERATED CINEMA SHINE/SHIMMER TEXT OVERLAY ===== */
-.retro-title-shine {
-  position: relative;
-  color: transparent; /* Invisible bounding box */
-  z-index: 2;
-}
-
-/* Gradient Text (Front) */
-.retro-title-shine::before {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2; /* Front */
-  
-  /* Warm white-gold shimmer gradient */
+/* ===== EDITORIAL LINES (decorative) ===== */
+.editorial-line {
+  height: 1px;
   background: linear-gradient(
-    -45deg,
-    rgba(232, 221, 211, 0.9) 0%,
-    rgba(255, 255, 255, 1) 35%,
-    rgba(232, 221, 211, 0.85) 50%,
-    rgba(255, 255, 255, 1) 65%,
-    rgba(232, 221, 211, 0.9) 100%
+    90deg,
+    transparent 0%,
+    var(--color-accent) 50%,
+    transparent 100%
   );
-  background-size: 300% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  opacity: 0.25;
 }
 
-/* Shadow Text (Back) - Dark Emboss */
-.retro-title-shine::after {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* Back */
-  
-  /* Dark shadow color for depth */
-  color: rgba(42, 36, 32, 0.5);
-  -webkit-text-fill-color: rgba(42, 36, 32, 0.5);
-  background: none;
-  -webkit-background-clip: border-box;
-  animation: none;
-  
-  /* The 3D offset and glow */
-  transform: translateY(6px);
-  text-shadow: 
-    0px 8px 20px rgba(0,0,0,0.4),
-    0 0 40px rgba(0, 0, 0, 0.15);
-}
-
-@keyframes shine-sweep-text {
-  0%   { background-position: 250% center; }
-  100% { background-position: -250% center; }
-}
-
-/* === Dark variant of retro-title-shine for use on LIGHT backgrounds === */
-.retro-title-shine-dark {
-  position: relative;
-  color: transparent;
-  z-index: 2;
-}
-
-.retro-title-shine-dark::before {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  
+.editorial-line-vertical {
+  width: 1px;
   background: linear-gradient(
-    -45deg,
-    #3b2516 0%,
-    #50321e 35%,
-    #7a5235 50%,
-    #50321e 65%,
-    #3b2516 100%
+    180deg,
+    transparent 0%,
+    var(--color-accent) 50%,
+    transparent 100%
   );
-  background-size: 300% auto;
-  color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: shine-sweep-text 7s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  opacity: 0.2;
 }
 
-.retro-title-shine-dark::after {
-  content: attr(data-text);
+/* ===== HOVER UNDERLINE ANIMATION ===== */
+.hover-underline {
+  position: relative;
+}
+
+.hover-underline::after {
+  content: "";
   position: absolute;
+  bottom: -2px;
   left: 0;
-  top: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-accent);
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-underline:hover::after {
   width: 100%;
-  height: 100%;
-  z-index: 1;
-  
-  color: #E8DDD3;
-  -webkit-text-fill-color: #E8DDD3;
-  background: none;
-  -webkit-background-clip: border-box;
-  animation: none;
-  
-  transform: translateY(5px);
-  text-shadow: 
-    0px 8px 15px rgba(0,0,0,0.06),
-    0 0 25px rgba(194, 168, 140, 0.2);
 }
 
-/* ===== LENS FLARE / PROJECTOR LIGHTS ===== */
-.lens-flare-top {
-  position: absolute;
-  top: -20%;
-  left: 20%;
-  width: 150vw;
-  height: 50vh;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.9) 0%, rgba(255, 240, 230, 0.4) 30%, transparent 60%);
-  transform: rotate(-15deg) translateY(-50%) translateX(-20%);
-  transform-origin: center;
-  pointer-events: none;
-  opacity: 0.5;
-  z-index: 10;
-  filter: blur(60px);
+/* ===== SECTION DIVIDER ===== */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 115, 85, 0.15) 20%,
+    rgba(139, 115, 85, 0.35) 50%,
+    rgba(139, 115, 85, 0.15) 80%,
+    transparent 100%
+  );
 }
 
-.lens-flare-bottom {
-  position: absolute;
-  bottom: -30%;
-  right: 10%;
-  width: 120vw;
-  height: 60vh;
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.8) 0%, rgba(250, 235, 215, 0.3) 40%, transparent 70%);
-  transform: rotate(20deg) translateY(30%);
-  pointer-events: none;
-  opacity: 0.4;
-  z-index: 10;
-  filter: blur(80px);
-}
-
-@media (max-width: 768px) {
-  .lens-flare-top,
-  .lens-flare-bottom {
-    display: none;
-  }
-}
-
-/* ===== NOISE TEXTURE OVERLAY (static, canvas handles animated version) ===== */
+/* ===== NOISE TEXTURE (very subtle on light) ===== */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9990;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
   mix-blend-mode: multiply;
 }
 
+/* ===== VIGNETTE (warm, subtle) ===== */
+.warm-vignette::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9989;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(180, 170, 155, 0.12) 100%
+  );
+}
+
 /* ===== SELECTION ===== */
 ::selection {
-  background: rgba(194, 168, 140, 0.3);
-  color: #2A2420;
+  background: rgba(139, 115, 85, 0.18);
+  color: #1C1917;
 }
 
 /* ===== TOUCH TARGETS ===== */
@@ -442,39 +278,21 @@ body::before {
   }
 }
 
-/* ===== SECTION DIVIDER ===== */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(194, 168, 140, 0.4) 20%,
-    rgba(194, 168, 140, 0.8) 50%,
-    rgba(194, 168, 140, 0.4) 80%,
-    transparent 100%
-  );
-}
-
-/* ===== RETRO VIGNETTE (subtle dark edges) ===== */
-.retro-vignette::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9989;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 40%,
-    rgba(150, 130, 110, 0.15) 100%
-  );
-}
-
 /* ===== KEYFRAMES ===== */
-@keyframes aurora-drift {
-  0%   { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 0.7; }
-  50%  { transform: translate(-48%, -52%) rotate(1deg) scale(1.03); opacity: 1; }
-  100% { transform: translate(-52%, -48%) rotate(-1deg) scale(0.97); opacity: 0.8; }
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes line-draw {
+  from { width: 0; }
+  to { width: 100%; }
 }
 
 @keyframes shimmer {
@@ -484,17 +302,12 @@ body::before {
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50%      { transform: translateY(-8px); }
+  50%      { transform: translateY(-6px); }
 }
 
-@keyframes pulse-warm {
-  0%, 100% { opacity: 0.03; }
-  50%      { opacity: 0.07; }
-}
-
-@keyframes gentle-rotate {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 0.8; }
 }
 
 /* ===== REDUCE MOTION ===== */

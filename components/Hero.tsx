@@ -14,8 +14,6 @@ function lenisScrollTo(target: string) {
   }
 }
 
-const heroTitle = "Ana Fotos";
-
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -23,12 +21,10 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  // Parallax effects
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "35%"]);
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.35], [0, -80]);
-  const contentScale = useTransform(scrollYProgress, [0, 0.35], [1, 0.95]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const contentY = useTransform(scrollYProgress, [0, 0.4], [0, -60]);
 
   const smoothEase = [0.22, 1, 0.36, 1] as const;
 
@@ -36,145 +32,135 @@ export default function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative h-[100svh] flex items-center justify-center overflow-hidden bg-background"
+      className="relative h-[100svh] flex items-center overflow-hidden bg-background"
     >
-      {/* 
-        Cinemascope / Letterboxing 
-        White bars at top and bottom to create a dramatic anamorphic film look on light theme
-      */}
-      <div className="absolute top-0 left-0 right-0 h-[10svh] bg-background z-30 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-[10svh] bg-background z-30 pointer-events-none flex items-center justify-between px-3 sm:px-8">
-        {/* Retro Film Timecodes integrated inside letterbox */}
-        <motion.div 
-          className="glass px-2.5 sm:px-4 py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 2, duration: 1 }}
+      {/* Split layout: Text left, Image right */}
+      <div className="relative z-20 w-full h-full flex flex-col lg:flex-row items-center">
+
+        {/* LEFT — Typography */}
+        <motion.div
+          className="relative z-20 flex-1 flex flex-col justify-center px-6 sm:px-10 md:px-16 lg:px-20 xl:px-28 pt-28 lg:pt-0"
+          style={{ opacity: contentOpacity, y: contentY }}
         >
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="text-[7px] sm:text-[9px] text-white/70 tracking-[0.2em] sm:tracking-[0.3em] font-mono">REC / 35MM</span>
+          {/* Tagline */}
+          <motion.div
+            className="flex items-center gap-3 mb-8 sm:mb-10"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.2, duration: 0.8, ease: smoothEase }}
+          >
+            <div className="w-8 sm:w-12 h-[1px] bg-accent/40" />
+            <p className="text-accent text-[10px] sm:text-xs tracking-[0.35em] uppercase font-medium">
+              Fotografia de Essência
+            </p>
+          </motion.div>
+
+          {/* Main title */}
+          <div className="overflow-hidden mb-4">
+            <motion.h1
+              className="font-display font-light text-[clamp(3.2rem,10vw,8rem)] lg:text-[clamp(4rem,7vw,9rem)] tracking-tight leading-[0.9] text-foreground"
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1.4, duration: 1.2, ease: smoothEase }}
+            >
+              Ana
+              <br />
+              <span className="italic font-light text-accent">Fotos</span>
+            </motion.h1>
+          </div>
+
+          {/* Decorative line */}
+          <motion.div
+            className="h-[1px] bg-accent/30 mb-6 sm:mb-8"
+            initial={{ width: 0 }}
+            animate={{ width: "5rem" }}
+            transition={{ delay: 2, duration: 1, ease: smoothEase }}
+          />
+
+          {/* Subtitle */}
+          <motion.p
+            className="text-secondary font-normal text-sm sm:text-base md:text-lg max-w-md leading-relaxed tracking-wide"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.2, duration: 0.8, ease: smoothEase }}
+          >
+            Cada clique é uma{" "}
+            <span className="text-foreground italic font-display text-lg sm:text-xl md:text-2xl">memória eternizada.</span>
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-4 sm:gap-5"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.5, duration: 0.7 }}
+          >
+            <motion.button
+              onClick={() => lenisScrollTo("#portfolio")}
+              className="relative px-8 sm:px-10 py-3.5 sm:py-4 overflow-hidden rounded-full bg-foreground text-background font-medium text-[11px] sm:text-xs tracking-[0.2em] uppercase active:scale-95 transition-all shadow-[0_4px_20px_rgba(28,25,23,0.12)]"
+              whileHover={{ scale: 1.03, boxShadow: "0 8px 30px rgba(28,25,23,0.18)" }}
+              whileTap={{ scale: 0.97 }}
+              data-hover
+            >
+              Explorar Portfólio
+            </motion.button>
+
+            <motion.a
+              href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 sm:px-10 py-3.5 sm:py-4 text-secondary font-medium text-[11px] sm:text-xs tracking-[0.2em] uppercase hover:text-foreground hover:border-accent/40 active:scale-95 transition-all duration-400 text-center rounded-full border border-foreground/12"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              data-hover
+            >
+              Falar no WhatsApp
+            </motion.a>
+          </motion.div>
         </motion.div>
-        
-        <motion.div 
-          className="glass px-2.5 sm:px-4 py-1.5 rounded-full"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 2, duration: 1 }}
+
+        {/* RIGHT — Photo */}
+        <motion.div
+          className="relative flex-1 h-[45vh] lg:h-full w-full lg:w-auto"
+          style={{ y: imageY, scale: imageScale }}
         >
-          <span className="text-[7px] sm:text-[9px] text-white/70 tracking-[0.2em] sm:tracking-[0.3em] font-mono">SCN 01 — TAKE 1</span>
+          <motion.div
+            className="relative w-full h-full"
+            initial={{ opacity: 0, scale: 1.08, filter: "blur(10px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ duration: 2, delay: 0.8, ease: smoothEase }}
+          >
+            <Image
+              src="/portfolio/photos/Ana_03.webp"
+              alt="Fotografia por Ana Fotos — Essência & Qualidade"
+              fill
+              className="object-cover will-change-transform"
+              style={{ filter: "saturate(0.92) contrast(1.02)" }}
+              priority
+              quality={90}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            {/* Gradient fades into background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-transparent pointer-events-none lg:from-background/25" />
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* Exaggerated Lens Flares */}
-      <div className="lens-flare-top" />
-      <div className="lens-flare-bottom" />
-
-      {/* 
-        Background Image — Full warm color, no desaturation.
-        The photo is the star of the hero. We let it breathe with
-        natural tones, a gentle sepia warmth, and a smooth gradient
-        fade at the bottom so it melts into the off-white background.
-      */}
-      <motion.div className="absolute inset-0 z-0" style={{ y: imageY, scale: imageScale }}>
-        <motion.div
-          className="relative w-full h-full"
-          initial={{ scale: 1.15, opacity: 0, filter: "blur(12px)" }}
-          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-          transition={{ duration: 2.5, ease: smoothEase }}
-        >
-          <Image
-            src="/portfolio/photos/Ana_03.webp"
-            alt="Fotografia por Ana Fotos — Essência & Qualidade"
-            fill
-            className="object-cover will-change-transform"
-            style={{ filter: "sepia(0.08) contrast(1.05) brightness(0.95) saturate(0.9)" }}
-            priority
-            quality={100}
-            sizes="100vw"
-          />
-        </motion.div>
-        
-        {/* Layered gradient fade — bottom melts into background, top stays visible */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#F9F6F0] via-[#F9F6F0]/60 via-[30%] to-transparent pointer-events-none" />
-        
-        {/* Soft side fades for elegant framing */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#F9F6F0]/50 via-transparent to-[#F9F6F0]/50 pointer-events-none" />
-        
-        {/* Very subtle dark overlay so text is readable over the photo */}
-        <div className="absolute inset-0 bg-black/15 pointer-events-none" />
-      </motion.div>
-
-      {/* Content */}
+      {/* Scroll indicator */}
       <motion.div
-        className="relative z-20 text-center px-2 sm:px-4 w-full max-w-6xl mx-auto flex flex-col items-center"
-        style={{ opacity: contentOpacity, y: contentY, scale: contentScale }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3, duration: 1 }}
       >
-        {/* Apple Glass Label Pill */}
+        <span className="text-muted text-[9px] tracking-[0.3em] uppercase">Scroll</span>
         <motion.div
-          className="glass-pill px-5 sm:px-6 py-2 sm:py-2.5 mb-10 sm:mb-12 flex items-center gap-2 sm:gap-3 border border-white/40 shadow-lg bg-white/20"
-          initial={{ opacity: 0, y: 30, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 1.2, duration: 0.9, ease: smoothEase }}
-        >
-          <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.6)] animate-pulse bg-white" />
-          <p className="text-[9px] sm:text-[10px] md:text-xs tracking-[0.25em] uppercase text-white font-semibold">
-            Essência & Qualidade
-          </p>
-        </motion.div>
-
-        {/* Exaggerated Cinematic Title */}
-        <div className="overflow-visible pb-10 pt-4 sm:pb-12 sm:pt-6 w-full max-w-[100vw] px-2 flex justify-center">
-          <motion.h1
-            className="font-display font-semibold text-[clamp(3.5rem,13vw,5.5rem)] sm:text-[9rem] md:text-[11rem] lg:text-[13rem] tracking-tighter leading-[0.8] retro-title-shine relative whitespace-nowrap"
-            initial={{ y: "80%", opacity: 0, rotateX: 45, scale: 0.9 }}
-            animate={{ y: 0, opacity: 1, rotateX: 0, scale: 1 }}
-            transition={{ delay: 1.4, duration: 1.4, ease: smoothEase }}
-            style={{ perspective: "1000px" }}
-            data-text={heroTitle}
-          >
-            {heroTitle}
-          </motion.h1>
-        </div>
-
-        {/* Dramatic Subtitle */}
-        <motion.p
-          className="mt-4 sm:mt-8 text-white/80 font-light text-lg sm:text-2xl md:text-3xl max-w-2xl mx-auto leading-relaxed tracking-wide drop-shadow-sm"
-          initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 2.2, duration: 1, ease: smoothEase }}
-        >
-          Cada clique é uma <span className="italic text-white">memória eternizada.</span>
-        </motion.p>
-
-        {/* CTA Buttons in strong glass */}
-        <motion.div
-          className="mt-14 sm:mt-20 flex flex-col sm:flex-row gap-5 sm:gap-6 justify-center w-full sm:w-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.5, duration: 0.8 }}
-        >
-          <motion.button
-            onClick={() => lenisScrollTo("#portfolio")}
-            className="relative px-12 py-4 sm:py-5 overflow-hidden rounded-full bg-white text-foreground font-semibold text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto active:scale-95 transition-all shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
-            whileHover={{ scale: 1.05, boxShadow: "0 12px 40px rgba(0,0,0,0.2)" }}
-            whileTap={{ scale: 0.95 }}
-            data-hover
-          >
-            Explorar Portfólio
-          </motion.button>
-
-          <motion.a
-            href="https://wa.me/5562994101578?text=Olá,%20gostaria%20de%20falar%20sobre%20fotografia."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-12 py-4 sm:py-5 text-white font-medium text-xs sm:text-sm tracking-[0.2em] uppercase w-full sm:w-auto hover:bg-white/15 active:bg-white/20 transition-all duration-300 text-center rounded-full border border-white/40 bg-white/10"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            data-hover
-          >
-            Falar no WhatsApp
-          </motion.a>
-        </motion.div>
+          className="w-[1px] h-6 bg-accent/25 origin-top"
+          animate={{ scaleY: [1, 0.4, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        />
       </motion.div>
     </section>
   );

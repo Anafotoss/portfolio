@@ -1,26 +1,27 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Syne } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#F9F6F0",
+  themeColor: "#F9F7F3",
 };
 
 export const metadata: Metadata = {
@@ -45,9 +46,9 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${playfair.variable} ${inter.variable} antialiased`}
+      className={`${cormorant.variable} ${syne.variable} antialiased`}
     >
-      <body className="min-h-screen md:cursor-none bg-background text-foreground retro-vignette">{children}</body>
+      <body className="min-h-screen md:cursor-none bg-background text-foreground warm-vignette">{children}</body>
     </html>
   );
 }

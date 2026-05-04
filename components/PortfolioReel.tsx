@@ -1,106 +1,53 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { photos, type Photo } from "@/lib/photos";
+import { photos, categories, type Photo } from "@/lib/photos";
 import Lightbox from "./Lightbox";
 
-// Reusable hook for 3D card tilt and glare effect
-function useMouseTilt() {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    // Exaggerated 3D tilt for Apple Glass feel
-    const tiltX = (y - 0.5) * -15; 
-    const tiltY = (x - 0.5) * 15;
-    ref.current.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale3d(1.02, 1.02, 1.02)`;
-    
-    // Specular light glare moving with the mouse
-    const glare = ref.current.querySelector('.glass-glare') as HTMLElement;
-    if (glare) {
-      glare.style.left = `${x * 100}%`;
-      glare.style.top = `${y * 100}%`;
-      glare.style.opacity = '1';
-    }
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (ref.current) {
-      ref.current.style.transform = "perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
-      const glare = ref.current.querySelector('.glass-glare') as HTMLElement;
-      if (glare) {
-        glare.style.opacity = '0';
-      }
-    }
-  }, []);
-
-  return { ref, handleMouseMove, handleMouseLeave };
-}
-
-function ReelCard({ photo, index, onClick }: { photo: Photo; index: number; onClick: () => void }) {
-  const { ref, handleMouseMove, handleMouseLeave } = useMouseTilt();
-
+function GalleryCard({ photo, index, onClick }: { photo: Photo; index: number; onClick: () => void }) {
   return (
     <motion.div
-      className="relative flex-shrink-0 w-[85vw] sm:w-[50vw] md:w-[40vw] lg:w-[35vw] h-[60vh] sm:h-[65vh] md:h-[70vh] rounded-[2rem] overflow-hidden group cursor-pointer apple-glass-card shadow-xl"
+      className="relative group cursor-pointer editorial-card overflow-hidden"
       onClick={onClick}
-      whileHover={{ y: -10 }}
-      whileTap={{ scale: 0.96 }}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      whileTap={{ scale: 0.98 }}
       data-hover
     >
-      <div
-        ref={ref}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="relative w-full h-full transition-transform duration-[0.6s] ease-out"
-        style={{ transformStyle: "preserve-3d" }}
-      >
+      <div className={`relative overflow-hidden rounded-2xl ${
+        photo.span === "tall" ? "aspect-[3/4]" :
+        photo.span === "wide" ? "aspect-[4/3]" :
+        "aspect-square"
+      }`}>
         <Image
           src={photo.src}
           alt={photo.alt}
           fill
-          className="object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-[1.08] will-change-transform"
-          sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 35vw"
+          className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04] will-change-transform"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           placeholder="blur"
           blurDataURL={photo.blurDataURL}
-          style={{ filter: "sepia(0.15) contrast(1.05) brightness(1.05)" }}
-        />
-        
-        {/* Cinematic gradient overlay — soft fade to background */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#2A2420]/80 via-[#2A2420]/15 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 z-[2]" />
-        
-        {/* Dynamic Specular Glare */}
-        <div 
-          className="glass-glare absolute w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-none opacity-0 transition-opacity duration-500 z-[3]"
-          style={{
-            background: "radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.15) 40%, transparent 70%)",
-            filter: "blur(40px)",
-            top: "50%",
-            left: "50%"
-          }}
         />
 
-        {/* Floating Glass Info Panel */}
-        <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 z-[4] translate-y-4 group-hover:translate-y-0 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
-          <div className="glass-strong rounded-2xl p-5 sm:p-7 border border-white/40 shadow-lg">
+        {/* Hover overlay — warm dark gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/70 via-[#1C1917]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[2]" />
+
+        {/* Info overlay */}
+        <div className="absolute inset-0 z-[3] flex flex-col justify-end p-5 sm:p-7 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
             <div className="flex items-center gap-3 mb-3">
-              <span className="inline-block px-3 py-1 text-[9px] sm:text-[10px] tracking-widest uppercase text-background bg-foreground rounded-full font-bold shadow-sm">
-                0{index + 1}
-              </span>
-              <span className="w-8 h-[1px] bg-foreground/20" />
-              <span className="text-[9px] sm:text-[10px] tracking-widest uppercase text-retro-warm font-mono">
+              <span className="text-white/80 text-[10px] tracking-[0.3em] uppercase font-medium">
                 {photo.category}
               </span>
+              <span className="flex-1 h-[1px] bg-white/15" />
+              <span className="text-white/40 text-[10px] tracking-widest font-mono">
+                0{index + 1}
+              </span>
             </div>
-            
-            <h3 className="font-display font-medium text-2xl sm:text-3xl text-white tracking-tight mb-2">
-              {photo.category}
-            </h3>
             <p className="text-white/70 font-light text-xs sm:text-sm leading-relaxed line-clamp-2">
               {photo.description}
             </p>
@@ -112,19 +59,13 @@ function ReelCard({ photo, index, onClick }: { photo: Photo; index: number; onCl
 }
 
 export default function PortfolioReel() {
-  const targetRef = useRef<HTMLDivElement>(null);
-  
-  // Creates a sticky scroll context
-  const { scrollYProgress } = useScroll({
-    target: targetRef,
-  });
-
-  // Calculate the horizontal movement based on the vertical scroll
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
-
-  // Lightbox State
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("Todos");
+
+  const filteredPhotos = activeCategory === "Todos"
+    ? photos
+    : photos.filter((p) => p.category === activeCategory);
 
   const handlePhotoClick = (photo: Photo, index: number) => {
     setSelectedPhoto(photo);
@@ -132,72 +73,96 @@ export default function PortfolioReel() {
   };
 
   const handleNavigate = (direction: "prev" | "next") => {
+    const list = filteredPhotos;
     const newIndex =
       direction === "next"
-        ? (selectedIndex + 1) % photos.length
-        : (selectedIndex - 1 + photos.length) % photos.length;
+        ? (selectedIndex + 1) % list.length
+        : (selectedIndex - 1 + list.length) % list.length;
     setSelectedIndex(newIndex);
-    setSelectedPhoto(photos[newIndex]);
+    setSelectedPhoto(list[newIndex]);
   };
 
   return (
     <>
-      <section id="portfolio" ref={targetRef} className="relative h-[400vh] bg-background">
-        {/* Sticky Container that holds the viewport height */}
-        <div className="sticky top-0 h-screen flex flex-col items-start justify-center overflow-hidden">
-          
-          {/* Ambient Background Lights — warm sunlight pools */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] rounded-full bg-gradient-to-r from-[rgba(232,221,211,0.4)] to-transparent blur-[140px]" />
-            <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] rounded-full bg-gradient-to-l from-[rgba(255,255,255,0.5)] to-transparent blur-[140px]" />
-          </div>
+      <section id="portfolio" className="relative py-20 sm:py-28 md:py-36 px-4 sm:px-6 md:px-12 lg:px-20 bg-background">
 
-          {/* Section Header */}
-          <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 max-w-screen-2xl mx-auto mb-10 sm:mb-16 z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="flex items-center gap-4 mb-5">
-                <div className="h-[1px] w-12 sm:w-20 bg-gradient-to-r from-retro-warm to-transparent" />
-                <p className="text-retro-warm font-medium text-[10px] sm:text-xs tracking-[0.3em] uppercase font-mono">
-                  06 Trabalhos
-                </p>
-              </div>
-              <h2 className="font-display font-bold text-[clamp(2.5rem,8vw,6rem)] tracking-tight text-foreground leading-[0.95]">
-                <span className="text-foreground/35 font-light italic">Acervo &</span>{" "}
-                <span className="retro-title-shine-dark" data-text="Especialidades">Especialidades</span>
-              </h2>
-            </motion.div>
-          </div>
+        {/* Ambient warm light */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] rounded-full bg-gradient-to-r from-[rgba(241,238,232,0.6)] to-transparent blur-[140px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] rounded-full bg-gradient-to-l from-[rgba(255,255,255,0.5)] to-transparent blur-[140px]" />
+        </div>
 
-          {/* Cinematic Scroll Reel */}
-          <motion.div style={{ x }} className="flex gap-6 sm:gap-10 md:gap-16 px-4 sm:px-6 md:px-12 lg:px-20 z-10 pb-8">
-            {photos.map((photo, index) => (
-              <ReelCard
+        {/* Section Header */}
+        <div className="relative max-w-7xl mx-auto mb-14 sm:mb-20 z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="flex items-center gap-4 mb-5">
+              <div className="h-[1px] w-10 sm:w-16 bg-accent/35" />
+              <p className="text-accent text-[10px] sm:text-xs tracking-[0.3em] uppercase font-medium">
+                Portfólio
+              </p>
+            </div>
+            <h2 className="font-display font-light text-[clamp(2.5rem,7vw,5.5rem)] tracking-tight text-foreground leading-[0.95]">
+              Acervo{" "}
+              <span className="italic text-accent/60">&</span>{" "}
+              <span className="italic">Especialidades</span>
+            </h2>
+          </motion.div>
+
+          {/* Category filters */}
+          <motion.div
+            className="mt-10 sm:mt-14 flex flex-wrap gap-2 sm:gap-3"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            {categories.map((cat) => (
+              <motion.button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-xs tracking-[0.15em] uppercase transition-all duration-400 border ${
+                  activeCategory === cat
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-transparent text-secondary border-foreground/8 hover:border-accent/30 hover:text-foreground"
+                }`}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                data-hover
+              >
+                {cat}
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Masonry Grid */}
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={activeCategory}
+            className="relative max-w-7xl mx-auto z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 auto-rows-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {filteredPhotos.map((photo, index) => (
+              <GalleryCard
                 key={photo.id}
                 photo={photo}
                 index={index}
                 onClick={() => handlePhotoClick(photo, index)}
               />
             ))}
-            
-            {/* End of reel spacer */}
-            <div className="w-[10vw] flex-shrink-0" />
           </motion.div>
-
-          {/* Cinematic Film strip perforations (decoration) */}
-          <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 flex justify-between px-8 z-0 opacity-15 pointer-events-none">
-            {Array.from({ length: 20 }).map((_, i) => (
-              <div key={i} className="w-4 h-4 rounded-sm border border-retro-warm/30 bg-foreground/5" />
-            ))}
-          </div>
-        </div>
+        </AnimatePresence>
       </section>
 
-      {/* Fullscreen Lightbox integration */}
+      {/* Lightbox */}
       <AnimatePresence>
         {selectedPhoto && (
           <Lightbox

@@ -3,10 +3,9 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Performance-optimized FilmGrain.
- * Instead of generating pixel-by-pixel noise every frame (extremely CPU heavy),
- * we pre-generate a single static noise frame and just re-render it with random
- * offset shifts at low FPS. This is ~50x faster than the old approach.
+ * Performance-optimized FilmGrain for light theme.
+ * Pre-generates a single static noise frame with warm undertones.
+ * Uses multiply blend mode for natural grain on light backgrounds.
  */
 export default function FilmGrain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -18,13 +17,12 @@ export default function FilmGrain() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    // Use a very small resolution — CSS scales it up with pixelated rendering
     const grainW = 256;
     const grainH = 256;
     canvas.width = grainW;
     canvas.height = grainH;
 
-    // Pre-generate a single noise tile (done ONCE, not every frame)
+    // Pre-generate warm-tinted noise tile for light theme
     const noiseCanvas = document.createElement("canvas");
     noiseCanvas.width = grainW;
     noiseCanvas.height = grainH;
@@ -34,17 +32,16 @@ export default function FilmGrain() {
 
     for (let i = 0; i < data.length; i += 4) {
       const v = Math.random() * 200 + 40;
-      data[i] = v + 15;     // R: slightly warmer
-      data[i + 1] = v + 8;  // G
+      data[i] = v + 8;      // R: slightly warm
+      data[i + 1] = v + 4;  // G
       data[i + 2] = v;      // B: cooler
-      data[i + 3] = Math.random() * 28;
+      data[i + 3] = Math.random() * 18;
     }
     noiseCtx.putImageData(imageData, 0, 0);
 
-    // Animate by drawing the pre-baked tile at random offsets (extremely cheap)
     let animationId: number;
     let lastTime = 0;
-    const fps = 8; // 8fps is enough for grain feel, saves tons of CPU
+    const fps = 8;
     const interval = 1000 / fps;
 
     const render = (time: number) => {
@@ -53,7 +50,6 @@ export default function FilmGrain() {
       if (delta < interval) return;
       lastTime = time - (delta % interval);
 
-      // Random offset creates the illusion of new noise each frame
       const ox = Math.random() * grainW | 0;
       const oy = Math.random() * grainH | 0;
       ctx.clearRect(0, 0, grainW, grainH);
@@ -64,7 +60,6 @@ export default function FilmGrain() {
     };
 
     animationId = requestAnimationFrame(render);
-
     return () => cancelAnimationFrame(animationId);
   }, []);
 
@@ -72,7 +67,7 @@ export default function FilmGrain() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none z-[9995] mix-blend-multiply"
-      style={{ opacity: 0.12, imageRendering: "pixelated" }}
+      style={{ opacity: 0.08, imageRendering: "pixelated" }}
       aria-hidden="true"
     />
   );

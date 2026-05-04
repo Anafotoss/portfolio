@@ -4,20 +4,17 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { photos } from "@/lib/photos";
 
-const preloaderTitle = "Ana Fotos";
-
-// All critical images that must load before showing the site
 const criticalImages = [
-  "/portfolio/photos/Ana_03.webp",        // Hero background
-  "/portfolio/photos/aboutme.jpeg",        // About section
-  ...photos.map((p) => p.src),             // Portfolio cards
+  "/portfolio/photos/Ana_03.webp",
+  "/portfolio/photos/aboutme.jpeg",
+  ...photos.map((p) => p.src),
 ];
 
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
     const img = new window.Image();
     img.onload = () => resolve();
-    img.onerror = () => resolve(); // Don't block on errors
+    img.onerror = () => resolve();
     img.src = src;
   });
 }
@@ -28,7 +25,6 @@ export default function Preloader() {
   const loaded = useRef(0);
 
   useEffect(() => {
-    // Block scrolling & Lenis
     document.body.style.overflow = "hidden";
     document.body.style.touchAction = "none";
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,7 +33,6 @@ export default function Preloader() {
 
     const total = criticalImages.length;
 
-    // Load all images in parallel, updating progress as each completes
     const promises = criticalImages.map((src) =>
       preloadImage(src).then(() => {
         loaded.current += 1;
@@ -45,7 +40,6 @@ export default function Preloader() {
       })
     );
 
-    // Also wait for the window load event (fonts, scripts, etc.)
     const windowLoadPromise = new Promise<void>((resolve) => {
       if (document.readyState === "complete") {
         resolve();
@@ -56,8 +50,7 @@ export default function Preloader() {
 
     Promise.all([...promises, windowLoadPromise]).then(() => {
       setProgress(100);
-      // Small delay so the 100% state is visible before exit animation
-      setTimeout(() => setIsLoading(false), 500);
+      setTimeout(() => setIsLoading(false), 600);
     });
   }, []);
 
@@ -76,71 +69,63 @@ export default function Preloader() {
       {isLoading && (
         <motion.div
           className="fixed inset-0 z-[9998] flex flex-col items-center justify-center bg-background"
-          exit={{ 
+          exit={{
             opacity: 0,
-            scale: 1.05,
-            filter: "blur(10px)",
+            filter: "blur(6px)",
           }}
-          transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* Warm ambient orb — simple CSS gradient, no animated blur */}
+          {/* Ambient warm orb */}
           <div
-            className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full opacity-60"
+            className="absolute w-[280px] h-[280px] md:w-[450px] md:h-[450px] rounded-full opacity-50"
             style={{
-              background:
-                "radial-gradient(circle, rgba(232,221,211,0.6) 0%, rgba(249,246,240,0.2) 50%, transparent 70%)",
+              background: "radial-gradient(circle, rgba(241,238,232,0.8) 0%, rgba(249,247,243,0.3) 50%, transparent 70%)",
             }}
           />
 
-          {/* Logo with letter-by-letter reveal */}
+          {/* Logo — horizontal mask reveal */}
           <div className="relative mb-6 overflow-hidden">
             <motion.h1
-              className="font-display font-semibold text-5xl sm:text-7xl md:text-8xl tracking-tight flex"
+              className="font-display font-light text-5xl sm:text-7xl md:text-8xl tracking-tight text-foreground"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.3 }}
+              transition={{ delay: 0.1, duration: 0.5 }}
             >
-              {preloaderTitle.split("").map((char, i) => (
-                <motion.span
-                  key={i}
-                  className="apple-text inline-block"
-                  initial={{ y: "120%", opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ 
-                    delay: 0.15 + i * 0.06, 
-                    duration: 0.8, 
-                    ease: [0.22, 1, 0.36, 1] 
-                  }}
-                  style={char === " " ? { width: "0.3em" } : {}}
-                >
-                  {char === " " ? "\u00A0" : char}
-                </motion.span>
-              ))}
+              <motion.span
+                className="inline-block"
+                initial={{ clipPath: "inset(0 100% 0 0)" }}
+                animate={{ clipPath: "inset(0 0% 0 0)" }}
+                transition={{ delay: 0.2, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Ana{" "}
+                <span className="italic font-light text-accent">Fotos</span>
+              </motion.span>
             </motion.h1>
           </div>
 
+          {/* Tagline */}
           <motion.p
-            className="text-retro-warm/60 text-[10px] sm:text-xs tracking-[0.25em] uppercase font-medium"
+            className="text-muted text-[10px] sm:text-xs tracking-[0.4em] uppercase font-medium mb-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
           >
-            Essência & Qualidade
+            Fotografia de Essência
           </motion.p>
 
-          {/* Real progress bar tied to actual image loading */}
-          <div className="absolute bottom-16 sm:bottom-20 w-44 sm:w-56">
-            <div className="h-[1px] bg-foreground/10 rounded-full overflow-hidden">
+          {/* Progress bar */}
+          <div className="absolute bottom-16 sm:bottom-20 w-40 sm:w-52">
+            <div className="h-[1px] bg-foreground/6 rounded-full overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
-                style={{ background: "linear-gradient(90deg, rgba(194,168,140,0.4), rgba(194,168,140,0.9), rgba(194,168,140,0.4))" }}
+                style={{ background: "linear-gradient(90deg, rgba(139,115,85,0.3), rgba(139,115,85,0.7), rgba(139,115,85,0.3))" }}
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(progress, 100)}%` }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               />
             </div>
             <motion.p
-              className="text-foreground/25 text-[10px] tracking-widest mt-3 text-center tabular-nums"
+              className="text-muted text-[10px] tracking-[0.3em] mt-3 text-center tabular-nums uppercase"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}

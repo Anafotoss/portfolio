@@ -30,10 +30,7 @@ export default function Navbar() {
     const sections = ["contact", "about", "portfolio", "hero"];
     for (const id of sections) {
       const el = document.getElementById(id);
-      if (el && window.scrollY >= el.offsetTop - 200) {
-        setActiveSection(id);
-        break;
-      }
+      if (el && window.scrollY >= el.offsetTop - 200) { setActiveSection(id); break; }
     }
   }, []);
 
@@ -45,17 +42,9 @@ export default function Navbar() {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const lenis = (window as any).__lenis;
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-      lenis?.stop();
-    } else {
-      document.body.style.overflow = "";
-      lenis?.start();
-    }
-    return () => { 
-      document.body.style.overflow = "";
-      lenis?.start();
-    };
+    if (isMobileMenuOpen) { document.body.style.overflow = "hidden"; lenis?.stop(); }
+    else { document.body.style.overflow = ""; lenis?.start(); }
+    return () => { document.body.style.overflow = ""; lenis?.start(); };
   }, [isMobileMenuOpen]);
 
   const handleNavClick = (href: string) => {
@@ -65,96 +54,53 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-6 lg:mt-8 pointer-events-none px-4">
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center mt-5 lg:mt-7 pointer-events-none px-4">
         <motion.nav
-          className={`pointer-events-auto transition-all duration-700 ease-out flex items-center justify-between
-            ${isScrolled ? "glass-pill py-3 px-6 lg:px-8 shadow-sm" : "bg-transparent py-3 px-4 lg:px-6"}
-          `}
+          className={`pointer-events-auto transition-all duration-700 ease-out flex items-center justify-between ${isScrolled ? "glass-pill py-3 px-6 lg:px-8 shadow-sm" : "bg-transparent py-3 px-4 lg:px-6"}`}
           initial={{ y: -100, opacity: 0 }}
           animate={{ y: 0, opacity: 1, width: isScrolled ? "auto" : "100%", maxWidth: "1200px" }}
           transition={{ delay: 1.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <button onClick={() => handleNavClick("#hero")} className="group flex items-center pr-8 lg:pr-16" data-hover>
-            <motion.span
-              className="font-display font-medium text-xl sm:text-2xl tracking-wide text-foreground"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            >
-              Ana<span className="text-retro-warm mx-0.5">.</span>
+            <motion.span className="font-display font-light text-2xl sm:text-3xl tracking-wide text-foreground" whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+              ana<span className="text-accent mx-0.5 font-normal">.</span>
             </motion.span>
           </button>
 
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+          <div className="hidden md:flex items-center gap-7 lg:gap-9">
             {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavClick(link.href)}
-                className={`relative text-xs lg:text-sm tracking-widest uppercase transition-colors duration-300 group ${
-                  activeSection === link.href.slice(1) ? "text-foreground" : "text-foreground/40 hover:text-foreground"
-                }`}
-                data-hover
-              >
+              <button key={link.name} onClick={() => handleNavClick(link.href)} className={`relative text-[11px] lg:text-xs tracking-[0.2em] uppercase transition-colors duration-400 hover-underline ${activeSection === link.href.slice(1) ? "text-foreground" : "text-secondary hover:text-foreground"}`} data-hover>
                 {link.name}
                 {activeSection === link.href.slice(1) && (
-                  <motion.div
-                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-retro-warm shadow-[0_0_6px_rgba(194,168,140,0.5)]"
-                    layoutId="navbar-indicator"
-                    transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
-                  />
+                  <motion.div className="absolute -bottom-1 left-0 right-0 h-[1px] bg-accent" layoutId="navbar-indicator" transition={{ type: "spring", bounce: 0.2, duration: 0.5 }} />
                 )}
               </button>
             ))}
           </div>
 
-          <button
-            className="md:hidden flex flex-col gap-[5px] p-2 ml-auto"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Menu"
-          >
-            <motion.span className="w-5 h-[1.5px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
-            <motion.span className="w-4 h-[1.5px] bg-foreground block ml-auto" animate={isMobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }} transition={{ duration: 0.2 }} />
-            <motion.span className="w-5 h-[1.5px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
+          <button className="md:hidden flex flex-col gap-[5px] p-2 ml-auto" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menu">
+            <motion.span className="w-5 h-[1px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
+            <motion.span className="w-4 h-[1px] bg-foreground block ml-auto" animate={isMobileMenuOpen ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }} transition={{ duration: 0.2 }} />
+            <motion.span className="w-5 h-[1px] bg-foreground block origin-center" animate={isMobileMenuOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }} transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} />
           </button>
         </motion.nav>
       </div>
 
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-3xl flex flex-col items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-          >
-            <nav className="flex flex-col items-center gap-4">
+          <motion.div className="fixed inset-0 z-40 bg-background/97 backdrop-blur-3xl flex flex-col items-center justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.35 }}>
+            <nav className="flex flex-col items-center gap-3">
               {navLinks.map((link, i) => (
                 <div key={link.name} className="overflow-hidden">
-                  <motion.button
-                    onClick={() => handleNavClick(link.href)}
-                    className={`font-display text-4xl sm:text-5xl font-light tracking-wide py-2 transition-colors duration-300 ${
-                      activeSection === link.href.slice(1) ? "text-foreground" : "text-foreground/30 active:text-foreground"
-                    }`}
-                    initial={{ y: 80, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -40, opacity: 0 }}
-                    transition={{ delay: i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  >
+                  <motion.button onClick={() => handleNavClick(link.href)} className={`font-display text-4xl sm:text-5xl font-light tracking-wide py-2 transition-colors duration-300 ${activeSection === link.href.slice(1) ? "text-foreground" : "text-muted active:text-foreground"}`} initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -40, opacity: 0 }} transition={{ delay: i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}>
                     {link.name}
                   </motion.button>
                 </div>
               ))}
             </nav>
-            <motion.div
-              className="absolute bottom-12 flex gap-8"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.3, duration: 0.4 }}
-            >
-              <a href="https://wa.me/5562994101578" target="_blank" rel="noopener noreferrer" className="text-foreground/30 hover:text-retro-warm text-xs tracking-widest uppercase transition-colors">WhatsApp</a>
-              <a href="https://instagram.com/anaefoto" target="_blank" rel="noopener noreferrer" className="text-foreground/30 hover:text-retro-warm text-xs tracking-widest uppercase transition-colors">Instagram</a>
+            <motion.div className="absolute bottom-12 flex gap-8" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.3, duration: 0.4 }}>
+              <a href="https://wa.me/5562994101578" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-accent text-xs tracking-[0.2em] uppercase transition-colors">WhatsApp</a>
+              <a href="https://instagram.com/anaefoto" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-accent text-xs tracking-[0.2em] uppercase transition-colors">Instagram</a>
             </motion.div>
           </motion.div>
         )}

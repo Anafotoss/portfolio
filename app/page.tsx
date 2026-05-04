@@ -21,14 +21,14 @@ export default function Home() {
           <Hero />
 
           {/* Divider */}
-          <div className="flex items-center justify-center py-10">
+          <div className="flex items-center justify-center py-6 sm:py-10">
             <div className="section-divider max-w-xs" />
           </div>
 
           <PortfolioReel />
 
           {/* Divider */}
-          <div className="flex items-center justify-center py-10">
+          <div className="flex items-center justify-center py-6 sm:py-10">
             <div className="section-divider max-w-xs" />
           </div>
 
