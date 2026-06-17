@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { photos } from "@/lib/photos";
 
 const criticalImages = [
-  "/portfolio/photos/Ana_03.webp",
+  "/portfolio/photos/Ana_03.jpeg",
   "/portfolio/photos/aboutme.jpeg",
   ...photos.map((p) => p.src),
 ];
