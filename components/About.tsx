@@ -139,7 +139,7 @@ export default function About() {
             viewport={{ once: true }}
             transition={{ delay: 0.7, duration: 0.5 }}
           >
-            {["Ensaios", "Retratos", "Gestantes", "Infantil", "Eventos", "Sensuais"].map((tag) => (
+            {["Individuais", "Retratos", "Infantil", "Eventos"].map((tag) => (
               <motion.span
                 key={tag}
                 className="px-4 py-2 rounded-full text-secondary text-[11px] sm:text-xs tracking-[0.15em] uppercase border border-foreground/6 hover:border-accent/25 hover:text-foreground transition-all duration-400"

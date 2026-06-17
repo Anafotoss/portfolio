@@ -27,13 +27,13 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "AnaFotos | Fotografia Profissional — Essência & Qualidade",
   description:
-    "Portfólio de fotografia profissional de Ana. Ensaios, retratos, gestantes, infantil e eventos. Cada clique é uma memória eternizada.",
+    "Portfólio de fotografia profissional de Ana. Individuais, retratos, infantil e eventos. Cada clique é uma memória eternizada.",
   keywords:
-    "fotografia, ensaios, retratos, gestantes, infantil, aniversários, sensuais, natureza, eventos, fotógrafa, Goiânia",
+    "fotografia, individuais, retratos, infantil, eventos, fotógrafa, Goiânia",
   openGraph: {
     title: "AnaFotos | Fotografia Profissional — Essência & Qualidade",
     description:
-      "Portfólio de fotografia profissional. Ensaios, retratos, gestantes, infantil e eventos. Cada clique é uma memória eternizada.",
+      "Portfólio de fotografia profissional. Individuais, retratos, infantil e eventos. Cada clique é uma memória eternizada.",
     type: "website",
   },
 };

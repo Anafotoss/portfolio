@@ -19,7 +19,7 @@ export const photos: Photo[] = [
     id: 1,
     src: "/portfolio/photos/IMG_0374.webp",
     alt: "Fotografia individual artística",
-    category: "Individual",
+    category: "Individuais",
     description:
       "A essência de cada pessoa capturada em um único instante. Retratos que revelam histórias únicas.",
     width: 1200,
@@ -31,7 +31,7 @@ export const photos: Photo[] = [
     id: 2,
     src: "/portfolio/photos/IMG_0714.webp",
     alt: "Fotografia de aniversário e celebração",
-    category: "Aniversários",
+    category: "Eventos",
     description:
       "Celebrações inesquecíveis. Cada detalhe, cada risada, cada abraço registrado com carinho.",
     width: 1600,
@@ -51,50 +51,12 @@ export const photos: Photo[] = [
     span: "normal",
     blurDataURL: blurPlaceholder,
   },
-  {
-    id: 4,
-    src: "/portfolio/photos/Hellen_01.webp",
-    alt: "Ensaio fotográfico de gestante",
-    category: "Gestantes",
-    description:
-      "A magia da espera. Registros delicados e emocionantes dessa fase tão especial.",
-    width: 1600,
-    height: 1200,
-    span: "wide",
-    blurDataURL: blurPlaceholder,
-  },
-  {
-    id: 5,
-    src: "/portfolio/photos/Sensuais.webp",
-    alt: "Ensaio sensual feminino",
-    category: "Sensuais",
-    description:
-      "Beleza, empoderamento e confiança. Ensaios que celebram a feminilidade com arte e elegância.",
-    width: 1200,
-    height: 1600,
-    span: "tall",
-    blurDataURL: blurPlaceholder,
-  },
-  {
-    id: 6,
-    src: "/portfolio/photos/natureza_real.webp",
-    alt: "Fotografia de natureza com luz natural",
-    category: "Natureza",
-    description:
-      "A grandiosidade do mundo natural. Paisagens que inspiram e conectam com o essencial.",
-    width: 1600,
-    height: 1200,
-    span: "normal",
-    blurDataURL: blurPlaceholder,
-  },
 ];
 
 export const categories = [
   "Todos",
-  "Individual",
-  "Aniversários",
+  "Individuais",
+  "Retratos",
   "Infantil",
-  "Gestantes",
-  "Sensuais",
-  "Natureza",
+  "Eventos",
 ];
