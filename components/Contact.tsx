@@ -123,7 +123,7 @@ export default function Contact() {
             delay={0.1}
           />
           <ContactCard
-            href="https://instagram.com/ana_fotos__"
+            href="https://instagram.com/anaefoto"
             title="Instagram"
             subtitle="Acompanhe o portfólio"
             icon={Instagram}
