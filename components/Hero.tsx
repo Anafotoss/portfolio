@@ -47,7 +47,7 @@ export default function Hero() {
             transition={{ duration: 2, delay: 0.6, ease: smoothEase }}
           >
             <Image
-              src="/portfolio/photos/Ana_03.jpeg"
+              src="/portfolio/photos/aboutme.jpeg"
               alt="Fotografia por Ana Fotos"
               fill
               className="object-cover object-[center_25%] will-change-transform"
@@ -244,7 +244,7 @@ export default function Hero() {
             transition={{ duration: 2, delay: 0.8, ease: smoothEase }}
           >
             <Image
-              src="/portfolio/photos/Ana_03.jpeg"
+              src="/portfolio/photos/aboutme.jpeg"
               alt="Fotografia por Ana Fotos — Essência & Qualidade"
               fill
               className="object-cover object-[center_25%] will-change-transform"

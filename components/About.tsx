@@ -43,7 +43,7 @@ export default function About() {
             {/* Photo frame */}
             <div className="absolute inset-0 rounded-2xl border border-foreground/5 z-10 pointer-events-none" />
             <Image
-              src="/portfolio/photos/aboutme.jpeg"
+              src="/portfolio/photos/Ana_03.jpeg"
               alt="Retrato fotográfico de Ana"
               fill
               className="object-cover will-change-transform"
